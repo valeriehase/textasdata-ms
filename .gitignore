@@ -1,0 +1,10 @@
+*.Rhistory
+*.Rapp.history
+*.RData
+*.Rproj
+*.Rproj.user
+*.Ruserdata
+*.Renviron
+*.DS_Store
+/.quarto/
+/site_libs

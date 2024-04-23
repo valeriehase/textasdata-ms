@@ -1,2 +1,4 @@
 # textasdata-ms
-Folien &amp; Übungen für Workshop zu "Automatisierter Inhaltsanalyse" an der Universität Münster
+Tutorial zum Workshop "Automatisierte Inhaltsanalyse"
+
+Methodenworkshop an der Universität Münster, Juli 2024.

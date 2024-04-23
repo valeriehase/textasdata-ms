@@ -1,0 +1,31 @@
+---
+title: "Automatisierte Inhaltsanalyse"
+subtitle: "Einführung in R - Methodenworkshop Universität Münster"
+---
+
+![Quelle: Foto von Sara Kurfeß auf Unsplash](images/social-media.jpg){fig-alt="image of smartphone" fig-align="center" width="300"}
+
+<hr>
+
+## Infos zum Workshop
+
+-   Methodenworkshop am Institut für Kommunikationswissenschaft, Universität Münster
+
+-   📅 24-25. Juli 2024
+
+-   Workshop-Leitung:
+
+    -   Valerie Hase (Ludwig-Maximilians-Universität München). Mehr Infos: [github.com/valeriehase](https://github.com/valeriehase) & [valerie-hase.com](https://valerie-hase.com/)
+
+    -   Unterstützung durch Teaching Assistant Luisa Kutlar (Ludwig-Maximilians-Universität München). Mehr Infos: [github.com/luisakutlar](https://github.com/luisakutlar)
+
+## Materialien
+
+Sitzung 1️⃣: **Begrüßung**
+
+-   [Folien - HTML](docs/01-begrüssung.html)
+-   [Folien - PDF](pdf/01-begrüssung.pdf)
+
+## Weiterführende Tutorials
+
+## Weiterführende Literatur
