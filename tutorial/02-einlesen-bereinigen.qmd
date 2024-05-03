@@ -1,0 +1,21 @@
+---
+title: "Sitzung 2 - Einlesen & Bereinigen von Text"
+author: "Valerie Hase & Luisa Kutlar"
+date: "05.04.2024"
+format:
+  html:
+    toc: true
+    html-math-method: katex
+    css: styles.css
+---
+# Paket "readtext" installieren
+Wenn ihr beim Workshop kein Internet habt, könnt ihr das Paket auch weglassen. 
+```{r echo = TRUE, eval = FALSE, message = FALSE, warning = FALSE, error = FALSE} 
+install.packages("readtext")
+```
+
+# Pakete "aktivieren"
+Als nächstes laden wir über die folgenden Befehle die Pakete, mit denen wir Daten einlesen und bereinigen werden. 
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE} 
+library("readtext")
+```

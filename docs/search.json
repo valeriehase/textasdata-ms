@@ -18,7 +18,7 @@
     "href": "index.html#materialien",
     "title": "Automatisierte Inhaltsanalyse",
     "section": "Materialien",
-    "text": "Materialien\nSitzung 1️⃣: Begrüßung\n\nFolien - HTML\nFolien - PDF"
+    "text": "Materialien\nSitzung 1️⃣: Begrüßung\n\nFolien - HTML\n\nSitzung 2️⃣: *Einlesen & Bereinigen von Text **\n\nTutorial - HTML"
   },
   {
     "objectID": "index.html#weiterführende-tutorials",
@@ -82,5 +82,26 @@
     "title": "Automatisierte Inhaltsanalyse_ Workshop",
     "section": "",
     "text": "Fragen? 🤔\n\n\n\n\nAutomatisierte Inhaltsanalyse - Workshop Universität Münster, Juli 2024"
+  },
+  {
+    "objectID": "tutorial/sitzung2.html",
+    "href": "tutorial/sitzung2.html",
+    "title": "Sitzung 2",
+    "section": "",
+    "text": "Paket “readtext” installieren\nWenn ihr beim Workshop kein Internet habt, könnt ihr das Paket auch weglassen.\n\ninstall.packages(\"readtext\")\n\n\n\nPakete “aktivieren”\nAls nächstes laden wir über die folgenden Befehle die Pakete, mit denen wir Daten einlesen und bereinigen werden.\n\nlibrary(\"readtext\")"
+  },
+  {
+    "objectID": "tutorial/Sitzung2_EinlesenBereinigung.html",
+    "href": "tutorial/Sitzung2_EinlesenBereinigung.html",
+    "title": "Session 2: Einlesen & Bereinigen von Text",
+    "section": "",
+    "text": "Paket “readtext” installieren\nWenn ihr beim Workshop kein Internet habt, könnt ihr das Paket auch weglassen.\n\ninstall.packages(\"readtext\")\n\n\n\nPakete “aktivieren”\nAls nächstes laden wir über die folgenden Befehle die Pakete, mit denen wir Daten einlesen und bereinigen werden.\n\nlibrary(\"readtext\")"
+  },
+  {
+    "objectID": "tutorial/02-einlesen-bereinigen.html",
+    "href": "tutorial/02-einlesen-bereinigen.html",
+    "title": "Sitzung 2 - Einlesen & Bereinigen von Text",
+    "section": "",
+    "text": "Paket “readtext” installieren\nWenn ihr beim Workshop kein Internet habt, könnt ihr das Paket auch weglassen.\n\ninstall.packages(\"readtext\")\n\n\n\nPakete “aktivieren”\nAls nächstes laden wir über die folgenden Befehle die Pakete, mit denen wir Daten einlesen und bereinigen werden.\n\nlibrary(\"readtext\")"
   }
 ]

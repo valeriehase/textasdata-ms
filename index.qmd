@@ -24,7 +24,10 @@ subtitle: "Einführung in R - Methodenworkshop Universität Münster"
 Sitzung 1️⃣: **Begrüßung**
 
 -   [Folien - HTML](docs/01-begrüssung.html)
--   [Folien - PDF](pdf/01-begrüssung.pdf)
+
+Sitzung 2️⃣: *Einlesen & Bereinigen von Text **
+
+-   [Tutorial - HTML](tutorial/02-einlesen-bereinigen.html)
 
 ## Weiterführende Tutorials
 
