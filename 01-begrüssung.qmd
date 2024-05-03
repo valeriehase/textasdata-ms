@@ -51,7 +51,7 @@ Bitte die Hand heben 🤚, wenn ihr ....
 
 Shoutout an: [Mittelbaunetzwerk Journalismusforschung](https://mijofo.wordpress.com/) & [Mittelbaunetzwerk Wissenschaftskommunikation](https://www.dgpuk.de/de/wissenschaftskommunikation.html)
 
--   **Julia Metag**
+-   Julia Metag
 -   Franca Singh
 -   Jakon Jünger
 
@@ -63,8 +63,6 @@ Shoutout an: [Mittelbaunetzwerk Journalismusforschung](https://mijofo.wordpress.
 :::
 
 ## Ablauf
-
-## 
 
 ::: {style="font-size: 400%;text-align:center;"}
 **Fragen?** 🤔
