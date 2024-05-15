@@ -18,4 +18,23 @@ install.packages("readtext")
 Als nächstes laden wir über die folgenden Befehle die Pakete, mit denen wir Daten einlesen und bereinigen werden. 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE} 
 library("readtext")
+library("quanteda")
 ```
+# Daten einlesen
+Es gibt einige Packete mit denen Daten in R je nach Typ eingelesen werden können. Hier nutzen wir das packet "readtext", dass wir oben bereits installiert und geladen haben. 
+
+Davor müsst ihr den Datensatz ... aus ... herunterladen und in euren Working Directory ablegen bzw. den Working Directory in den entsprechenden Ordner mit dem Datensatz setzen. 
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE} 
+# setwd("your/working/directory") #Funktion, um den Working Directory zu setzen 
+# data <- readtext(data.csv) #Datensatz data.csv einlesen und als Objekt "data" abspeichern
+```
+Mit dem package "readtext" können beispielsweise auch diese Dateiformate eingelesen werden: .txt .json .html .pdf .doc .docx. Für einen besseren Überblick siehe <a href="https://cran.r-project.org/web/packages/readtext/readtext.pdf">hier</a>.
+
+Es gibt darüber hinaus auch eine Reihe an anderen Packeten mit denen weitere Dateiformate eingelesen werden können:
+
+::: incremental
+- readxl und xlsx: für das Arbeiten mit Excel Dateien, vor allem .xls und .xlsx Dateien.
+- foreign: für das Arbeiten mit vielen anderen Dateitypen, wie SPSS oder STATA Dateien.
+:::
+
+
