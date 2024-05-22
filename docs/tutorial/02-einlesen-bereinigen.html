@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.3.433">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -129,6 +129,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#paket-readtext-installieren" id="toc-paket-readtext-installieren" class="nav-link active" data-scroll-target="#paket-readtext-installieren">Paket “readtext” installieren</a></li>
   <li><a href="#pakete-aktivieren" id="toc-pakete-aktivieren" class="nav-link" data-scroll-target="#pakete-aktivieren">Pakete “aktivieren”</a></li>
+  <li><a href="#daten-einlesen" id="toc-daten-einlesen" class="nav-link" data-scroll-target="#daten-einlesen">Daten einlesen</a></li>
   </ul>
 </nav>
     </div>
@@ -175,7 +176,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>Pakete “aktivieren”</h1>
 <p>Als nächstes laden wir über die folgenden Befehle die Pakete, mit denen wir Daten einlesen und bereinigen werden.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"readtext"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"readtext"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"quanteda"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="daten-einlesen" class="level1">
+<h1>Daten einlesen</h1>
+<p>Es gibt einige Packete mit denen Daten in R je nach Typ eingelesen werden können. Hier nutzen wir das packet “readtext”, dass wir oben bereits installiert und geladen haben.</p>
+<p>Davor müsst ihr den Datensatz … aus … herunterladen und in euren Working Directory ablegen bzw. den Working Directory in den entsprechenden Ordner mit dem Datensatz setzen.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># setwd("your/working/directory") #Funktion, um den Working Directory zu setzen </span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># data &lt;- readtext(data.csv) #Datensatz data.csv einlesen und als Objekt "data" abspeichern</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Mit dem package “readtext” können beispielsweise auch diese Dateiformate eingelesen werden: .txt .json .html .pdf .doc .docx. Für einen besseren Überblick siehe <a href="https://cran.r-project.org/web/packages/readtext/readtext.pdf">hier</a>.</p>
+<p>Es gibt darüber hinaus auch eine Reihe an anderen Packeten mit denen weitere Dateiformate eingelesen werden können:</p>
+<div class="incremental">
+<ul class="incremental">
+<li>readxl und xlsx: für das Arbeiten mit Excel Dateien, vor allem .xls und .xlsx Dateien.</li>
+<li>foreign: für das Arbeiten mit vielen anderen Dateitypen, wie SPSS oder STATA Dateien.</li>
+</ul>
 </div>
 
 
