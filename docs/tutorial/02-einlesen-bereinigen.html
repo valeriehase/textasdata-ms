@@ -130,6 +130,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#paket-readtext-installieren" id="toc-paket-readtext-installieren" class="nav-link active" data-scroll-target="#paket-readtext-installieren">Paket “readtext” installieren</a></li>
   <li><a href="#pakete-aktivieren" id="toc-pakete-aktivieren" class="nav-link" data-scroll-target="#pakete-aktivieren">Pakete “aktivieren”</a></li>
   <li><a href="#daten-einlesen" id="toc-daten-einlesen" class="nav-link" data-scroll-target="#daten-einlesen">Daten einlesen</a></li>
+  <li><a href="#text-as-data-datentypen" id="toc-text-as-data-datentypen" class="nav-link" data-scroll-target="#text-as-data-datentypen">Text as Data: Datentypen</a></li>
+  <li><a href="#data-frame" id="toc-data-frame" class="nav-link" data-scroll-target="#data-frame">Data frame</a></li>
+  <li><a href="#corpus" id="toc-corpus" class="nav-link" data-scroll-target="#corpus">Corpus</a></li>
+  <li><a href="#tokens-types" id="toc-tokens-types" class="nav-link" data-scroll-target="#tokens-types">Tokens &amp; Types</a></li>
+  <li><a href="#document-feature-matrix-dfm" id="toc-document-feature-matrix-dfm" class="nav-link" data-scroll-target="#document-feature-matrix-dfm">Document-Feature-Matrix (dfm)</a></li>
+  <li><a href="#bag-of-words" id="toc-bag-of-words" class="nav-link" data-scroll-target="#bag-of-words">Bag of words</a></li>
+  <li><a href="#preprocessing" id="toc-preprocessing" class="nav-link" data-scroll-target="#preprocessing">Preprocessing</a></li>
+  <li><a href="#definition-eines-dokuments-festlegen" id="toc-definition-eines-dokuments-festlegen" class="nav-link" data-scroll-target="#definition-eines-dokuments-festlegen">Definition eines Dokuments festlegen</a></li>
+  <li><a href="#encoding-issues-chekchen" id="toc-encoding-issues-chekchen" class="nav-link" data-scroll-target="#encoding-issues-chekchen">Encoding issues chekchen</a></li>
   </ul>
 </nav>
     </div>
@@ -165,6 +174,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
+<p>#Gliederung</p>
 <section id="paket-readtext-installieren" class="level1">
 <h1>Paket “readtext” installieren</h1>
 <p>Wenn ihr beim Workshop kein Internet habt, könnt ihr das Paket auch weglassen.</p>
@@ -183,17 +193,134 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="daten-einlesen" class="level1">
 <h1>Daten einlesen</h1>
 <p>Es gibt einige Packete mit denen Daten in R je nach Typ eingelesen werden können. Hier nutzen wir das packet “readtext”, dass wir oben bereits installiert und geladen haben.</p>
-<p>Davor müsst ihr den Datensatz … aus … herunterladen und in euren Working Directory ablegen bzw. den Working Directory in den entsprechenden Ordner mit dem Datensatz setzen.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># setwd("your/working/directory") #Funktion, um den Working Directory zu setzen </span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># data &lt;- readtext(data.csv) #Datensatz data.csv einlesen und als Objekt "data" abspeichern</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># setwd("your/working/directory")  </span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># data &lt;- readtext(data.csv) </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Mit dem package “readtext” können beispielsweise auch diese Dateiformate eingelesen werden: .txt .json .html .pdf .doc .docx. Für einen besseren Überblick siehe <a href="https://cran.r-project.org/web/packages/readtext/readtext.pdf">hier</a>.</p>
-<p>Es gibt darüber hinaus auch eine Reihe an anderen Packeten mit denen weitere Dateiformate eingelesen werden können:</p>
+<p>Packete für andere Datentypen</p>
 <div class="incremental">
 <ul class="incremental">
-<li>readxl und xlsx: für das Arbeiten mit Excel Dateien, vor allem .xls und .xlsx Dateien.</li>
-<li>foreign: für das Arbeiten mit vielen anderen Dateitypen, wie SPSS oder STATA Dateien.</li>
+<li>utils: .csv Dateien</li>
+<li>readxl und xlsx: für das Arbeiten mit Excel Dateien, vor allem .xls und .xlsx Dateien</li>
+<li>foreign: für das Arbeiten mit vielen anderen Dateitypen, wie SPSS oder STATA Dateien</li>
+</ul>
+</div>
+</section>
+<section id="text-as-data-datentypen" class="level1">
+<h1>Text as Data: Datentypen</h1>
+<p>Mit den folgenden Datentypen werden wir arbeiten:</p>
+<div class="incremental">
+<ul class="incremental">
+<li>Data frame</li>
+<li>Corpus</li>
+<li>Tokens &amp; Types</li>
+<li>Document-Feature-Matrix (dfm)</li>
+</ul>
+</div>
+</section>
+<section id="data-frame" class="level1">
+<h1>Data frame</h1>
+<div class="incremental">
+<ul class="incremental">
+<li>Objekt in dem alle eingelesen Daten zunächst gespeichert werden</li>
+<li>Jede Zeile ist ein Dokument</li>
+<li>Jede Spalte ist eine Variable</li>
+</ul>
+</div>
+</section>
+<section id="corpus" class="level1">
+<h1>Corpus</h1>
+<div class="incremental">
+<ul class="incremental">
+<li>Ähnlich zum data frame</li>
+<li>Üblicherweise werden hier die Dokumenten ID und die Textinhalte übernommen</li>
+<li>Alle hier übernommenen Dokumente sollten einem Typ entsprechen (z.B. Zeitungsartikel, Instagram Posts)</li>
+<li>Jede Zeile ist ein Dokument</li>
+<li>Jede Spalte ist eine Variable</li>
+</ul>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(quanteda)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># corpus &lt;- data %&gt;% </span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">#  corpus(text_field = "text", docid_field = "doc_id")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Bild Corpus</p>
+</section>
+<section id="tokens-types" class="level1">
+<h1>Tokens &amp; Types</h1>
+<div class="incremental">
+<ul class="incremental">
+<li>Bei der Tokenisierung werden Texte in Analyseeinheiten (Token) unterteilt</li>
+<li>Das können einzelne Wörter (Unigramme), Wortketten (N-Gramme), ganze Sätze, Zahlen, Satzzeichen oder Emojis sein</li>
+<li>Types sind eindeutige Tokens</li>
+<li>Der Satz “Coden macht Spaß, weil Coden kreativ ist.” beinhaltet 9 Tokens und 8 Typen, weil das Wort “Coden” zwei mal vor kommt</li>
+<li>Types werden auch features genannt</li>
+</ul>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># tokens &lt;- corpus %&gt;% </span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">#  tokens(what = "word")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Bild Tokens</p>
+</section>
+<section id="document-feature-matrix-dfm" class="level1">
+<h1>Document-Feature-Matrix (dfm)</h1>
+<p>Um Text für den Computer “lesbar” zu machen müssen wir ihn in Zahlen überführen. Das machen wir mit der Document-Feature-Matrix, in der</p>
+<div class="incremental">
+<ul class="incremental">
+<li>die Zeilen alle Dokumente darstellen</li>
+<li>die Spalten alle features der Dokumente beinhalten</li>
+<li>die Zellen angeben, wie oft das jeweilig feature im Dokument vorkommt</li>
+</ul>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># dfm &lt;- tokens() %&gt;% </span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">#  dfm()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Bild dfm</p>
+</section>
+<section id="bag-of-words" class="level1">
+<h1>Bag of words</h1>
+<p>Beim bag of words Modell wird der Syntax bei der Analyse nicht berücksichtigt (siehe dfm). Es wird also angenommen, dass die Reihenfolge von Wörtern keinen Einfluss auf die Interpretation dieser hat.</p>
+<p>Bild einfügen</p>
+</section>
+<section id="preprocessing" class="level1">
+<h1>Preprocessing</h1>
+<p>Ziel: Text vereinfachen, (systematische) Fehler reduzieren und Text vergleichbar über mehrere Dokumente machen</p>
+<p>Mit der wichtigste Schritt bei der automatisierten Inhaltsanalyse. Die hier gefällten Entscheidungen wirken sich maßgeblich auf die Ergebnisse aus. Preprocessing umfasst die folgenden Punkte (nicht alle Schritte müssen immer für die eigenen Analyse zielführend sein):</p>
+<div class="incremental">
+<ul class="incremental">
+<li>Definiton eines Dokuments festlegen</li>
+<li>Endcoding issues checken</li>
+<li>Zahlen, Satzzeichen … entfernen</li>
+<li>Normalisierung auf Kleinbuchstaben</li>
+<li>Stopwörter entfernen</li>
+<li>Vereinheitlichung</li>
+<li>Lemmatizing/Stemming</li>
+<li>Seltene/Häufige features entfernen90</li>
+</ul>
+</div>
+</section>
+<section id="definition-eines-dokuments-festlegen" class="level1">
+<h1>Definition eines Dokuments festlegen</h1>
+<div class="incremental">
+<ul class="incremental">
+<li>Was ist die angestrebte Analyseeinheit und wofür wird sie benötigt? (z.B. ganzer Artikel, Text-Absätze, Satz)</li>
+<li>Abwägung zwischen Effizienz und Effektivität</li>
+<li>Primär theoretischer Schritt</li>
+</ul>
+</div>
+</section>
+<section id="encoding-issues-chekchen" class="level1">
+<h1>Encoding issues chekchen</h1>
+<div class="incremental">
+<ul class="incremental">
+<li>Das Problem: Computer speichern Zeichen indem sie ihnen numerischen Code (Bytes) zuordnen</li>
+<li>z.B. “Wort” wir als “01110111011011110111001001100100” gespeichert</li>
+<li>Encoding als der Vorgang den numerischen Code wieder in Zeichen zu übersetzen</li>
+<li>Problem: Co-Existenz von mehreren Encodings (z.B. bei “ß”, “ü”, “ğ” oder emojis)</li>
+<li>Lösung: Direkt beim Einlesen das richtige Encoding verwenden ODER manuell bereinigen</li>
 </ul>
 </div>
 
