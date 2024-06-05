@@ -8,33 +8,150 @@ format:
     html-math-method: katex
     css: styles.css
 ---
+
+#Gliederung
+
 # Paket "readtext" installieren
-Wenn ihr beim Workshop kein Internet habt, könnt ihr das Paket auch weglassen. 
-```{r echo = TRUE, eval = FALSE, message = FALSE, warning = FALSE, error = FALSE} 
+
+Wenn ihr beim Workshop kein Internet habt, könnt ihr das Paket auch weglassen.
+
+```{r echo = TRUE, eval = FALSE, message = FALSE, warning = FALSE, error = FALSE}
 install.packages("readtext")
 ```
 
 # Pakete "aktivieren"
-Als nächstes laden wir über die folgenden Befehle die Pakete, mit denen wir Daten einlesen und bereinigen werden. 
-```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE} 
+
+Als nächstes laden wir über die folgenden Befehle die Pakete, mit denen wir Daten einlesen und bereinigen werden.
+
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 library("readtext")
 library("quanteda")
 ```
-# Daten einlesen
-Es gibt einige Packete mit denen Daten in R je nach Typ eingelesen werden können. Hier nutzen wir das packet "readtext", dass wir oben bereits installiert und geladen haben. 
 
-Davor müsst ihr den Datensatz ... aus ... herunterladen und in euren Working Directory ablegen bzw. den Working Directory in den entsprechenden Ordner mit dem Datensatz setzen. 
-```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE} 
-# setwd("your/working/directory") #Funktion, um den Working Directory zu setzen 
-# data <- readtext(data.csv) #Datensatz data.csv einlesen und als Objekt "data" abspeichern
+# Daten einlesen
+
+Es gibt einige Packete mit denen Daten in R je nach Typ eingelesen werden können. Hier nutzen wir das packet "readtext", dass wir oben bereits installiert und geladen haben.
+
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+# setwd("your/working/directory")  
+# data <- readtext(data.csv) 
 ```
+
 Mit dem package "readtext" können beispielsweise auch diese Dateiformate eingelesen werden: .txt .json .html .pdf .doc .docx. Für einen besseren Überblick siehe <a href="https://cran.r-project.org/web/packages/readtext/readtext.pdf">hier</a>.
 
-Es gibt darüber hinaus auch eine Reihe an anderen Packeten mit denen weitere Dateiformate eingelesen werden können:
+Packete für andere Datentypen
 
 ::: incremental
-- readxl und xlsx: für das Arbeiten mit Excel Dateien, vor allem .xls und .xlsx Dateien.
-- foreign: für das Arbeiten mit vielen anderen Dateitypen, wie SPSS oder STATA Dateien.
+-   utils: .csv Dateien
+-   readxl und xlsx: für das Arbeiten mit Excel Dateien, vor allem .xls und .xlsx Dateien
+-   foreign: für das Arbeiten mit vielen anderen Dateitypen, wie SPSS oder STATA Dateien
 :::
 
+# Text as Data: Datentypen
 
+Mit den folgenden Datentypen werden wir arbeiten:
+
+::: incremental
+-   Data frame
+-   Corpus
+-   Tokens & Types
+-   Document-Feature-Matrix (dfm)
+:::
+
+# Data frame
+
+::: incremental
+-   Objekt in dem alle eingelesen Daten zunächst gespeichert werden
+-   Jede Zeile ist ein Dokument
+-   Jede Spalte ist eine Variable
+:::
+
+# Corpus
+
+::: incremental
+-   Ähnlich zum data frame
+-   Üblicherweise werden hier die Dokumenten ID und die Textinhalte übernommen
+-   Alle hier übernommenen Dokumente sollten einem Typ entsprechen (z.B. Zeitungsartikel, Instagram Posts)
+-   Jede Zeile ist ein Dokument
+-   Jede Spalte ist eine Variable
+:::
+
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+library(quanteda)
+# corpus <- data %>% 
+#  corpus(text_field = "text", docid_field = "doc_id")
+```
+
+Bild Corpus
+
+# Tokens & Types
+
+::: incremental
+-   Bei der Tokenisierung werden Texte in Analyseeinheiten (Token) unterteilt
+-   Das können einzelne Wörter (Unigramme), Wortketten (N-Gramme), ganze Sätze, Zahlen, Satzzeichen oder Emojis sein
+-   Types sind eindeutige Tokens
+-   Der Satz "Coden macht Spaß, weil Coden kreativ ist." beinhaltet 9 Tokens und 8 Typen, weil das Wort "Coden" zwei mal vor kommt
+-   Types werden auch features genannt
+:::
+
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+# tokens <- corpus %>% 
+#  tokens(what = "word")
+```
+
+Bild Tokens
+
+# Document-Feature-Matrix (dfm)
+
+Um Text für den Computer "lesbar" zu machen müssen wir ihn in Zahlen überführen. Das machen wir mit der Document-Feature-Matrix, in der
+
+::: incremental
+-   die Zeilen alle Dokumente darstellen
+-   die Spalten alle features der Dokumente beinhalten
+-   die Zellen angeben, wie oft das jeweilig feature im Dokument vorkommt
+:::
+
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+# dfm <- tokens() %>% 
+#  dfm()
+```
+
+Bild dfm
+
+# Bag of words
+
+Beim bag of words Modell wird der Syntax bei der Analyse nicht berücksichtigt (siehe dfm). Es wird also angenommen, dass die Reihenfolge von Wörtern keinen Einfluss auf die Interpretation dieser hat.
+
+Bild einfügen
+
+# Preprocessing
+Ziel: Text vereinfachen, (systematische) Fehler reduzieren und Text vergleichbar über mehrere Dokumente machen
+
+Mit der wichtigste Schritt bei der automatisierten Inhaltsanalyse. Die hier gefällten Entscheidungen wirken sich maßgeblich auf die Ergebnisse aus. Preprocessing umfasst die folgenden Punkte (nicht alle Schritte müssen immer für die eigenen Analyse zielführend sein):
+
+::: incremental
+-   Definiton eines Dokuments festlegen
+-   Endcoding issues checken
+-   Zahlen, Satzzeichen ... entfernen
+-   Normalisierung auf Kleinbuchstaben
+-   Stopwörter entfernen
+-   Vereinheitlichung
+-   Lemmatizing/Stemming
+-   Seltene/Häufige features entfernen90
+:::
+
+# Definition eines Dokuments festlegen
+::: incremental
+-   Was ist die angestrebte Analyseeinheit und wofür wird sie benötigt? (z.B. ganzer Artikel, Text-Absätze, Satz)
+-   Abwägung zwischen Effizienz und Effektivität
+-   Primär theoretischer Schritt 
+:::
+
+# Encoding issues chekchen
+::: incremental
+- Das Problem: Computer speichern Zeichen indem sie ihnen numerischen Code (Bytes) zuordnen
+- z.B. "Wort" wir als "01110111011011110111001001100100" gespeichert
+- Encoding als der Vorgang den numerischen Code wieder in Zeichen zu übersetzen
+- Problem: Co-Existenz von mehreren Encodings (z.B. bei "ß", "ü", "ğ" oder emojis)
+- Lösung: Direkt beim Einlesen das richtige Encoding verwenden ODER manuell bereinigen
+::: 
