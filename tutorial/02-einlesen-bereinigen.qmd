@@ -125,6 +125,7 @@ Beim bag of words Modell wird der Syntax bei der Analyse nicht berücksichtigt (
 Bild einfügen
 
 # Preprocessing
+
 Ziel: Text vereinfachen, (systematische) Fehler reduzieren und Text vergleichbar über mehrere Dokumente machen
 
 Mit der wichtigste Schritt bei der automatisierten Inhaltsanalyse. Die hier gefällten Entscheidungen wirken sich maßgeblich auf die Ergebnisse aus. Preprocessing umfasst die folgenden Punkte (nicht alle Schritte müssen immer für die eigenen Analyse zielführend sein):
@@ -134,24 +135,150 @@ Mit der wichtigste Schritt bei der automatisierten Inhaltsanalyse. Die hier gef�
 -   Endcoding issues checken
 -   Zahlen, Satzzeichen ... entfernen
 -   Normalisierung auf Kleinbuchstaben
--   Stopwörter entfernen
+-   Stoppwörter entfernen
 -   Vereinheitlichung
 -   Lemmatizing/Stemming
--   Seltene/Häufige features entfernen90
+-   Seltene/Häufige features entfernen
 :::
 
 # Definition eines Dokuments festlegen
+
 ::: incremental
 -   Was ist die angestrebte Analyseeinheit und wofür wird sie benötigt? (z.B. ganzer Artikel, Text-Absätze, Satz)
 -   Abwägung zwischen Effizienz und Effektivität
--   Primär theoretischer Schritt 
+-   Primär theoretischer Schritt
 :::
 
 # Encoding issues chekchen
+
 ::: incremental
-- Das Problem: Computer speichern Zeichen indem sie ihnen numerischen Code (Bytes) zuordnen
-- z.B. "Wort" wir als "01110111011011110111001001100100" gespeichert
-- Encoding als der Vorgang den numerischen Code wieder in Zeichen zu übersetzen
-- Problem: Co-Existenz von mehreren Encodings (z.B. bei "ß", "ü", "ğ" oder emojis)
-- Lösung: Direkt beim Einlesen das richtige Encoding verwenden ODER manuell bereinigen
-::: 
+-   Das Problem: Computer speichern Zeichen indem sie ihnen numerischen Code (Bytes) zuordnen
+-   z.B. "Wort" wir als "01110111011011110111001001100100" gespeichert
+-   Encoding als der Vorgang den numerischen Code wieder in Zeichen zu übersetzen
+-   Problem: Co-Existenz von mehreren Encodings (z.B. bei "ß", "ü", "ğ" oder emojis)
+-   Lösung: Direkt beim Einlesen das richtige Encoding verwenden ODER manuell bereinigen
+:::
+
+######## neu nur Code
+
+# 1 Daten einlesen
+
+Zunächst installieren und laden wir alle Packete, die wir heute und morgen brauchen.
+
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+#install.packages("RCurl")
+#install.packages("quanteda")
+
+library("RCurl")
+library("quanteda")
+library("tidyverse")
+library("dplyr")
+```
+
+Dann laden wir die Datei die hinter dem Link liegt mit der Funktion `getURL()` aus dem package Rcurl herunter. Mit einem Blick in das Environment sehen wir, dass die einzelnen Wörter mit einem ; getrennt werden . Daher brauchen wir die Funktion `read.csv2()` aus dem utils package - das package ist vorinstalliert und immer geladen - um die Daten in R einzulesen. Der Datensatz wird im Objekt `daten_df` gespeichert.
+
+```{r echo = TRUE, message = FALSE, error = FALSE}
+url <-  getURL("https://raw.githubusercontent.com/valeriehase/Salamanca-CSS-SummerSchool/main/Processing%20text%20and%20text%20as%20data/data_tvseries.csv")
+daten_df <-  read.csv2(text = url)
+```
+
+Alternativ können Daten in einer .csv Datei auch mit einem , voneinander abgetrennt sein. Hier bräuchte es dann die Funktion `read.csv()` zum Einlesen.
+
+Nach dem Einlesen der Daten ist es üblich sich zunächst einen Überblick über die Daten zu machen und zu kontrollieren, ob alles korrekt eingelesen wurde. 
+
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+head(daten_df)
+View(daten_df)
+str(daten_df)
+```
+
+# 2 Preprocessing
+
+## 2.1 Encoding issues checken
+
+Nach dem Einlesen haben wir bereits einen Blick in den Datensatz geworfen. Nun schauen wir uns gezielt die Textvariable `description` an, um zu überprüfen, ob alle Zeichen richtig dargestellt werden. 
+
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+daten_df %>% 
+   select(Description) %>% 
+  head()
+```
+
+In diesem Fall gibt es keine Encoding issues.
+
+Was tun falls doch?
+
+::: incremental
+-   Beim Einlesen das richtige Encoding mitgeben
+-   Manuell bereinigen 
+:::
+
+Beim manuellen Bereinigen kann die Funktion `gsub()` helfen, die Zeichenketten ersetzen kann. Zum Beispiel so: 
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+#string mit encoding issues
+string <- "SchÃ¶ne GrÃ¼Ãe aus MÃ¼nchen!"
+print(string)
+
+#Überprüfen, ob "München" in string vorhanden ist
+contains_münchen <- grepl("München", string)
+print(contains_münchen)
+
+#Zeichen manuell ersetzen
+string_bereinigt <- string %>% 
+  gsub(pattern = "Ã¶", replacement ="ö") %>% 
+  gsub(pattern = "Ã¼", replacement = "ü") %>% 
+  gsub(pattern = "Ã\u009f", replacement = "ß") 
+print(string_bereinigt)
+
+#Überprüfen, ob "München" in string_bereinigt vorhanden ist
+contains_münchen <- grepl("aus", string_bereinigt)
+print(contains_münchen)
+```
+
+## 2.2 Tokenisierung & Zahlen, URLs, etc. entfernen
+Die Funktion `tokens()`von quanteda ermöglicht es uns bei der Aufteilung von Text in tokens direkt bestimmte Zeichen zu entfernen. Hier entfernen wir Punkte, Zahlen, URLs und Symbole.
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+daten_tokens <- tokens(daten_df$Description, what = "word", remove_punct = TRUE, remove_numbers = TRUE, remove_url = TRUE, remove_symbols = TRUE) #wollen wir das alles entfernen?
+
+daten_tokens %>% 
+  head(n=3)
+```
+## 2.3 Normalisierung
+Mit der Funktion `tokens_tolower()`aus dem quanteda Packet können alle Buchstaben in Kleinbuchstaben umgeformt werden. 
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+daten_tokens <- tokens_tolower(daten_tokens) #wollen wir das alles entfernen?
+
+daten_tokens %>% 
+  head(n=3)
+```
+## 2.4 Stoppwörter entfernen
+Es gibt verschiedene Möglichkeiten, Stoppwörter zu entfernen. Am einfachsten ist dies mithilfe der in quanteda integrierten Stoppwortlisten möglich. Diese sind in mehreren Sprachen verfügbar, darunter auch Deutsch.
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+stopwords("english")
+daten_tokens <- tokens_remove(daten_tokens, stopwords("english"))
+```
+Je nach Forschungsfrage können Stoppwortlisten angepasst werden indem Wörter entfernt oder hinzugefügt werden. Es ist aber auch möglich eine eigene Liste zu erstellen. 
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+stoppwörter <- stopwords("english")
+list(stoppwörter)
+#stoppwörter <- stoppwörter[stoppwörter =! "i"]
+```
+
+
+## 2.5 Vereinheitlichung?
+## 2.6 Lemmatizing/Stemming
+## 2.7 Seltene/häufige features entfernen
+
+
+# Co-Occurrence-Analysen
+
+# Diktionäre
+
+# Topic Modeling
+
+# Qualitätskriterien
+
+Irgendwo einbauen: 
+write.csv()/write.csv2()
+writeRDS()/readRDS()
+save.image()
