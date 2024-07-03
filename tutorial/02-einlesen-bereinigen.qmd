@@ -246,7 +246,7 @@ daten_tokens %>%
 ## 2.3 Normalisierung
 Mit der Funktion `tokens_tolower()`aus dem quanteda Packet können alle Buchstaben in Kleinbuchstaben umgeformt werden. 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
-daten_tokens <- tokens_tolower(daten_tokens) #wollen wir das alles entfernen?
+daten_tokens <- tokens_tolower(daten_tokens)
 
 daten_tokens %>% 
   head(n=3)
@@ -259,18 +259,63 @@ daten_tokens <- tokens_remove(daten_tokens, stopwords("english"))
 ```
 Je nach Forschungsfrage können Stoppwortlisten angepasst werden indem Wörter entfernt oder hinzugefügt werden. Es ist aber auch möglich eine eigene Liste zu erstellen. 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+#Wörter aus der quanteda Stoppwortliste entfernen
 stoppwörter <- stopwords("english")
-list(stoppwörter)
-#stoppwörter <- stoppwörter[stoppwörter =! "i"]
+stoppwörter <- stoppwörter[!stoppwörter %in% c("i", "me")]
+
+#Wörter der quanteda Stoppwortliste hinzufügen
+stoppwörter <- c(stoppwörter, "i", "me")
+
+#Eigene Liste erstellen
+eigene_stoppwörter <- c("hier", "eigene", "stoppwörter")
 ```
 
 
-## 2.5 Vereinheitlichung?
-## 2.6 Lemmatizing/Stemming
-## 2.7 Seltene/häufige features entfernen
+## 2.5 Vereinheitlichung
+Oft gibt es Wörter, die unterschiedliche Abkürzungen oder Schreibweisen haben. Nehmen wir das Beispiel der Europäischen Union, die auch mit EU oder E.U. abgekürzt wird. Mit Hilfe der Funktion `gsub()` können wir strings mit anderen strings ersetzen. 
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+string <- "Bei den EU Wahlen können alle Bürger*innen der Europäischen Union wählen gehen."
+string <- gsub("Europäischen Union", "EU", string)
+print(string)
+```
+
+## 2.6 Lemmatizing
+Mit der Funktion `tokens_wordstem()`aus quanteda reduzieren wir alle tokens auf ihren Wortstamm.
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+daten_tokens <- daten_tokens %>% 
+  tokens_wordstem() 
+
+daten_tokens %>% 
+  head(n=3)
+```
 
 
-# Co-Occurrence-Analysen
+## 2.7 Document-Feature-Matrix
+Um aus unseren tokens eine dfm zu machen nutzen wir die `dfm()`Funktion aus dem quanteda package.
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+daten_dfm <- daten_tokens %>% 
+  dfm()
+```
+
+## 2.8 Seltene/häufige features entfernen
+Im letzten Schritt des Preprocessings entfernen wir häufige und selten vorkommende features aus der dfm. Das geht mit der Funktion `dfm_trim()`aus dem quanteda package. 
+
+Es können unterschiedliche thresholds gesetzt werden - hier lassen wir nur features in der dfm die mindestens in 0.5% und höchstens in 99% der Dokumente vorkommen. Das Argument `docfreq_type = "prop"`berechnet den Anteil der Dokumente, die ein bestimmtes feature beinhalten relativ zur Gesamtzahl der Dokumente. 
+`verbose = TRUE`printed während der Ausführung der Funktion Informationen über den Rechenvorgang in die Konsole. 
+
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+daten_dfm <- daten_dfm %>% 
+  dfm_trim( min_docfreq = 0.005, 
+            max_docfreq = 0.99, 
+            docfreq_type = "prop", 
+            verbose = TRUE) 
+```
+
+
+Frage: Wollen wir hier dazwischen noch ein Kapitel "erste Auswertungen" machen? Also topfeatures() und kwic() etc.? Und dann danach eine ausführliche Übung? Und soll die Übung dann hier rein oder in die Folien? Ich hätte jetzt fast Folien gesagt... kann mir die Übung aber gerne so oder so überlegen:) 
+
+# 3. Co-Occurrence-Analysen
+
 
 # Diktionäre
 
