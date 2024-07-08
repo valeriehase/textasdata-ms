@@ -315,6 +315,40 @@ daten_dfm <- daten_dfm %>%
 Frage: Wollen wir hier dazwischen noch ein Kapitel "erste Auswertungen" machen? Also topfeatures() und kwic() etc.? Und dann danach eine ausführliche Übung? Und soll die Übung dann hier rein oder in die Folien? Ich hätte jetzt fast Folien gesagt... kann mir die Übung aber gerne so oder so überlegen:) 
 
 # 3. Co-Occurrence-Analysen
+Für die Co-Occurence-Analyse müssen wir zunächst die dfm in eine Feature Co-occurrence Matrix (fcm) umwandeln. Das machen wir mit der Funktion `fcm()` aus dem quanteda Packet. 
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+daten_fcm <- daten_dfm %>% 
+  fcm()
+
+daten_fcm %>% 
+  head()
+```
+Beim nächsten Schritt wählen wir die features aus, die uns in unserer Analyse interessieren. Das machen wir mit der Funktion `fcm_select()`aus dem quanteda Packet.
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+daten_fcm <- daten_fcm %>% 
+  fcm_select(pattern = c("america", "crime", "family"), #hier noch bessere Begriffe
+             selection = "keep")
+```
+Dann visualisieren wir die fcm mit der `textplot_network()`Funktion aus dem`quanteda.textplots()` Paket. Wenn features im selben Dokument vorkommen, werden sie mit einer Linie verbunden. Umso dicker die Linie, desto öfter kommen die features miteinander vor. 
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+#install.packages("quanteda.textplots")
+library("quanteda.textplots")
+textplot_network(daten_fcm)
+```
+Diese Visualisierung gibt uns nun aber noch keine genauen Angaben dazu, wie oft ein feature mit einem anderen vorkommt. Um das herauszufinden, müssen wir die fcm mit der `convert()`Funktion aus dem quanteda package in einen data frame umwandeln. 
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+daten_fcm_df <- daten_fcm %>% 
+  convert(to = "data.frame")
+
+daten_fcm_df %>% 
+  head()
+```
+Mit Hilfe von `select()`können wir uns nun einzelne Häufigkeiten, wie oft ein feature mit einem anderen feature vorkommt, ausgeben lassen. 
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+daten_fcm_df %>%
+  filter(doc_id == "crime") %>% #Zeile
+  select(america) #Spalte #Frage: Wie kann es sein, dass crime america 0 ist und america crime 2?
+```
 
 
 # Diktionäre
