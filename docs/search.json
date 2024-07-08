@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "Automatisierte Inhaltsanalyse",
     "section": "",
-    "text": "Quelle: Foto von Sara Kurfeß auf Unsplash"
+    "text": "Quelle: Foto von AltumCode auf Unsplash"
   },
   {
     "objectID": "index.html#infos-zum-workshop",
@@ -18,7 +18,7 @@
     "href": "index.html#materialien",
     "title": "Automatisierte Inhaltsanalyse",
     "section": "Materialien",
-    "text": "Materialien\nSitzung 1️⃣: Begrüßung\n\nFolien - HTML\n\nSitzung 2️⃣: *Einlesen & Bereinigen von Text **\n\nTutorial - HTML"
+    "text": "Materialien\nSitzung 1️⃣: Einführung in die automatisierte Inhaltsanalyse\n\nFolien\n\nSitzung 2️⃣: Einlesen & Bereinigen von Text\n\nTutorial\n\nSitzung 3️⃣: Co-Occurence-Analysen\nSitzung 4️⃣: Diktionäre\nSitzung 5️⃣: Topic Modeling\nSitzung 6️⃣: Qualitätskriterien\nSitzung 7️⃣: Ausblick"
   },
   {
     "objectID": "index.html#weiterführende-tutorials",
@@ -102,6 +102,97 @@
     "href": "tutorial/02-einlesen-bereinigen.html",
     "title": "Sitzung 2 - Einlesen & Bereinigen von Text",
     "section": "",
-    "text": "Paket “readtext” installieren\nWenn ihr beim Workshop kein Internet habt, könnt ihr das Paket auch weglassen.\n\ninstall.packages(\"readtext\")\n\n\n\nPakete “aktivieren”\nAls nächstes laden wir über die folgenden Befehle die Pakete, mit denen wir Daten einlesen und bereinigen werden.\n\nlibrary(\"readtext\")"
+    "text": "#Gliederung"
+  },
+  {
+    "objectID": "tutorial/02-einlesen-bereinigen.html#preprocessing-1",
+    "href": "tutorial/02-einlesen-bereinigen.html#preprocessing-1",
+    "title": "Sitzung 2 - Einlesen & Bereinigen von Text",
+    "section": "Preprocessing",
+    "text": "Preprocessing"
+  },
+  {
+    "objectID": "tutorial/02-einlesen-bereinigen.html#encoding-issues-checken",
+    "href": "tutorial/02-einlesen-bereinigen.html#encoding-issues-checken",
+    "title": "Sitzung 2 - Einlesen & Bereinigen von Text",
+    "section": "2.1 Encoding issues checken",
+    "text": "2.1 Encoding issues checken\nNach dem Einlesen haben wir bereits einen Blick in den Datensatz geworfen. Nun schauen wir uns gezielt die Textvariable description an, um zu überprüfen, ob alle Zeichen richtig dargestellt werden.\n\ndaten_df %&gt;% \n   select(Description) %&gt;% \n  head()\n\n                                                                                                                                                                                                                                    Description\n1                                                                                                           Nine noble families fight for control over the lands of Westeros, while an ancient enemy returns after being dormant for millennia.\n2                                                                    A chemistry teacher diagnosed with inoperable lung cancer turns to manufacturing and selling methamphetamine with a former student in order to secure his family's future.\n3                                                                                          When a young boy vanishes, a small town uncovers a mystery involving secret experiments, terrifying supernatural forces and one strange little girl.\n4                                                                                                        Follows the personal and professional lives of six twenty to thirty year-old friends living in the Manhattan borough of New York City.\n5                                                                                                              Sheriff Deputy Rick Grimes wakes up from a coma to learn the world is in ruins and must lead a group of survivors to stay alive.\n6 The quirky spin on Conan Doyle's iconic sleuth pitches him as a \"high-functioning sociopath\" in modern-day London. Assisting him in his investigations: Afghanistan War vet John Watson, who's introduced to Holmes by a mutual acquaintance.\n\n\nIn diesem Fall gibt es keine Encoding issues.\nWas tun falls doch?\n\n\nBeim Einlesen das richtige Encoding mitgeben\nManuell bereinigen\n\n\nBeim manuellen Bereinigen kann die Funktion gsub() helfen, die Zeichenketten ersetzen kann. Zum Beispiel so:\n\n#string mit encoding issues\nstring &lt;- \"SchÃ¶ne GrÃ¼Ãe aus MÃ¼nchen!\"\nprint(string)\n\n[1] \"SchÃ¶ne GrÃ¼Ã\\u009fe aus MÃ¼nchen!\"\n\n#Überprüfen, ob \"München\" in string vorhanden ist\ncontains_münchen &lt;- grepl(\"München\", string)\nprint(contains_münchen)\n\n[1] FALSE\n\n#Zeichen manuell ersetzen\nstring_bereinigt &lt;- string %&gt;% \n  gsub(pattern = \"Ã¶\", replacement =\"ö\") %&gt;% \n  gsub(pattern = \"Ã¼\", replacement = \"ü\") %&gt;% \n  gsub(pattern = \"Ã\\u009f\", replacement = \"ß\") \nprint(string_bereinigt)\n\n[1] \"Schöne Grüße aus München!\"\n\n#Überprüfen, ob \"München\" in string_bereinigt vorhanden ist\ncontains_münchen &lt;- grepl(\"aus\", string_bereinigt)\nprint(contains_münchen)\n\n[1] TRUE"
+  },
+  {
+    "objectID": "tutorial/02-einlesen-bereinigen.html#datenbereinigung",
+    "href": "tutorial/02-einlesen-bereinigen.html#datenbereinigung",
+    "title": "Sitzung 2 - Einlesen & Bereinigen von Text",
+    "section": "Datenbereinigung",
+    "text": "Datenbereinigung"
+  },
+  {
+    "objectID": "tutorial/02-einlesen-bereinigen.html#normalisierung",
+    "href": "tutorial/02-einlesen-bereinigen.html#normalisierung",
+    "title": "Sitzung 2 - Einlesen & Bereinigen von Text",
+    "section": "2.3 Normalisierung",
+    "text": "2.3 Normalisierung\nMit der Funktion tokens_tolower()aus dem quanteda Packet können alle Buchstaben in Kleinbuchstaben umgeformt werden.\n\ndaten_tokens &lt;- tokens_tolower(daten_tokens)\n\ndaten_tokens %&gt;% \n  head(n=3)\n\nTokens consisting of 3 documents.\ntext1 :\n [1] \"nine\"     \"noble\"    \"families\" \"fight\"    \"for\"      \"control\" \n [7] \"over\"     \"the\"      \"lands\"    \"of\"       \"westeros\" \"while\"   \n[ ... and 9 more ]\n\ntext2 :\n [1] \"a\"             \"chemistry\"     \"teacher\"       \"diagnosed\"    \n [5] \"with\"          \"inoperable\"    \"lung\"          \"cancer\"       \n [9] \"turns\"         \"to\"            \"manufacturing\" \"and\"          \n[ ... and 13 more ]\n\ntext3 :\n [1] \"when\"      \"a\"         \"young\"     \"boy\"       \"vanishes\"  \"a\"        \n [7] \"small\"     \"town\"      \"uncovers\"  \"a\"         \"mystery\"   \"involving\"\n[ ... and 10 more ]"
+  },
+  {
+    "objectID": "tutorial/02-einlesen-bereinigen.html#tokenisierung-zahlen-urls-etc.-entfernen",
+    "href": "tutorial/02-einlesen-bereinigen.html#tokenisierung-zahlen-urls-etc.-entfernen",
+    "title": "Sitzung 2 - Einlesen & Bereinigen von Text",
+    "section": "2.2 Tokenisierung & Zahlen, URLs, etc. entfernen",
+    "text": "2.2 Tokenisierung & Zahlen, URLs, etc. entfernen\nDie Funktion tokens()von quanteda ermöglicht es uns bei der Aufteilung von Text in tokens direkt bestimmte Zeichen zu entfernen. Hier entfernen wir Punkte, Zahlen, URLs und Symbole.\n\ndaten_tokens &lt;- tokens(daten_df$Description, what = \"word\", remove_punct = TRUE, remove_numbers = TRUE, remove_url = TRUE, remove_symbols = TRUE) #wollen wir das alles entfernen?\n\ndaten_tokens %&gt;% \n  head(n=3)\n\nTokens consisting of 3 documents.\ntext1 :\n [1] \"Nine\"     \"noble\"    \"families\" \"fight\"    \"for\"      \"control\" \n [7] \"over\"     \"the\"      \"lands\"    \"of\"       \"Westeros\" \"while\"   \n[ ... and 9 more ]\n\ntext2 :\n [1] \"A\"             \"chemistry\"     \"teacher\"       \"diagnosed\"    \n [5] \"with\"          \"inoperable\"    \"lung\"          \"cancer\"       \n [9] \"turns\"         \"to\"            \"manufacturing\" \"and\"          \n[ ... and 13 more ]\n\ntext3 :\n [1] \"When\"      \"a\"         \"young\"     \"boy\"       \"vanishes\"  \"a\"        \n [7] \"small\"     \"town\"      \"uncovers\"  \"a\"         \"mystery\"   \"involving\"\n[ ... and 10 more ]"
+  },
+  {
+    "objectID": "tutorial/02-einlesen-bereinigen.html#stopwörter-entfernen",
+    "href": "tutorial/02-einlesen-bereinigen.html#stopwörter-entfernen",
+    "title": "Sitzung 2 - Einlesen & Bereinigen von Text",
+    "section": "2.4 Stopwörter entfernen",
+    "text": "2.4 Stopwörter entfernen"
+  },
+  {
+    "objectID": "tutorial/02-einlesen-bereinigen.html#vereinheitlichung",
+    "href": "tutorial/02-einlesen-bereinigen.html#vereinheitlichung",
+    "title": "Sitzung 2 - Einlesen & Bereinigen von Text",
+    "section": "2.5 Vereinheitlichung",
+    "text": "2.5 Vereinheitlichung\nOft gibt es Wörter, die unterschiedliche Abkürzungen oder Schreibweisen haben. Nehmen wir das Beispiel der Europäischen Union, die auch mit EU oder E.U. abgekürzt wird. Mit Hilfe der Funktion gsub() können wir strings mit anderen strings ersetzen.\n\nstring &lt;- \"Bei den EU Wahlen können alle Bürger*innen der Europäischen Union wählen gehen.\"\nstring &lt;- gsub(\"Europäischen Union\", \"EU\", string)\nprint(string)\n\n[1] \"Bei den EU Wahlen können alle Bürger*innen der EU wählen gehen.\""
+  },
+  {
+    "objectID": "tutorial/02-einlesen-bereinigen.html#lemmatizingstemming",
+    "href": "tutorial/02-einlesen-bereinigen.html#lemmatizingstemming",
+    "title": "Sitzung 2 - Einlesen & Bereinigen von Text",
+    "section": "2.6 Lemmatizing/Stemming",
+    "text": "2.6 Lemmatizing/Stemming"
+  },
+  {
+    "objectID": "tutorial/02-einlesen-bereinigen.html#seltenehäufige-features-entfernen",
+    "href": "tutorial/02-einlesen-bereinigen.html#seltenehäufige-features-entfernen",
+    "title": "Sitzung 2 - Einlesen & Bereinigen von Text",
+    "section": "2.8 Seltene/häufige features entfernen",
+    "text": "2.8 Seltene/häufige features entfernen\nIm letzten Schritt des Preprocessings entfernen wir häufige und selten vorkommende features aus der dfm. Das geht mit der Funktion dfm_trim()aus dem quanteda package.\nEs können unterschiedliche thresholds gesetzt werden - hier lassen wir nur features in der dfm die mindestens in 0.5% und höchstens in 99% der Dokumente vorkommen. Das Argument docfreq_type = \"prop\"berechnet den Anteil der Dokumente, die ein bestimmtes feature beinhalten relativ zur Gesamtzahl der Dokumente. verbose = TRUEprinted während der Ausführung der Funktion Informationen über den Rechenvorgang in die Konsole.\n\ndaten_dfm &lt;- daten_dfm %&gt;% \n  dfm_trim( min_docfreq = 0.005, \n            max_docfreq = 0.99, \n            docfreq_type = \"prop\", \n            verbose = TRUE) \n\nFrage: Wollen wir hier dazwischen noch ein Kapitel “erste Auswertungen” machen? Also topfeatures() und kwic() etc.? Und dann danach eine ausführliche Übung? Und soll die Übung dann hier rein oder in die Folien? Ich hätte jetzt fast Folien gesagt… kann mir die Übung aber gerne so oder so überlegen:)"
+  },
+  {
+    "objectID": "tutorial/02-einlesen-bereinigen.html#stoppwörter-entfernen",
+    "href": "tutorial/02-einlesen-bereinigen.html#stoppwörter-entfernen",
+    "title": "Sitzung 2 - Einlesen & Bereinigen von Text",
+    "section": "2.4 Stoppwörter entfernen",
+    "text": "2.4 Stoppwörter entfernen\nEs gibt verschiedene Möglichkeiten, Stoppwörter zu entfernen. Am einfachsten ist dies mithilfe der in quanteda integrierten Stoppwortlisten möglich. Diese sind in mehreren Sprachen verfügbar, darunter auch Deutsch.\n\nstopwords(\"english\")\n\n  [1] \"i\"          \"me\"         \"my\"         \"myself\"     \"we\"        \n  [6] \"our\"        \"ours\"       \"ourselves\"  \"you\"        \"your\"      \n [11] \"yours\"      \"yourself\"   \"yourselves\" \"he\"         \"him\"       \n [16] \"his\"        \"himself\"    \"she\"        \"her\"        \"hers\"      \n [21] \"herself\"    \"it\"         \"its\"        \"itself\"     \"they\"      \n [26] \"them\"       \"their\"      \"theirs\"     \"themselves\" \"what\"      \n [31] \"which\"      \"who\"        \"whom\"       \"this\"       \"that\"      \n [36] \"these\"      \"those\"      \"am\"         \"is\"         \"are\"       \n [41] \"was\"        \"were\"       \"be\"         \"been\"       \"being\"     \n [46] \"have\"       \"has\"        \"had\"        \"having\"     \"do\"        \n [51] \"does\"       \"did\"        \"doing\"      \"would\"      \"should\"    \n [56] \"could\"      \"ought\"      \"i'm\"        \"you're\"     \"he's\"      \n [61] \"she's\"      \"it's\"       \"we're\"      \"they're\"    \"i've\"      \n [66] \"you've\"     \"we've\"      \"they've\"    \"i'd\"        \"you'd\"     \n [71] \"he'd\"       \"she'd\"      \"we'd\"       \"they'd\"     \"i'll\"      \n [76] \"you'll\"     \"he'll\"      \"she'll\"     \"we'll\"      \"they'll\"   \n [81] \"isn't\"      \"aren't\"     \"wasn't\"     \"weren't\"    \"hasn't\"    \n [86] \"haven't\"    \"hadn't\"     \"doesn't\"    \"don't\"      \"didn't\"    \n [91] \"won't\"      \"wouldn't\"   \"shan't\"     \"shouldn't\"  \"can't\"     \n [96] \"cannot\"     \"couldn't\"   \"mustn't\"    \"let's\"      \"that's\"    \n[101] \"who's\"      \"what's\"     \"here's\"     \"there's\"    \"when's\"    \n[106] \"where's\"    \"why's\"      \"how's\"      \"a\"          \"an\"        \n[111] \"the\"        \"and\"        \"but\"        \"if\"         \"or\"        \n[116] \"because\"    \"as\"         \"until\"      \"while\"      \"of\"        \n[121] \"at\"         \"by\"         \"for\"        \"with\"       \"about\"     \n[126] \"against\"    \"between\"    \"into\"       \"through\"    \"during\"    \n[131] \"before\"     \"after\"      \"above\"      \"below\"      \"to\"        \n[136] \"from\"       \"up\"         \"down\"       \"in\"         \"out\"       \n[141] \"on\"         \"off\"        \"over\"       \"under\"      \"again\"     \n[146] \"further\"    \"then\"       \"once\"       \"here\"       \"there\"     \n[151] \"when\"       \"where\"      \"why\"        \"how\"        \"all\"       \n[156] \"any\"        \"both\"       \"each\"       \"few\"        \"more\"      \n[161] \"most\"       \"other\"      \"some\"       \"such\"       \"no\"        \n[166] \"nor\"        \"not\"        \"only\"       \"own\"        \"same\"      \n[171] \"so\"         \"than\"       \"too\"        \"very\"       \"will\"      \n\ndaten_tokens &lt;- tokens_remove(daten_tokens, stopwords(\"english\"))\n\nJe nach Forschungsfrage können Stoppwortlisten angepasst werden indem Wörter entfernt oder hinzugefügt werden. Es ist aber auch möglich eine eigene Liste zu erstellen.\n\n#Wörter aus der quanteda Stoppwortliste entfernen\nstoppwörter &lt;- stopwords(\"english\")\nstoppwörter &lt;- stoppwörter[!stoppwörter %in% c(\"i\", \"me\")]\n\n#Wörter der quanteda Stoppwortliste hinzufügen\nstoppwörter &lt;- c(stoppwörter, \"i\", \"me\")\n\n#Eigene Liste erstellen\neigene_stoppwörter &lt;- c(\"hier\", \"eigene\", \"stoppwörter\")"
+  },
+  {
+    "objectID": "tutorial/02-einlesen-bereinigen.html#lemmatizing",
+    "href": "tutorial/02-einlesen-bereinigen.html#lemmatizing",
+    "title": "Sitzung 2 - Einlesen & Bereinigen von Text",
+    "section": "2.6 Lemmatizing",
+    "text": "2.6 Lemmatizing\nMit der Funktion tokens_wordstem()aus quanteda reduzieren wir alle tokens auf ihren Wortstamm.\n\ndaten_tokens &lt;- daten_tokens %&gt;% \n  tokens_wordstem() \n\ndaten_tokens %&gt;% \n  head(n=3)\n\nTokens consisting of 3 documents.\ntext1 :\n [1] \"nine\"      \"nobl\"      \"famili\"    \"fight\"     \"control\"   \"land\"     \n [7] \"westero\"   \"ancient\"   \"enemi\"     \"return\"    \"dormant\"   \"millennia\"\n\ntext2 :\n [1] \"chemistri\"      \"teacher\"        \"diagnos\"        \"inoper\"        \n [5] \"lung\"           \"cancer\"         \"turn\"           \"manufactur\"    \n [9] \"sell\"           \"methamphetamin\" \"former\"         \"student\"       \n[ ... and 4 more ]\n\ntext3 :\n [1] \"young\"      \"boy\"        \"vanish\"     \"small\"      \"town\"      \n [6] \"uncov\"      \"mysteri\"    \"involv\"     \"secret\"     \"experi\"    \n[11] \"terrifi\"    \"supernatur\"\n[ ... and 5 more ]"
+  },
+  {
+    "objectID": "tutorial/02-einlesen-bereinigen.html#document-feature-matrix",
+    "href": "tutorial/02-einlesen-bereinigen.html#document-feature-matrix",
+    "title": "Sitzung 2 - Einlesen & Bereinigen von Text",
+    "section": "2.7 Document-Feature-Matrix",
+    "text": "2.7 Document-Feature-Matrix\nUm aus unseren tokens eine dfm zu machen nutzen wir die dfm()Funktion aus dem quanteda package.\n\ndaten_dfm &lt;- daten_tokens %&gt;% \n  dfm()"
+  },
+  {
+    "objectID": "index.html#zeitplan",
+    "href": "index.html#zeitplan",
+    "title": "Automatisierte Inhaltsanalyse",
+    "section": "Zeitplan",
+    "text": "Zeitplan\n📅 Mi, 24. Juli\n\n09:00 - 10:00: 1️⃣ Einführung in die automatisierte Inhaltsanalyse\n10:00 - 12:00: 2️⃣ Einlesen & Bereinigen von Text\n12:00 - 13:00: 🥗 Mittagspause\n13:00 - 15:00: 3️⃣ Co-Occurence-Analysen\n15:00 - 17:00: 4️⃣ Diktionäre\n\n📅 Do, 25. Juli\n\n09:00 - 12:00: 5️⃣ Topic Modeling\n12:00 - 13:00: 🥗 Mittagspause\n13:00 - 15:00: 6️⃣ Qualitätskriterien\n15:00 - 16:00: 7️⃣ Ausblick"
   }
 ]

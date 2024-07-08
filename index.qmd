@@ -3,7 +3,7 @@ title: "Automatisierte Inhaltsanalyse"
 subtitle: "Einführung in R - Methodenworkshop Universität Münster"
 ---
 
-![Quelle: Foto von Sara Kurfeß auf Unsplash](images/social-media.jpg){fig-alt="image of smartphone" fig-align="center" width="300"}
+![Quelle: Foto von AltumCode auf Unsplash](images/code.jpg){fig-alt="image of smartphone" fig-align="center" width="800"}
 
 <hr>
 
@@ -15,19 +15,53 @@ subtitle: "Einführung in R - Methodenworkshop Universität Münster"
 
 -   Workshop-Leitung:
 
-    -   Valerie Hase (Ludwig-Maximilians-Universität München). Mehr Infos: [github.com/valeriehase](https://github.com/valeriehase) & [valerie-hase.com](https://valerie-hase.com/)
+    -   **Valerie Hase** (Ludwig-Maximilians-Universität München). Mehr Infos: [github.com/valeriehase](https://github.com/valeriehase) & [valerie-hase.com](https://valerie-hase.com/)
 
-    -   Unterstützung durch Teaching Assistant Luisa Kutlar (Ludwig-Maximilians-Universität München). Mehr Infos: [github.com/luisakutlar](https://github.com/luisakutlar)
+    -   Unterstützung durch Teaching Assistant **Luisa Kutlar** (Ludwig-Maximilians-Universität München). Mehr Infos: [github.com/luisakutlar](https://github.com/luisakutlar)
+
+## Zeitplan
+
+📅 **Mi, 24. Juli**
+
+-   09:00 - 10:00: 1️⃣ *Einführung in die automatisierte Inhaltsanalyse*
+
+-   10:00 - 12:00: 2️⃣ *Einlesen & Bereinigen von Text*
+
+-   12:00 - 13:00: 🥗 *Mittagspause*
+
+-   13:00 - 15:00: 3️⃣ *Co-Occurence-Analysen*
+
+-   15:00 - 17:00: 4️⃣ *Diktionäre*
+
+📅 **Do,** **25. Juli**
+
+-   09:00 - 12:00: 5️⃣ *Topic Modeling*
+
+-   12:00 - 13:00: 🥗 *Mittagspause*
+
+-   13:00 - 15:00: 6️⃣ *Qualitätskriterien*
+
+-   15:00 - 16:00: 7️⃣ *Ausblick*
 
 ## Materialien
 
-Sitzung 1️⃣: **Begrüßung**
+Sitzung 1️⃣: *Einführung in die automatisierte Inhaltsanalyse*
 
--   [Folien - HTML](docs/01-begrüssung.html)
+-   [Folien](docs/01-begrüssung.html)
 
-Sitzung 2️⃣: *Einlesen & Bereinigen von Text **
+Sitzung 2️⃣: *Einlesen & Bereinigen von Text*
 
--   [Tutorial - HTML](tutorial/02-einlesen-bereinigen.html)
+-   [Tutorial](tutorial/02-einlesen-bereinigen.html)
+
+Sitzung 3️⃣: *Co-Occurence-Analysen*
+
+Sitzung 4️⃣: *Diktionäre*
+
+Sitzung 5️⃣: *Topic Modeling*
+
+Sitzung 6️⃣: *Qualitätskriterien*
+
+Sitzung 7️⃣: *Ausblick*
 
 ## Weiterführende Tutorials
 
