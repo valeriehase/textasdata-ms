@@ -3,7 +3,7 @@ project:
   output-dir: docs
 
 website:
-  title: "Automatisierte Inhaltsanalyse_ Workshop"
+  title: "Automatisierte Inhaltsanalyse: Workshop"
   navbar:
     search: false
     pinned: true
