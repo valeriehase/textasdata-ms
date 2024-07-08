@@ -314,7 +314,7 @@ daten_dfm <- daten_dfm %>%
 
 Frage: Wollen wir hier dazwischen noch ein Kapitel "erste Auswertungen" machen? Also topfeatures() und kwic() etc.? Und dann danach eine ausführliche Übung? Und soll die Übung dann hier rein oder in die Folien? Ich hätte jetzt fast Folien gesagt... kann mir die Übung aber gerne so oder so überlegen:) 
 
-# 3. Co-Occurrence-Analysen
+# 3 Co-Occurrence-Analysen
 Für die Co-Occurence-Analyse müssen wir zunächst die dfm in eine Feature Co-occurrence Matrix (fcm) umwandeln. Das machen wir mit der Funktion `fcm()` aus dem quanteda Packet. 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 daten_fcm <- daten_dfm %>% 
@@ -351,9 +351,24 @@ daten_fcm_df %>%
 ```
 
 
-# Diktionäre
+# 4 Diktionäre
+## 4.1 Off-the-shelf Diktionäre
+Es gibt viele off-the-shelf Diktionäre. Der Einfachkeit halber nutzen wir hier zur Demonstation den `data_dictionary_LSD2015`aus dem quanteda Packet (Young & Soroka, 2012). #Soll hier noch ein Disclaimer wegen Validität und Auswahl Diktionär etc. hin?
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+diktionär <- data_dictionary_LSD2015
 
-# Topic Modeling
+diktionär %>% 
+  head()
+
+?data_dictionary_LSD2015
+```
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+sentiment_tvshows <-  daten_dfm %>% 
+dfm_lookup(dictionary = data_dictionary_LSD2015[1:2])
+```
+## 4.2 Eigene Diktionäre 
+
+# 5 Topic Modeling
 
 # Qualitätskriterien
 
