@@ -243,7 +243,7 @@ daten_tokens <- tokens(daten_df$Description, what = "word", remove_punct = TRUE,
 daten_tokens %>% 
   head(n=3)
 ```
-## 2.3 Normalisierung
+## 2.3 Anpassung auf Kleinschreibung
 Mit der Funktion `tokens_tolower()`aus dem quanteda Packet können alle Buchstaben in Kleinbuchstaben umgeformt werden. 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 daten_tokens <- tokens_tolower(daten_tokens)
@@ -279,7 +279,7 @@ string <- gsub("Europäischen Union", "EU", string)
 print(string)
 ```
 
-## 2.6 Lemmatizing
+## 2.6 Stemming
 Mit der Funktion `tokens_wordstem()`aus quanteda reduzieren wir alle tokens auf ihren Wortstamm.
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 daten_tokens <- daten_tokens %>% 
@@ -297,8 +297,9 @@ daten_dfm <- daten_tokens %>%
   dfm()
 ```
 
+
 ## 2.8 Seltene/häufige features entfernen
-Im letzten Schritt des Preprocessings entfernen wir häufige und selten vorkommende features aus der dfm. Das geht mit der Funktion `dfm_trim()`aus dem quanteda package. 
+Im letzten Schritt des Preprocessings entfernen wir häufig und selten vorkommende features aus der dfm. Das geht mit der Funktion `dfm_trim()`aus dem quanteda Packet. 
 
 Es können unterschiedliche thresholds gesetzt werden - hier lassen wir nur features in der dfm die mindestens in 0.5% und höchstens in 99% der Dokumente vorkommen. Das Argument `docfreq_type = "prop"`berechnet den Anteil der Dokumente, die ein bestimmtes feature beinhalten relativ zur Gesamtzahl der Dokumente. 
 `verbose = TRUE`printed während der Ausführung der Funktion Informationen über den Rechenvorgang in die Konsole. 
@@ -311,10 +312,14 @@ daten_dfm <- daten_dfm %>%
             verbose = TRUE) 
 ```
 
+hier noch wordcloud einfügen und check most frequent features (in salamanca)
 
-Frage: Wollen wir hier dazwischen noch ein Kapitel "erste Auswertungen" machen? Also topfeatures() und kwic() etc.? Und dann danach eine ausführliche Übung? Und soll die Übung dann hier rein oder in die Folien? Ich hätte jetzt fast Folien gesagt... kann mir die Übung aber gerne so oder so überlegen:) 
+Übung: mit emoji einleiten "test your knowledge" mit anderem Datensatz, der nicht zu groß ist
 
 # 3 Co-Occurrence-Analysen
+ab hier neues Dokument
+hier mit kwic() anfangen 
+
 Für die Co-Occurence-Analyse müssen wir zunächst die dfm in eine Feature Co-occurrence Matrix (fcm) umwandeln. Das machen wir mit der Funktion `fcm()` aus dem quanteda Packet. 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 daten_fcm <- daten_dfm %>% 
@@ -326,7 +331,7 @@ daten_fcm %>%
 Beim nächsten Schritt wählen wir die features aus, die uns in unserer Analyse interessieren. Das machen wir mit der Funktion `fcm_select()`aus dem quanteda Packet.
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 daten_fcm <- daten_fcm %>% 
-  fcm_select(pattern = c("america", "crime", "family"), #hier noch bessere Begriffe
+  fcm_select(pattern = c("america", "crime", "", "hero"), #hier noch bessere Begriffe vielleicht über topfeatures oder topic modeling
              selection = "keep")
 ```
 Dann visualisieren wir die fcm mit der `textplot_network()`Funktion aus dem`quanteda.textplots()` Paket. Wenn features im selben Dokument vorkommen, werden sie mit einer Linie verbunden. Umso dicker die Linie, desto öfter kommen die features miteinander vor. 
@@ -335,7 +340,7 @@ Dann visualisieren wir die fcm mit der `textplot_network()`Funktion aus dem`quan
 library("quanteda.textplots")
 textplot_network(daten_fcm)
 ```
-Diese Visualisierung gibt uns nun aber noch keine genauen Angaben dazu, wie oft ein feature mit einem anderen vorkommt. Um das herauszufinden, müssen wir die fcm mit der `convert()`Funktion aus dem quanteda package in einen data frame umwandeln. 
+Diese Visualisierung gibt uns nun aber noch keine genauen Angaben dazu, wie oft ein feature mit einem anderen vorkommt. Um das herauszufinden, müssen wir die fcm mit der `convert()`Funktion aus dem quanteda Packet in einen data frame umwandeln. 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 daten_fcm_df <- daten_fcm %>% 
   convert(to = "data.frame")
@@ -349,6 +354,11 @@ daten_fcm_df %>%
   filter(doc_id == "crime") %>% #Zeile
   select(america) #Spalte #Frage: Wie kann es sein, dass crime america 0 ist und america crime 2?
 ```
+und dann noch code n-grams von salamanca 
+
+und dann noch part of speech tagging (salamanca)
+
+und named entity recognition 
 
 
 # 4 Diktionäre
@@ -362,12 +372,21 @@ diktionär %>%
 
 ?data_dictionary_LSD2015
 ```
+Nun wollen wir den dictionary auf unsere Daten anwenden. Diese müssen dafür im dfm-Format sein. Mit der Funktion `dfm_lookup()` aus dem quanteda Packet wird für jeden Text, also in diesem Fall für jede TV Show, geschaut, wie viele Wörter aus den ersten zwei Spalten des Diktionärs vorkommen. Die Funktion `dfm_weight(scheme = "prop")`setzt die Anzahl der dictionary Wörter ins Verhältnis mit der Länge des Textes.  
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 sentiment_tvshows <-  daten_dfm %>% 
-dfm_lookup(dictionary = data_dictionary_LSD2015[1:2])
+  dfm_weight(scheme = "prop") %>% 
+  dfm_lookup(dictionary = data_dictionary_LSD2015[1:2])
+
+sentiment_tvshows %>% 
+  head()
 ```
+
+
+
 ## 4.2 Eigene Diktionäre 
 
+Am Ende alles nochmal in ein RSkript packen ohne Text, nur mit Überschrift (alles an Code)
 # 5 Topic Modeling
 
 # Qualitätskriterien
