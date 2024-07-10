@@ -9,173 +9,29 @@ format:
     css: styles.css
 ---
 
-#Gliederung
-
-# Paket "readtext" installieren
-
-Wenn ihr beim Workshop kein Internet habt, könnt ihr das Paket auch weglassen.
-
-```{r echo = TRUE, eval = FALSE, message = FALSE, warning = FALSE, error = FALSE}
-install.packages("readtext")
-```
-
-# Pakete "aktivieren"
-
-Als nächstes laden wir über die folgenden Befehle die Pakete, mit denen wir Daten einlesen und bereinigen werden.
-
-```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
-library("readtext")
-library("quanteda")
-```
-
-# Daten einlesen
-
-Es gibt einige Packete mit denen Daten in R je nach Typ eingelesen werden können. Hier nutzen wir das packet "readtext", dass wir oben bereits installiert und geladen haben.
-
-```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
-# setwd("your/working/directory")  
-# data <- readtext(data.csv) 
-```
-
-Mit dem package "readtext" können beispielsweise auch diese Dateiformate eingelesen werden: .txt .json .html .pdf .doc .docx. Für einen besseren Überblick siehe <a href="https://cran.r-project.org/web/packages/readtext/readtext.pdf">hier</a>.
-
-Packete für andere Datentypen
-
-::: incremental
--   utils: .csv Dateien
--   readxl und xlsx: für das Arbeiten mit Excel Dateien, vor allem .xls und .xlsx Dateien
--   foreign: für das Arbeiten mit vielen anderen Dateitypen, wie SPSS oder STATA Dateien
-:::
-
-# Text as Data: Datentypen
-
-Mit den folgenden Datentypen werden wir arbeiten:
-
-::: incremental
--   Data frame
--   Corpus
--   Tokens & Types
--   Document-Feature-Matrix (dfm)
-:::
-
-# Data frame
-
-::: incremental
--   Objekt in dem alle eingelesen Daten zunächst gespeichert werden
--   Jede Zeile ist ein Dokument
--   Jede Spalte ist eine Variable
-:::
-
-# Corpus
-
-::: incremental
--   Ähnlich zum data frame
--   Üblicherweise werden hier die Dokumenten ID und die Textinhalte übernommen
--   Alle hier übernommenen Dokumente sollten einem Typ entsprechen (z.B. Zeitungsartikel, Instagram Posts)
--   Jede Zeile ist ein Dokument
--   Jede Spalte ist eine Variable
-:::
-
-```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
-library(quanteda)
-# corpus <- data %>% 
-#  corpus(text_field = "text", docid_field = "doc_id")
-```
-
-Bild Corpus
-
-# Tokens & Types
-
-::: incremental
--   Bei der Tokenisierung werden Texte in Analyseeinheiten (Token) unterteilt
--   Das können einzelne Wörter (Unigramme), Wortketten (N-Gramme), ganze Sätze, Zahlen, Satzzeichen oder Emojis sein
--   Types sind eindeutige Tokens
--   Der Satz "Coden macht Spaß, weil Coden kreativ ist." beinhaltet 9 Tokens und 8 Typen, weil das Wort "Coden" zwei mal vor kommt
--   Types werden auch features genannt
-:::
-
-```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
-# tokens <- corpus %>% 
-#  tokens(what = "word")
-```
-
-Bild Tokens
-
-# Document-Feature-Matrix (dfm)
-
-Um Text für den Computer "lesbar" zu machen müssen wir ihn in Zahlen überführen. Das machen wir mit der Document-Feature-Matrix, in der
-
-::: incremental
--   die Zeilen alle Dokumente darstellen
--   die Spalten alle features der Dokumente beinhalten
--   die Zellen angeben, wie oft das jeweilig feature im Dokument vorkommt
-:::
-
-```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
-# dfm <- tokens() %>% 
-#  dfm()
-```
-
-Bild dfm
-
-# Bag of words
-
-Beim bag of words Modell wird der Syntax bei der Analyse nicht berücksichtigt (siehe dfm). Es wird also angenommen, dass die Reihenfolge von Wörtern keinen Einfluss auf die Interpretation dieser hat.
-
-Bild einfügen
-
-# Preprocessing
-
-Ziel: Text vereinfachen, (systematische) Fehler reduzieren und Text vergleichbar über mehrere Dokumente machen
-
-Mit der wichtigste Schritt bei der automatisierten Inhaltsanalyse. Die hier gefällten Entscheidungen wirken sich maßgeblich auf die Ergebnisse aus. Preprocessing umfasst die folgenden Punkte (nicht alle Schritte müssen immer für die eigenen Analyse zielführend sein):
-
-::: incremental
--   Definiton eines Dokuments festlegen
--   Endcoding issues checken
--   Zahlen, Satzzeichen ... entfernen
--   Normalisierung auf Kleinbuchstaben
--   Stoppwörter entfernen
--   Vereinheitlichung
--   Lemmatizing/Stemming
--   Seltene/Häufige features entfernen
-:::
-
-# Definition eines Dokuments festlegen
-
-::: incremental
--   Was ist die angestrebte Analyseeinheit und wofür wird sie benötigt? (z.B. ganzer Artikel, Text-Absätze, Satz)
--   Abwägung zwischen Effizienz und Effektivität
--   Primär theoretischer Schritt
-:::
-
-# Encoding issues chekchen
-
-::: incremental
--   Das Problem: Computer speichern Zeichen indem sie ihnen numerischen Code (Bytes) zuordnen
--   z.B. "Wort" wir als "01110111011011110111001001100100" gespeichert
--   Encoding als der Vorgang den numerischen Code wieder in Zeichen zu übersetzen
--   Problem: Co-Existenz von mehreren Encodings (z.B. bei "ß", "ü", "ğ" oder emojis)
--   Lösung: Direkt beim Einlesen das richtige Encoding verwenden ODER manuell bereinigen
-:::
-
-######## neu nur Code
-
-# 1 Daten einlesen
+# 1 Packete laden und Daten einlesen
 
 Zunächst installieren und laden wir alle Packete, die wir heute und morgen brauchen.
 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 #install.packages("RCurl")
 #install.packages("quanteda")
+#install.packages("tidyverse)
+#install.packages("dplyr")
+#install.packages("quanteda.textplots")
+#install.packages("quanteda.textstats")
+#install.packages("udpipe")
 
 library("RCurl")
 library("quanteda")
 library("tidyverse")
 library("dplyr")
+library("quanteda.textplots")
+library("quanteda.textstats")
+library("udpipe")
 ```
 
-Dann laden wir die Datei die hinter dem Link liegt mit der Funktion `getURL()` aus dem package Rcurl herunter. Mit einem Blick in das Environment sehen wir, dass die einzelnen Wörter mit einem ; getrennt werden . Daher brauchen wir die Funktion `read.csv2()` aus dem utils package - das package ist vorinstalliert und immer geladen - um die Daten in R einzulesen. Der Datensatz wird im Objekt `daten_df` gespeichert.
+Dann laden wir die Datei die hinter dem Link liegt mit der Funktion `getURL()` aus dem package Rcurl herunter. Mit einem Blick in das Environment sehen wir, dass die einzelnen Wörter mit einem ; getrennt werden . Daher brauchen wir die Funktion `read.csv2()` aus dem utils Packet - das Packet ist vorinstalliert und immer geladen - um die Daten in R einzulesen. Der Datensatz wird im Objekt `daten_df` gespeichert.
 
 ```{r echo = TRUE, message = FALSE, error = FALSE}
 url <-  getURL("https://raw.githubusercontent.com/valeriehase/Salamanca-CSS-SummerSchool/main/Processing%20text%20and%20text%20as%20data/data_tvseries.csv")
@@ -184,12 +40,12 @@ daten_df <-  read.csv2(text = url)
 
 Alternativ können Daten in einer .csv Datei auch mit einem , voneinander abgetrennt sein. Hier bräuchte es dann die Funktion `read.csv()` zum Einlesen.
 
-Nach dem Einlesen der Daten ist es üblich sich zunächst einen Überblick über die Daten zu machen und zu kontrollieren, ob alles korrekt eingelesen wurde. 
+Nach dem Einlesen der Daten ist es üblich sich zunächst einen Überblick über die Daten zu verschaffen und zu kontrollieren, ob alles korrekt eingelesen wurde. 
 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 head(daten_df)
-View(daten_df)
 str(daten_df)
+View(daten_df)
 ```
 
 # 2 Preprocessing
@@ -257,7 +113,7 @@ Es gibt verschiedene Möglichkeiten, Stoppwörter zu entfernen. Am einfachsten i
 stopwords("english")
 daten_tokens <- tokens_remove(daten_tokens, stopwords("english"))
 ```
-Je nach Forschungsfrage können Stoppwortlisten angepasst werden indem Wörter entfernt oder hinzugefügt werden. Es ist aber auch möglich eine eigene Liste zu erstellen. 
+Je nach Forschungsfrage können Stoppwortlisten angepasst werden, indem Wörter entfernt oder hinzugefügt werden. Es ist aber auch möglich eine eigene Liste zu erstellen. 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 #Wörter aus der quanteda Stoppwortliste entfernen
 stoppwörter <- stopwords("english")
@@ -312,7 +168,20 @@ daten_dfm <- daten_dfm %>%
             verbose = TRUE) 
 ```
 
-hier noch wordcloud einfügen und check most frequent features (in salamanca)
+## 2.9 Word cloud: Erster Blick in die Daten
+Für einen ersten Einblick in die Daten lassen wir uns mit der `topfeatures()`Funktion aus dem quanteda Packet die 10 am häufigsten vorkommenden features ausgeben.
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+daten_dfm %>% 
+  topfeatures(n = 10)
+```
+
+Das Ergebnis können wir mit einer word cloud visualisieren. Hierfür nutzen wir die `textplot_wordcloud()`Funktion aus dem quanteda.textplots Packet. 
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+word_cloud <- daten_dfm %>% 
+  textplot_wordcloud(max_words = 100)
+```
+
+
 
 Übung: mit emoji einleiten "test your knowledge" mit anderem Datensatz, der nicht zu groß ist
 
@@ -331,13 +200,12 @@ daten_fcm %>%
 Beim nächsten Schritt wählen wir die features aus, die uns in unserer Analyse interessieren. Das machen wir mit der Funktion `fcm_select()`aus dem quanteda Packet.
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 daten_fcm <- daten_fcm %>% 
-  fcm_select(pattern = c("america", "crime", "", "hero"), #hier noch bessere Begriffe vielleicht über topfeatures oder topic modeling
+  fcm_select(pattern = c("famili", "crime", "america", "school"), #hier noch bessere Begriffe vielleicht über topfeatures oder topic modeling
              selection = "keep")
 ```
+
 Dann visualisieren wir die fcm mit der `textplot_network()`Funktion aus dem`quanteda.textplots()` Paket. Wenn features im selben Dokument vorkommen, werden sie mit einer Linie verbunden. Umso dicker die Linie, desto öfter kommen die features miteinander vor. 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
-#install.packages("quanteda.textplots")
-library("quanteda.textplots")
 textplot_network(daten_fcm)
 ```
 Diese Visualisierung gibt uns nun aber noch keine genauen Angaben dazu, wie oft ein feature mit einem anderen vorkommt. Um das herauszufinden, müssen wir die fcm mit der `convert()`Funktion aus dem quanteda Packet in einen data frame umwandeln. 
@@ -348,17 +216,56 @@ daten_fcm_df <- daten_fcm %>%
 daten_fcm_df %>% 
   head()
 ```
+
 Mit Hilfe von `select()`können wir uns nun einzelne Häufigkeiten, wie oft ein feature mit einem anderen feature vorkommt, ausgeben lassen. 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 daten_fcm_df %>%
   filter(doc_id == "crime") %>% #Zeile
   select(america) #Spalte #Frage: Wie kann es sein, dass crime america 0 ist und america crime 2?
 ```
-und dann noch code n-grams von salamanca 
 
-und dann noch part of speech tagging (salamanca)
+# Kollokationen und N-gramme
+Um herauszufinden, welche tokens oft hintereinander vorkommen, können wir die Funktion `textstat_collocations`aus dem quanteda.textstats Packet verwenden.
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+daten_tokens %>%
+  textstat_collocations(min_count = 10) %>%
+  arrange(-lambda) %>%
+  head(10)
+```
 
-und named entity recognition 
+In einem weiteren Schritt kann es manchmal sinnvoll sein, Kollokationen für die Analyse zu einem token zusammenzufassen. Das lässt sich mit der `tokens_compound()`Funktion aus dem quanteda.textstats Packet umsetzen. Die Funktion verbindet die gegebenen tokens mit einem Unterstrich zu einem token.
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+ngramme <- c("los angel","new york citi", "serial killer", "high school", "best friend")
+daten_tokens_ngramme <- tokens_compound(daten_tokens, pattern = phrase(ngramme))
+```
+
+Wie das nun in den Daten aussieht können wir mit Hilfe der `kwic()`Funktion aus dem quanteda Packet herausfinden (kwic steht für keywords in context). 
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+daten_tokens_ngramme %>% 
+  kwic(pattern = c("los angel","new york citi", "serial killer", "high school", "best friend")) %>% 
+  head(n=30)
+```
+
+# Part of speech tagging
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+daten_df$Description %>%
+
+#change format for udpipe package
+  as_tibble() %>%
+  mutate(doc_id = paste0("text", 1:n())) %>%
+  rename(text = value) %>%
+
+  #for simplicity, run for fewer documents
+  slice(1) %>%
+
+  #part-of-speech tagging, include only related variables
+  udpipe("english") %>%
+  select(doc_id, sentence_id, token_id, token, upos) %>%
+  head(10)
+```
+
+# Named entitiy recognition
+ 
 
 
 # 4 Diktionäre
