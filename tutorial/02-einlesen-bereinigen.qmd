@@ -224,7 +224,7 @@ daten_fcm_df %>%
   select(america) #Spalte #Frage: Wie kann es sein, dass crime america 0 ist und america crime 2?
 ```
 
-# Kollokationen und N-gramme
+# 4 Kollokationen und N-gramme
 Um herauszufinden, welche tokens oft hintereinander vorkommen, können wir die Funktion `textstat_collocations`aus dem quanteda.textstats Packet verwenden.
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 daten_tokens %>%
@@ -233,7 +233,7 @@ daten_tokens %>%
   head(10)
 ```
 
-In einem weiteren Schritt kann es manchmal sinnvoll sein, Kollokationen für die Analyse zu einem token zusammenzufassen. Das lässt sich mit der `tokens_compound()`Funktion aus dem quanteda.textstats Packet umsetzen. Die Funktion verbindet die gegebenen tokens mit einem Unterstrich zu einem token.
+In einem weiteren Schritt kann es manchmal sinnvoll sein, Kollokationen für die Analyse zu einem token zusammenzufassen (dieser Schritt wäre dann Teil des Preprocessings). Das lässt sich mit der `tokens_compound()`Funktion aus dem quanteda.textstats Packet umsetzen. Die Funktion verbindet die gegebenen tokens mit einem Unterstrich zu einem token.
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 ngramme <- c("los angel","new york citi", "serial killer", "high school", "best friend")
 daten_tokens_ngramme <- tokens_compound(daten_tokens, pattern = phrase(ngramme))
@@ -246,30 +246,48 @@ daten_tokens_ngramme %>%
   head(n=30)
 ```
 
-# Part of speech tagging
+# 5 Part-of-speech tagging
+Für das part of speech tagging nutzen wir das Packet UDPipe. Bevor wir unseren data frame in die `udipie()`Funktion geben, müssen wir ihn ins tibble Format umformen und eine ID Variable erstellen. Des Weiteren bennen wir die Spalte value in text um. Das ist notwendig, weil `as_tibble()`die ursprüngliche Spalte `Description` in `value` umbenannt hat. 
+Am Ende lassen wir uns nur einen Teil der Variablen ausgeben, damit das Ergebnis übersichtlich bleibt. 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
-daten_df$Description %>%
+daten_df_udpipe <- daten_df$Description %>%
 
-#change format for udpipe package
+#Format für das udpipe Packet anpassen
   as_tibble() %>%
-  mutate(doc_id = paste0("text", 1:n())) %>%
+  mutate(doc_id = paste0("text", 1:n())) %>% 
   rename(text = value) %>%
 
-  #for simplicity, run for fewer documents
+#Der Einfachheit halber nur für einen Text
   slice(1) %>%
 
-  #part-of-speech tagging, include only related variables
-  udpipe("english") %>%
-  select(doc_id, sentence_id, token_id, token, upos) %>%
-  head(10)
+#part-of-speech tagging
+  udpipe("english") 
 ```
 
-# Named entitiy recognition
+Wenn wir jetzt beispielsweise herausfinden wollen, mit welchen Adjektiven das Wort "family" beschrieben wird, sieht der Code dafür wie folgt aus: 
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+#Dataframe nach Nomen mit dem lemma "family" filtern
+adjectives_describing_family <- daten_df_udpipe %>%
+  filter(upos == "NOUN" & lemma == "family") %>%
+
+#Den gefilterten Dataframe mit dem ungefilterten Dataframe joinen
+  inner_join(daten_df_udpipe, by = c("doc_id", "sentence_id")) %>%
+  
+#Großen Dataframe nach Adjektiven filtern, die bei ihrer head_token Variable die family token_id haben
+  filter(upos.y == "ADJ" & head_token_id.y == token_id.x) %>%
+
+#relevanten Variablen auswählen
+  select(doc_id, sentence_id, token_id = token_id.y, token = token.y, upos = upos.y)
+
+print(adjectives_describing_family)
+```
+
+# 6 Named entitiy recognition
  
 
 
-# 4 Diktionäre
-## 4.1 Off-the-shelf Diktionäre
+# 7 Diktionäre
+## 7.1 Off-the-shelf Diktionäre
 Es gibt viele off-the-shelf Diktionäre. Der Einfachkeit halber nutzen wir hier zur Demonstation den `data_dictionary_LSD2015`aus dem quanteda Packet (Young & Soroka, 2012). #Soll hier noch ein Disclaimer wegen Validität und Auswahl Diktionär etc. hin?
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 diktionär <- data_dictionary_LSD2015
@@ -279,6 +297,7 @@ diktionär %>%
 
 ?data_dictionary_LSD2015
 ```
+
 Nun wollen wir den dictionary auf unsere Daten anwenden. Diese müssen dafür im dfm-Format sein. Mit der Funktion `dfm_lookup()` aus dem quanteda Packet wird für jeden Text, also in diesem Fall für jede TV Show, geschaut, wie viele Wörter aus den ersten zwei Spalten des Diktionärs vorkommen. Die Funktion `dfm_weight(scheme = "prop")`setzt die Anzahl der dictionary Wörter ins Verhältnis mit der Länge des Textes.  
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 sentiment_tvshows <-  daten_dfm %>% 
@@ -289,14 +308,13 @@ sentiment_tvshows %>%
   head()
 ```
 
+## 7.2 Eigene Diktionäre 
 
 
-## 4.2 Eigene Diktionäre 
 
-Am Ende alles nochmal in ein RSkript packen ohne Text, nur mit Überschrift (alles an Code)
-# 5 Topic Modeling
+# 8 Topic Modeling
 
-# Qualitätskriterien
+# 9 Qualitätskriterien
 
 Irgendwo einbauen: 
 write.csv()/write.csv2()
