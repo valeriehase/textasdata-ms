@@ -23,46 +23,96 @@ subtitle: "Einführung in R - Methodenworkshop Universität Münster"
 
 📅 **Mi, 24. Juli**
 
--   09:00 - 10:00: 1️⃣ *Einführung in die automatisierte Inhaltsanalyse*
-
--   10:00 - 12:00: 2️⃣ *Einlesen & Bereinigen von Text*
+-   09:00 - 12:00: 1️⃣ *Einführung & Preprocessing*
 
 -   12:00 - 13:00: 🥗 *Mittagspause*
 
--   13:00 - 15:00: 3️⃣ *Co-Occurence-Analysen*
+-   13:00 - 15:00: 2️⃣ *Co-Occurence-Analysen*
 
--   15:00 - 17:00: 4️⃣ *Diktionäre*
+-   15:00 - 17:00: 3️⃣ *Diktionäre*
 
 📅 **Do,** **25. Juli**
 
--   09:00 - 12:00: 5️⃣ *Topic Modeling*
+-   09:00 - 12:00: 4️⃣ *Topic Modeling*
 
 -   12:00 - 13:00: 🥗 *Mittagspause*
 
--   13:00 - 15:00: 6️⃣ *Qualitätskriterien*
+-   13:00 - 15:00: 5️⃣ *Qualitätskriterien*
 
--   15:00 - 16:00: 7️⃣ *Ausblick*
+-   15:00 - 16:00: 6️⃣ *Ausblick*
 
 ## Materialien
 
-Sitzung 1️⃣: *Einführung in die automatisierte Inhaltsanalyse*
+Sitzung 1️⃣: *Einführung in die automatisierte Inhaltsanalyse & Preprocessing*
 
 -   [Folien](docs/01-begrüssung.html)
+-   Tutorial
 
-Sitzung 2️⃣: *Einlesen & Bereinigen von Text*
+Sitzung 2️⃣: *Co-Occurence-Analysen*
 
+-   Folien
 -   [Tutorial](tutorial/02-einlesen-bereinigen.html)
 
-Sitzung 3️⃣: *Co-Occurence-Analysen*
+Sitzung 3️⃣: *Diktionäre*
 
-Sitzung 4️⃣: *Diktionäre*
+-   Folien
+-   Tutorial
 
-Sitzung 5️⃣: *Topic Modeling*
+Sitzung 4️⃣: *Topic Modeling*
 
-Sitzung 6️⃣: *Qualitätskriterien*
+-   Folien
+-   Tutorial
 
-Sitzung 7️⃣: *Ausblick*
+Sitzung 5️⃣: *Qualitätskriterien*
+
+-   Folien
+-   Tutorial
+
+Sitzung 6️⃣: *Ausblick*
+
+-   Folien
+-   Tutorial
 
 ## Weiterführende Tutorials
 
-## Weiterführende Literatur
+-   Bail, C. Day 3: Automated Text Analysis. [Link](https://compsocialscience.github.io/summer-institute/curriculum#day_3)
+
+-   Bernauer J, & Traber D. Quantitative Analysis of Political Text. [Link](https://www.mzes.uni-mannheim.de/socialsciencedatalab/article/quantitative-analysis-of-political-text/)
+
+-   Hase, V. (2022). Text as Data Methods in R. [Link](https://bookdown.org/valerie_hase/TextasData_HS2021/)
+
+-   Hase, V. (2023). Advanced Text Analysis. [Link](https://github.com/valeriehase/SICSS-Munich-Advanced-Text-Analysis)
+
+-   Sanchez, G. (2014). Handling Strings with R. [Link](https://www.gastonsanchez.com/r4strings/)
+
+-   Silge, J., & Robinson, D. Text mining with R: A tidy approach. [Link](https://www.tidytextmining.com/)
+
+-   Puschmann, C., & Haim, R. Automated Content Analysis with R. [Link](https://content-analysis-with-r.com/)
+
+-   Unkel, J. (2020). Methodische Vertiefung: Computational Methods mit R und R Studio. [Link](https://bookdown.org/joone/ComputationalMethods)
+
+-   Watanabe, K., & Müller, S (2023). Quanteda Tutorials. [Link](https://tutorials.quanteda.io/)
+
+## Weiterführende Literatur 
+
+-   Baden, C., Pipal, C., Schoonvelde, M., & Van Der Velden, M. A. C. G. (2022). Three Gaps in Computational Text Analysis Methods for Social Sciences: A Research Agenda. *Communication Methods and Measures*, *16*(1), 1–18. <https://doi.org/10.1080/19312458.2021.2015574>
+
+-   Benoit, K. (2019). Text as data: An overview. In Cuirini, L., & Franzese, R. (Eds.), *Handbook of Research Methods in Political Science and International Relations*. [Preprint](https://kenbenoit.net/pdfs/28%20Benoit%20Text%20as%20Data%20draft%202.pdf)
+
+-   Boumans, J. W., & Trilling, D. (2016). Taking Stock of the Toolkit: An overview of relevant automated content analysis approaches and techniques for digital journalism scholars. *Digital Journalism*, *4*(1), 8–23. [Link](https://doi.org/10.1080/21670811.2015.1096598)
+
+-   Grimmer, J., Roberts, M. E., & Stewart, B. M. (2022). *Text as data: A new framework for machine learning and the social sciences*. Princeton University Press.
+
+-   Günther, E., & Quandt, T. (2016). Word Counts and Topic Models: Automated text analysis methods for digital journalism research. *Digital Journalism*, *4*(1), 75–88. [Link](https://doi.org/10.1080/21670811.2015.1093270)
+
+-   Haim, M. (2023). *Computational Communication Science: Eine Einführung*. Springer Fachmedien Wiesbaden. <https://doi.org/10.1007/978-3-658-40171-9>
+
+-   Hase, V. (2023). Automated Content Analysis. In F. Oehmer, S. H. Kessler, E. Humprecht, K. Sommer, & L. Castro Herrero (eds.), *Handbook of Standardized Content Analysis: Applied Designs to Research Fields of Communication Science*. VS Springer (pp. 23–36). <https://doi.org/10.1007/978-3-658-36179-2_3>
+
+-   Jünger, J., & Gärtner, C. (2023). *Computational Methods für die Sozial- und Geisteswissenschaften*. Springer Fachmedien Wiesbaden. <https://doi.org/10.1007/978-3-658-37747-2>
+
+-   Quinn, K. M., Monroe, B. L., Colaresi, M., Crespin, M. H., & Radev, D. R. (2010). How to Analyze Political Attention with Minimal Assumptions and Costs. *American Journal of Political Science*, *54(*1), 209–228. [Link](https://doi.org/10.1111/j.1540-5907.2009.00427.x)
+
+-   Atteveldt, W. van, Trilling, D., & Arcíla Calderón, C. (2022). *Computational analysis of communication: A practical introduction to the analysis of texts, networks, and images with code examples in Python and R*. Wiley Blackwell.
+
+-   Wilkerson, J., & Casas, A. (2017). Large-Scale Computerized Text Analysis in Political Science: Opportunities and Challenges. *Annual Review of Political Science*, *20*(1), 529–544. [Link](https://www.annualreviews.org/doi/10.1146/annurev-polisci-052615-025542)
