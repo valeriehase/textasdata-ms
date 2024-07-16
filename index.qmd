@@ -66,12 +66,12 @@ read.csv2("data/data_tvseries.csv") %>%
 Sitzung 1️⃣: *Einführung in die automatisierte Inhaltsanalyse & Preprocessing*
 
 -   [Folien](docs/01-begrüssung.html)
--   Tutorial
+-   [Tutorial](tutorial/01-einlesen-bereinigen.html)
 
 Sitzung 2️⃣: *Co-Occurence-Analysen*
 
 -   Folien
--   [Tutorial](tutorial/02-einlesen-bereinigen.html)
+-   Tutorial
 
 Sitzung 3️⃣: *Diktionäre*
 
