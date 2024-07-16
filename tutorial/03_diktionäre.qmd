@@ -54,11 +54,10 @@ daten_dfm <- daten_tokens %>%
             docfreq_type = "prop", 
             verbose = TRUE) 
 ```
+
 # 7 Diktionäre
 ## 7.1 Off-the-shelf Diktionäre
-Es gibt viele off-the-shelf Diktionäre. Der Einfachkeit halber nutzen wir hier zur Demonstation den `data_dictionary_LSD2015`aus dem quanteda Packet (Young & Soroka, 2012). 
-
--- Soll hier noch ein Disclaimer wegen Validität und Auswahl Diktionär etc. hin?
+Es gibt viele off-the-shelf Diktionäre. Der Einfachkeit halber nutzen wir hier zur Demonstation den `data_dictionary_LSD2015`aus dem quanteda Packet (Young & Soroka, 2012).
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 diktionär <- data_dictionary_LSD2015
 
@@ -78,6 +77,62 @@ sentiment_tvshows %>%
   head()
 ```
 
+Eine erste Auswertung kann dann beispielsweise so aussehen:
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+#S4 Objekt in einen data frame umwandeln
+sentiment_tvshows <- convert(sentiment_tvshows, to = "data.frame")
+
+#Anzahl Texte, die mindestens ein negatives Wort haben
+sentiment_tvshows %>% 
+  filter(negative != 0) %>% 
+  count()
+
+#Negativität in Summe
+sentiment_tvshows$negative %>% 
+  sum()
+
+#Durschnittlicher negativ-Wert bei negativen Texten
+(sentiment_tvshows$negative %>% 
+  sum())/(sentiment_tvshows %>% 
+  filter(negative != 0) %>% 
+  count())
+
+#Negativster Text
+sentiment_tvshows %>% 
+  filter(negative != 0) %>% 
+  arrange(desc(negative)) %>% 
+  head()
+
+daten_df[329,] %>% 
+  select(Description) %>% 
+  print()
+```
+
 ## 7.2 Eigene Diktionäre 
+Zum Teil kann es sinnvoller sein einen eigenen Diktionär zu nutzen. So eine Wortliste zu erstellen geht sehr einfach:
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+diktionär_crime <- dictionary(list(crime = c("crime", "police", "gun", "shot", "dead", "murder", "kill", "court", "suspect", "witness", "arrest", "officer", "verdict")))
+```
 
+Die Anwendung und Auswertung bleibt gleich:
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+#Diktionär anwenden
+crime_tvshows <-  daten_dfm %>% 
+  dfm_weight(scheme = "prop") %>% 
+  dfm_lookup(dictionary = diktionär_crime)
 
+#S4 Objekt in einen data frame umwandeln 
+crime_tvshows <- convert(crime_tvshows, to = "data.frame")
+
+#Text, der am meisten dem Genre crime entspricht
+crime_tvshows %>% 
+  arrange(desc(crime)) %>% 
+  head()
+
+## FRAGE: wenn ich es in RStudio ausführe, dann hat text314 mit einem Wert von 0.333 am meisten crime Wörter. Bei der html Seite ist text314 aber nur auf Platz 3 und hat dort einen Wert von 0.250...
+
+daten_df[314,] %>% 
+  select(Description) %>% 
+  print()
+
+```
