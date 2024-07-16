@@ -45,7 +45,7 @@ subtitle: "Einführung in R - Methodenworkshop Universität Münster"
 
 ### Daten
 
--   Datensatz 1: IMDb Top-Rated TV Series Dataset(Download-Link). Verfügbar unter MIT Lizenz via [Kaggle](https://www.kaggle.com/datasets/khushikhushikhushi/imdb-top-rated-tv-series-dataset).
+-   Datensatz 1: IMDb Top-Rated TV Series Dataset. Verfügbar unter MIT Lizenz via [Kaggle](https://www.kaggle.com/datasets/khushikhushikhushi/imdb-top-rated-tv-series-dataset).
 
 ```{r echo = FALSE, message = FALSE, warning = FALSE, error = FALSE}
 library("here")
