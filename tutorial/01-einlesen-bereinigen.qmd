@@ -104,7 +104,7 @@ Wir wollen die Nummer, den Punkt und das Leerzeichen vor dem Titel der Tv-Serie 
 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 data %>%
-  head()
+  select(Title) %>%
 ```
 
 Das ginge mit folgenden Befehlen:
@@ -115,6 +115,7 @@ data <- data %>%
 
 #So sieht das Ergebnis aus:
 data %>%
+  select(Title) %>%
   head(5)
 ```
 
@@ -128,7 +129,8 @@ data %>%
   # filtern aller TV_Serien, die "Drama" in der Beschreibung beinhalten
   filter(grepl("[D|d]rama", Description)) %>%
 
-  # Inspektion der ersten fünf Zeilen
+  # Inspektion der ersten fünf Titel
+  select(Title) %>%
   head(5)
 ```
 
@@ -140,19 +142,18 @@ data %>%
   # filtern aller TV_Serien, die "Drama" in der Beschreibung beinhalten
   filter(grepl("[D|d]rama|[C|c]rime", Description)) %>%
 
-  # Inspektion der ersten fünf Zeilen
+  # Inspektion der ersten fünf Titel
+  select(Title) %>%
   head(5)
 ```
 
-## 📌Aufgabe 1
+### 📌Aufgabe 1
 
 Könnt ihr...
 
 -   **Basis**: Alle Serien identifizieren, die in Deutschland spielen?
 
 -   **Fortgeschritten**: Alle Serien identifizieren, in denen es um Superhelden geht und "*superhero/superheroes*” in der Variable `Description` mit "*fancy R programmers*“ ersetzen?
-
-## 2.2 Tokenisierung & Zahlen, URLs, etc. entfernen
 
 ## 2.2 Tokenisierung & Zahlen, URLs, etc. entfernen
 
@@ -260,4 +261,3 @@ word_cloud <- datam %>%
   textplot_wordcloud(max_words = 100)
 ```
 
-Übung: mit emoji einleiten "test your knowledge" mit anderem Datensatz, der nicht zu groß ist
