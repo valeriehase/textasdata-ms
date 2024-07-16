@@ -1,7 +1,6 @@
 ---
 title: "Sitzung 1: Daten einlesen und bereinigen"
 author: "Valerie Hase & Luisa Kutlar"
-date: "24.07.2024"
 format:
   html:
     toc: true
@@ -38,7 +37,9 @@ data <- read.csv2("data_tvseries.csv")
 ```
 
 ## 1.2 Textdaten von einer URL downloaden
+
 Oft wollen wir Dateien auch direkt von z. B. einer Webseite laden. Dafür nutzen wir die Funktion `getURL()` aus dem package `Rcurl` und dann wieder die `read.csv2()`-Funktion.
+
 ```{r echo = TRUE, message = FALSE, error = FALSE}
 library("RCurl")
 url <-  getURL("https://raw.githubusercontent.com/valeriehase/textasdata-ms/main/data/data_tvseries.csv")
@@ -50,9 +51,10 @@ Nach dem Einlesen der Daten verschaffen wir uns einen Überblick über die Daten
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 head(data)
 ```
+
 # 2 Preprocessing
 
-## 2.1 Encoding issues checken
+## 2.1 Bereinigung (z. B. Encoding-Probleme)
 
 Nach dem Einlesen haben wir bereits einen Blick in den Datensatz geworfen. Nun schauen wir uns gezielt die Variable `Description` an, um zu überprüfen, ob der zu analysierende Text gut aussieht.
 
@@ -61,9 +63,10 @@ data %>%
   select(Description) %>% 
   slice(1)
 ```
+
 Der Text sieht gut aus! Allerdings kann es, gerade bei Texten aus anderen Sprachen, zu sogenannten Encoding Issues kommen.
 
-Schauen wir uns ein Beispiel an: deutsche Umlaute
+Schauen wir uns ein Beispiel an: deutsche Umlaute. Was passiert wenn wir hier das Encoding ändern?
 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 #Beispiel-Satz
@@ -94,6 +97,62 @@ string_bereinigt <- string %>%
   gsub(pattern = "ÃŸ", replacement = "ß") 
 string_bereinigt
 ```
+
+Probieren wir das Ganze am Datensatz aus.
+
+Wir wollen die Nummer, den Punkt und das Leerzeichen vor dem Titel der Tv-Serie in der Variable `Title` mit `gsub()` entfernen:
+
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+data %>%
+  head()
+```
+
+Das ginge mit folgenden Befehlen:
+
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+data <- data %>%
+  mutate(Title = gsub("^[0-9]+[[:punct:]] ", "", Title))
+
+#So sieht das Ergebnis aus:
+data %>%
+  head(5)
+```
+
+Probieren wir das weiter aus:
+
+Wir wollen nur TV-Serien behalten, die als "Drama" klassifiziert wurden.
+
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+data %>%
+
+  # filtern aller TV_Serien, die "Drama" in der Beschreibung beinhalten
+  filter(grepl("[D|d]rama", Description)) %>%
+
+  # Inspektion der ersten fünf Zeilen
+  head(5)
+```
+
+Und jetzt behalten wir solche, die als "Drama" oder "Crime" klassifiziert wurden.
+
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+data %>%
+
+  # filtern aller TV_Serien, die "Drama" in der Beschreibung beinhalten
+  filter(grepl("[D|d]rama|[C|c]rime", Description)) %>%
+
+  # Inspektion der ersten fünf Zeilen
+  head(5)
+```
+
+## 📌Aufgabe 1
+
+Könnt ihr...
+
+-   **Basis**: Alle Serien identifizieren, die in Deutschland spielen?
+
+-   **Fortgeschritten**: Alle Serien identifizieren, in denen es um Superhelden geht und "*superhero/superheroes*” in der Variable `Description` mit "*fancy R programmers*“ ersetzen?
+
+## 2.2 Tokenisierung & Zahlen, URLs, etc. entfernen
 
 ## 2.2 Tokenisierung & Zahlen, URLs, etc. entfernen
 
