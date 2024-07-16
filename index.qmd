@@ -54,7 +54,7 @@ read.csv2("data/data_tvseries.csv") %>%
   download_this(
     output_name = "data_tvseries",
     output_extension = ".csv",
-    button_label = "Download TV Dataset",
+    button_label = "Hier geht es zum Download des TV Datasets",
     button_type = "default",
     has_icon = FALSE,
     icon = "fa fa-save"
