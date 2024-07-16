@@ -1,0 +1,83 @@
+---
+title: "Sitzung 3: Diktionäre"
+author: "Valerie Hase & Luisa Kutlar"
+date: "05.04.2024"
+format:
+  html:
+    toc: true
+    html-math-method: katex
+    css: styles.css
+---
+#Packages laden und Objekte erstellen
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+#install.packages("RCurl")
+#install.packages("quanteda")
+#install.packages("tidyverse)
+#install.packages("dplyr")
+#install.packages("quanteda.textplots")
+#install.packages("quanteda.textstats")
+#install.packages("udpipe")
+
+library("RCurl")
+library("quanteda")
+library("tidyverse")
+library("dplyr")
+library("quanteda.textplots")
+library("quanteda.textstats")
+library("udpipe")
+
+
+```
+
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+#Daten laden
+url <-  getURL("https://raw.githubusercontent.com/valeriehase/Salamanca-CSS-SummerSchool/main/Processing%20text%20and%20text%20as%20data/data_tvseries.csv")
+daten_df <-  read.csv2(text = url)
+
+#Tokens
+stopwords("english")
+daten_tokens <- daten_df$Description %>% 
+  tokens(what = "word",
+         remove_punct = TRUE, 
+         remove_numbers = TRUE, 
+         remove_url = TRUE, 
+         remove_symbols = TRUE) %>% 
+  tokens_tolower() %>% 
+  tokens_remove(stopwords("english")) %>% 
+  tokens_wordstem()
+
+#dfm
+daten_dfm <- daten_tokens %>% 
+  dfm() %>% 
+  dfm_trim( min_docfreq = 0.005, 
+            max_docfreq = 0.99, 
+            docfreq_type = "prop", 
+            verbose = TRUE) 
+```
+# 7 Diktionäre
+## 7.1 Off-the-shelf Diktionäre
+Es gibt viele off-the-shelf Diktionäre. Der Einfachkeit halber nutzen wir hier zur Demonstation den `data_dictionary_LSD2015`aus dem quanteda Packet (Young & Soroka, 2012). 
+
+-- Soll hier noch ein Disclaimer wegen Validität und Auswahl Diktionär etc. hin?
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+diktionär <- data_dictionary_LSD2015
+
+diktionär %>% 
+  head()
+
+?data_dictionary_LSD2015
+```
+
+Nun wollen wir den Diktionär auf unsere Daten anwenden. Diese müssen dafür im dfm-Format sein. Mit der Funktion `dfm_lookup()` aus dem quanteda Packet wird für jeden Text, also in diesem Fall für jede TV Show, geschaut, wie viele Wörter aus den ersten zwei Spalten des Diktionärs vorkommen. Die Funktion `dfm_weight(scheme = "prop")`setzt die Anzahl der dictionary Wörter ins Verhältnis mit der Länge des Textes.  
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+sentiment_tvshows <-  daten_dfm %>% 
+  dfm_weight(scheme = "prop") %>% 
+  dfm_lookup(dictionary = data_dictionary_LSD2015[1:2])
+
+sentiment_tvshows %>% 
+  head()
+```
+
+## 7.2 Eigene Diktionäre 
+
+
