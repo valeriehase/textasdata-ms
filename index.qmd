@@ -43,34 +43,36 @@ subtitle: "Einführung in R - Methodenworkshop Universität Münster"
 
 ## Materialien
 
+### Daten
+
 Datensatz 1: **IMDb Top-Rated TV Series Dataset** (Download-Link). Verfügbar unter MIT Lizenz via [Kaggle](https://www.kaggle.com/datasets/khushikhushikhushi/imdb-top-rated-tv-series-dataset).
 
-Sitzung 1️⃣: *Einführung in die automatisierte Inhaltsanalyse & Preprocessing*
+### Sitzung 1️⃣: *Einführung in die automatisierte Inhaltsanalyse & Preprocessing*
 
 -   [Folien](docs/01-begrüssung.html)
 -   Tutorial
 
-Sitzung 2️⃣: *Co-Occurence-Analysen*
+### Sitzung 2️⃣: *Co-Occurence-Analysen*
 
 -   Folien
 -   [Tutorial](tutorial/02-einlesen-bereinigen.html)
 
-Sitzung 3️⃣: *Diktionäre*
+### Sitzung 3️⃣: *Diktionäre*
 
 -   Folien
 -   Tutorial
 
-Sitzung 4️⃣: *Topic Modeling*
+### Sitzung 4️⃣: *Topic Modeling*
 
 -   Folien
 -   Tutorial
 
-Sitzung 5️⃣: *Qualitätskriterien*
+### Sitzung 5️⃣: *Qualitätskriterien*
 
 -   Folien
 -   Tutorial
 
-Sitzung 6️⃣: *Ausblick*
+### Sitzung 6️⃣: *Ausblick*
 
 -   Folien
 -   Tutorial
