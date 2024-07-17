@@ -27,8 +27,6 @@ library("dplyr")
 library("quanteda.textplots")
 library("quanteda.textstats")
 library("udpipe")
-
-
 ```
 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
@@ -134,9 +132,9 @@ daten_tokens_ngramme %>%
   head(n=30)
 ```
 
-# 5 Parts-of-speech tagging
+# 5 Part-of-speech tagging
 
-Für das parts of speech tagging nutzen wir das Packet UDPipe. Bevor wir unseren data frame in die `udipie()`Funktion geben, müssen wir ihn ins tibble Format umformen und eine ID Variable erstellen. Des Weiteren bennen wir die Spalte value in text um. Das ist notwendig, weil `as_tibble()`die ursprüngliche Spalte `Description` in `value` umbenannt hat. Am Ende lassen wir uns nur einen Teil der Variablen ausgeben, damit das Ergebnis übersichtlich bleibt.
+Für das part of speech tagging nutzen wir das Packet UDPipe. Bevor wir unseren data frame in die `udpipe()`Funktion geben, müssen wir ihn ins tibble Format umformen und eine ID Variable erstellen. Des Weiteren bennen wir die Spalte value in text um. Das ist notwendig, weil `as_tibble()`die ursprüngliche Spalte `Description` in `value` umbenannt hat. Am Ende lassen wir uns nur einen Teil der Variablen ausgeben, damit das Ergebnis übersichtlich bleibt.
 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 daten_df_udpipe <- daten_df$Description %>%
@@ -172,12 +170,55 @@ adjectives_describing_family <- daten_df_udpipe %>%
 print(adjectives_describing_family)
 ```
 
-# 6 Named entitiy recognition
+# 6 Dependency parsing
+Dependency parsing geht ebenfalls mit der Funktion `udpipe()` aus dem UDPipe Packet. Die Vorbereitung der Daten ist dementsprechend auch gleich zum Kapitel 5 Parts-of-speech tagging. 
+```{r eval = FALSE}
+library("udpipe")
+ daten_df_udpipe <- daten_df$Description %>%
+  
+  #Format für das udpipe Packet anpassen
+  as_tibble() %>%
+  mutate(doc_id = paste0("text", 1:n())) %>%
+  rename(text = value) %>%
+  
+  #Der Einfachheit halber nur für einen Text
+  slice_head %>%
+  
+  #dependency parsing
+  udpipe("english") %>% 
+  select(doc_id, sentence_id, token_id, token, head_token_id, dep_rel) %>%
+  head(5)
+```
+```{r, eval = FALSE, echo = FALSE}
+#@Valerie, Fehler erkannt aber noch nicht gelößt :D
+#Ignore this code, small adaptation for quarto
+library("udpipe")
+daten_df_udpipe <- daten_df$Description %>%
+  
+  #change format for udpipe package
+  as_tibble() %>%
+  mutate(doc_id = paste0("text", 1:n())) %>%
+  rename(text = value) %>%
+  
+  #for simplicity, run for fewer documents
+  slice_head %>%
+  
+  #dependency parsing, include only related variables
+  udpipe(object = paste0(getwd(), "/data/english-ewt-ud-2.5-191206.udpipe", sep = "")) %>% 
+  select(doc_id, sentence_id, token_id, token, head_token_id, dep_rel) %>%
+  head(5)
+```
+
+Wer sich nun fragt, was diese Abkürzungen bedeuten, kann über die Hilfefunktion die Dokumentation von `udpipe()`aufrufen. Unter der Überschrift Value sind Links hinterlegt um den output zu interpretieren. 
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+?udpipe()
+```
 
 # 👩‍💻Teste dein Wissen
 
-Die folgende Übung fasst alles zusammen, was wir bisher gelernt haben. Gehe Schritt für Schritt die Teilaufgaben durch und schaue wie weit du kommst. 
-Den Datensatz für die Übung findest du hier: "https://raw.githubusercontent.com/valeriehase/textasdata-ms/main/data/data_horoscope.csv"
+Die folgende Übung fasst alles zusammen, was wir bisher gelernt haben. Gehe Schritt für Schritt die Teilaufgaben durch und schaue wie weit du kommst.
+
+Bitte arbeite für die Übung mit diesem Datensatz: "https://raw.githubusercontent.com/valeriehase/textasdata-ms/main/data/data_horoscope.csv"
 
 1. Lade den Datensatz und verschaffe dir einen Überblick über die Daten. Gibt es Encoding-Issues, die bereinigt werden müssen?
 
@@ -189,7 +230,7 @@ Den Datensatz für die Übung findest du hier: "https://raw.githubusercontent.co
 
 5. Finde heraus welcher der Planeten am meisten in Zusammenhang mit Veränderungen und Neuanfängen genannt wird. #Notiz für uns: Co-Occurence 
 
-6. Was wird den Lesenden geraten mit ihrem Geld zu machen? #Notiz für uns: POS tagging und dann Verben zu money 
+6. Was wird den Lesenden geraten mit ihrem Geld zu machen? #Notiz für uns: POS tagging und dann Verben zu money oder dependency parsing
 
 
 

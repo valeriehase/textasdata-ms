@@ -9,3 +9,5 @@
 /.quarto/
 /site_libs
 .Rproj.user
+/references
+*.txt
