@@ -123,7 +123,6 @@ data$Description[1]
 tokens[1]
 
 ###### 2.2.1 Mehr Infos zur Entfernung von Stoppwörtern ######
-Es gibt verschiedene Möglichkeiten, Stoppwörter zu entfernen. Am einfachsten ist dies mithilfe der im `quanteda`-Paket integrierten Stoppwortlisten möglich. Diese sind in mehreren Sprachen verfügbar, darunter auch Deutsch. 
 
 #Wörter aus der quanteda Stoppwortliste entfernen
 stoppwörter <- stopwords("english")

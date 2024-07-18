@@ -65,13 +65,11 @@ read.csv2("data/data_tvseries.csv") %>%
 
 Sitzung 1️⃣: *Einführung in die automatisierte Inhaltsanalyse & Preprocessing*
 
--   Folien
+-   [Folien](slides/Sitzung1.pdf)
 -   [Tutorial](tutorial/01-einlesen-bereinigen.html)
-
+-   
 ```{=html}
-<a href="docs/01-begrüssung.html" download="R-Code-01-einlesen-bereinigen" target="_blank">- Folien</a>
-<a href="docs/tutorial/01-einlesen-bereinigen.html" target="_blank">- Tutorial</a>
-<a href="code/01-einlesen-bereinigen.R" download="R-Code-01-einlesen-bereinigen"">- R-Code</a>
+<a href="code/01-einlesen-bereinigen.R" download="R-Code-01-einlesen-bereinigen.R""">- R-Code</a>
 ```
 Sitzung 2️⃣: *Co-Occurence-Analysen*
 
