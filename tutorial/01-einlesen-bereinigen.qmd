@@ -69,7 +69,7 @@ data %>%
 
 Der Text sieht gut aus! Allerdings kann es, gerade bei Texten aus anderen Sprachen, zu sogenannten Encoding-Problemen kommen.
 
-### 2.1.1 Beispiel für Encoding-Probleme
+### 2.1.1 Encoding-Probleme
 
 Schauen wir uns ein Beispiel an: deutsche Umlaute. Was passiert wenn wir hier das Encoding ändern?
 
@@ -106,7 +106,7 @@ string %>%
   gsub(pattern = "ÃŸ", replacement = "ß") 
 ```
 
-### 2.1.2 Beispiel für Datenbereinigung mit regulären Ausdrücken
+### 2.1.2 Datenbereinigung mit regulären Ausdrücken
 
 Probieren wir dies für unseren Datensatz aus. Wir wollen die Nummer, den Punkt und das Leerzeichen vor dem Titel der TV-Serie in der Variable `Title` mit `gsub()` entfernen:
 
@@ -130,7 +130,7 @@ data %>%
   head(5)
 ```
 
-### 2.1.3 Beispiel für Datenfilterung mit regulären Ausdrücken
+### 2.1.3 Datenfilterung mit regulären Ausdrücken
 
 Mit regulären Ausdrücken können wir aber noch mehr machen, z.B. Daten filtern. Wir wollen nur TV-Serien behalten, die als "Drama" klassifiziert wurden.
 
