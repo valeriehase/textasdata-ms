@@ -147,9 +147,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#aufgabe-2" id="toc-aufgabe-2" class="nav-link" data-scroll-target="#aufgabe-2">📌Aufgabe 2</a></li>
   </ul></li>
   </ul></li>
-  <li><a href="#text-as-data-repräsentation" id="toc-text-as-data-repräsentation" class="nav-link" data-scroll-target="#text-as-data-repräsentation">3. Text-as-Data-Repräsentation</a></li>
+  <li><a href="#text-as-data-repräsentation" id="toc-text-as-data-repräsentation" class="nav-link" data-scroll-target="#text-as-data-repräsentation">3. Text-as-Data-Repräsentation</a>
+  <ul class="collapse">
   <li><a href="#erstellung-einer-dfm" id="toc-erstellung-einer-dfm" class="nav-link" data-scroll-target="#erstellung-einer-dfm">3.1 Erstellung einer DFM</a></li>
-  <li><a href="#zusätzliche-normalisierung-relative-pruning" id="toc-zusätzliche-normalisierung-relative-pruning" class="nav-link" data-scroll-target="#zusätzliche-normalisierung-relative-pruning">3.2 Zusätzliche Normalisierung: Relative pruning</a></li>
+  </ul></li>
   <li><a href="#erste-analysen" id="toc-erste-analysen" class="nav-link" data-scroll-target="#erste-analysen">4. Erste Analysen</a>
   <ul class="collapse">
   <li><a href="#top-features" id="toc-top-features" class="nav-link" data-scroll-target="#top-features">4.1 Top Features</a></li>
@@ -466,9 +467,8 @@ text1 :
 </section>
 <section id="text-as-data-repräsentation" class="level1">
 <h1>3. Text-as-Data-Repräsentation</h1>
-</section>
-<section id="erstellung-einer-dfm" class="level1">
-<h1>3.1 Erstellung einer DFM</h1>
+<section id="erstellung-einer-dfm" class="level2">
+<h2 class="anchored" data-anchor-id="erstellung-einer-dfm">3.1 Erstellung einer DFM</h2>
 <p>Um aus unseren tokens eine Document-Feature-Matrix zu machen, damit der Computer “Text-as-Data”, d.h. als numerisches Datenformat, verarbeiten kann, nutzen wir die <code>dfm()</code>Funktion aus dem <code>quanteda</code>-Paket.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Wir erstellen eine Document-Feature matrix</span></span>
@@ -496,10 +496,7 @@ docs    nine nobl famili fight control land westero ancient enemi return
 <li>Die DFM hat nach dem Preprocessing immer noch 4,246 individuelle Features, hier Wörter.</li>
 <li>Die DFM ist 99.66% “spare”, d.h. mehr als 99% der Zellen enthalten eine 0, weil viele Features nur sehr selten vorkommen.</li>
 </ul>
-</section>
-<section id="zusätzliche-normalisierung-relative-pruning" class="level1">
-<h1>3.2 Zusätzliche Normalisierung: Relative pruning</h1>
-<p>Im letzten Schritt des Preprocessings entfernen wir häufig und selten vorkommende Features aus der DFM. Das geht mit der Funktion <code>dfm_trim()</code>aus dem quanteda Packet.</p>
+<p>##3.2 Zusätzliche Normalisierung: Relative pruning Im letzten Schritt des Preprocessings entfernen wir häufig und selten vorkommende Features aus der DFM. Das geht mit der Funktion <code>dfm_trim()</code>aus dem quanteda Packet.</p>
 <p>Es können unterschiedliche Grenzwerte gesetzt werden. Hier behalten wir nur Features, die in mindestens in 0.5% und höchstens in 99% der Dokumente vorkommen. Das Argument <code>docfreq_type = "prop"</code>berechnet den Anteil der Dokumente, die ein bestimmtes Feature beinhalten relativ zur Gesamtzahl der Dokumente. <code>verbose = TRUE</code>printed während der Ausführung der Funktion Informationen über den Rechenvorgang in die Konsole.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Anzahl Features vor relative pruning</span></span>
@@ -539,6 +536,7 @@ docs    famili fight control land ancient enemi return turn former student
 </div>
 </div>
 <p>Wir sehen: Relative pruning kann unseren Datensatz noch einmal deutlich verkleinern (und damit z.B. Analysen beschleunigen).</p>
+</section>
 </section>
 <section id="erste-analysen" class="level1">
 <h1>4. Erste Analysen</h1>

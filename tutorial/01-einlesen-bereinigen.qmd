@@ -235,7 +235,7 @@ Könnt ihr...
 
 # 3. Text-as-Data-Repräsentation
 
-# 3.1 Erstellung einer DFM
+## 3.1 Erstellung einer DFM
 
 Um aus unseren tokens eine Document-Feature-Matrix zu machen, damit der Computer "Text-as-Data", d.h. als numerisches Datenformat, verarbeiten kann, nutzen wir die `dfm()`Funktion aus dem `quanteda`-Paket.
 
@@ -254,7 +254,7 @@ Wir sehen:
 - Die DFM hat nach dem Preprocessing immer noch 4,246 individuelle Features, hier Wörter.
 - Die DFM ist 99.66% "spare", d.h. mehr als 99% der Zellen enthalten eine 0, weil viele Features nur sehr selten vorkommen. 
 
-# 3.2 Zusätzliche Normalisierung: Relative pruning
+##3.2 Zusätzliche Normalisierung: Relative pruning
 Im letzten Schritt des Preprocessings entfernen wir häufig und selten vorkommende Features aus der DFM. Das geht mit der Funktion `dfm_trim()`aus dem quanteda Packet.
 
 Es können unterschiedliche Grenzwerte gesetzt werden. Hier behalten wir nur Features, die in mindestens in 0.5% und höchstens in 99% der Dokumente vorkommen. Das Argument `docfreq_type = "prop"`berechnet den Anteil der Dokumente, die ein bestimmtes Feature beinhalten relativ zur Gesamtzahl der Dokumente. `verbose = TRUE`printed während der Ausführung der Funktion Informationen über den Rechenvorgang in die Konsole.
