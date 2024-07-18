@@ -137,6 +137,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#bereinigung-z.-b.-encoding-probleme" id="toc-bereinigung-z.-b.-encoding-probleme" class="nav-link" data-scroll-target="#bereinigung-z.-b.-encoding-probleme">2.1 Bereinigung (z. B. Encoding-Probleme)</a>
   <ul class="collapse">
+  <li><a href="#beispiel-für-encoding-probleme" id="toc-beispiel-für-encoding-probleme" class="nav-link" data-scroll-target="#beispiel-für-encoding-probleme">2.1.1 Beispiel für Encoding-Probleme</a></li>
+  <li><a href="#beispiel-für-datenbereinigung-mit-regulären-ausdrücken" id="toc-beispiel-für-datenbereinigung-mit-regulären-ausdrücken" class="nav-link" data-scroll-target="#beispiel-für-datenbereinigung-mit-regulären-ausdrücken">2.1.2 Beispiel für Datenbereinigung mit regulären Ausdrücken</a></li>
+  <li><a href="#beispiel-für-datenfilterung-mit-regulären-ausdrücken" id="toc-beispiel-für-datenfilterung-mit-regulären-ausdrücken" class="nav-link" data-scroll-target="#beispiel-für-datenfilterung-mit-regulären-ausdrücken">2.1.3 Beispiel für Datenfilterung mit regulären Ausdrücken</a></li>
   <li><a href="#aufgabe-1" id="toc-aufgabe-1" class="nav-link" data-scroll-target="#aufgabe-1">📌Aufgabe 1</a></li>
   </ul></li>
   <li><a href="#normalisierung" id="toc-normalisierung" class="nav-link" data-scroll-target="#normalisierung">2.2 Normalisierung</a>
@@ -254,8 +257,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Der Text sieht gut aus! Allerdings kann es, gerade bei Texten aus anderen Sprachen, zu sogenannten Encoding-Problemen kommen.</p>
-<p><strong>Ein Beispiel für Encoding-Probleme</strong>: Schauen wir uns ein Beispiel an: deutsche Umlaute.</p>
-<p>Was passiert wenn wir hier das Encoding ändern?</p>
+<section id="beispiel-für-encoding-probleme" class="level3">
+<h3 class="anchored" data-anchor-id="beispiel-für-encoding-probleme">2.1.1 Beispiel für Encoding-Probleme</h3>
+<p>Schauen wir uns ein Beispiel an: deutsche Umlaute. Was passiert wenn wir hier das Encoding ändern?</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Beispiel-Satz</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>string <span class="ot">&lt;-</span> <span class="st">"Schöne Grüße aus München"</span></span>
@@ -294,7 +298,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>[1] "Schöne Grüße aus München"</code></pre>
 </div>
 </div>
-<p><strong>Ein Beispiel für Datenbereinigung mit regulären Ausdrücken</strong>:</p>
+</section>
+<section id="beispiel-für-datenbereinigung-mit-regulären-ausdrücken" class="level3">
+<h3 class="anchored" data-anchor-id="beispiel-für-datenbereinigung-mit-regulären-ausdrücken">2.1.2 Beispiel für Datenbereinigung mit regulären Ausdrücken</h3>
 <p>Probieren wir dies für unseren Datensatz aus. Wir wollen die Nummer, den Punkt und das Leerzeichen vor dem Titel der TV-Serie in der Variable <code>Title</code> mit <code>gsub()</code> entfernen:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">%&gt;%</span></span>
@@ -328,7 +334,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 5 The Walking Dead</code></pre>
 </div>
 </div>
-<p><strong>Ein Beispiel für Datenfilterung mit regulären Ausdrücken</strong>:</p>
+</section>
+<section id="beispiel-für-datenfilterung-mit-regulären-ausdrücken" class="level3">
+<h3 class="anchored" data-anchor-id="beispiel-für-datenfilterung-mit-regulären-ausdrücken">2.1.3 Beispiel für Datenfilterung mit regulären Ausdrücken</h3>
 <p>Mit regulären Ausdrücken können wir aber noch mehr machen, z.B. Daten filtern. Wir wollen nur TV-Serien behalten, die als “Drama” klassifiziert wurden.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">%&gt;%</span></span>
@@ -367,6 +375,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 5 The Lord of the Rings: The Rings of Power</code></pre>
 </div>
 </div>
+</section>
 <section id="aufgabe-1" class="level3">
 <h3 class="anchored" data-anchor-id="aufgabe-1">📌Aufgabe 1</h3>
 <p>Könnt ihr…</p>
