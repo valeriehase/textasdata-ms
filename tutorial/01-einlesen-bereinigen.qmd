@@ -8,9 +8,9 @@ format:
     css: styles.css
 ---
 
-# 1 Pakete laden und Daten einlesen
+# 1. Pakete laden und Daten einlesen
 
-Zunächst installieren alle Packete, die wir für diese Sitzung brauchten (z.B. *tidyverse*). Ihr braucht *install.packages()* nur, wenn ihr die Pakete im Methodencafe noch nicht installiert hattet-
+Zunächst installieren alle Pakete, die wir für diese Sitzung brauchten (z.B. *tidyverse*). Ihr braucht *install.packages()* nur, wenn ihr die Pakete im Methodencafe noch nicht installiert hattet.
 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 #install.packages("tidyverse)
@@ -26,11 +26,9 @@ library("RCurl")
 
 ## 1.1 Textdaten aus einer lokalen Datei einlesen
 
-Zunächst könnt ihr die Text-Daten via diesem Link auf der Webseite downloaden:
+Zunächst könnt ihr die Text-Daten via der Tutorials-Webseite downloaden (s. "Materialien/Daten").
 
-![](images/clipboard-3533778068.png)
-
-Anschliessen laden wir die Dateien in R. Wenn ihr via JupyterHub arbeitet, geht das via Click-and-Point. Andernfalls nutzt den `read.csv()`-Befehl. Der Datensatz wird im Objekt `data` gespeichert.
+Anschliessen laden wir die Dateien in R. Wenn ihr via JupyterHub arbeitet, geht das via Click-and-Point. Andernfalls nutzt den `read.csv2()`-Befehl. Der Datensatz wird im Objekt `data` gespeichert.
 
 ```{r echo = TRUE, eval = FALSE, message = FALSE, error = FALSE}
 data <- read.csv2("data_tvseries.csv")
@@ -41,7 +39,6 @@ data <- read.csv2("data_tvseries.csv")
 Oft wollen wir Dateien auch direkt von z. B. einer Webseite laden. Dafür nutzen wir die Funktion `getURL()` aus dem package `Rcurl` und dann wieder die `read.csv2()`-Funktion.
 
 ```{r echo = TRUE, message = FALSE, error = FALSE}
-library("RCurl")
 url <-  getURL("https://raw.githubusercontent.com/valeriehase/textasdata-ms/main/data/data_tvseries.csv")
 data <- read.csv2(text = url)
 ```
@@ -52,21 +49,29 @@ Nach dem Einlesen der Daten verschaffen wir uns einen Überblick über die Daten
 head(data)
 ```
 
-# 2 Preprocessing
+Sieht soweit gut aus!
+
+# 2. Preprocessing
 
 ## 2.1 Bereinigung (z. B. Encoding-Probleme)
 
-Nach dem Einlesen haben wir bereits einen Blick in den Datensatz geworfen. Nun schauen wir uns gezielt die Variable `Description` an, um zu überprüfen, ob der zu analysierende Text gut aussieht.
+Nach dem Einlesen haben wir bereits einen Blick in den Datensatz geworfen. Nun schauen wir uns gezielt die Variable `Description` an, um zu überprüfen, ob der zu analysierende Text gut aussieht. Hier nutzen wir `slice()`, um uns nur den allerersten Text ausgeben zu lassen.
 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 data %>%
+  
+  #Auswahl der Variable "Description"
   select(Description) %>% 
+  
+  #Reduktion auf ersten Text
   slice(1)
 ```
 
-Der Text sieht gut aus! Allerdings kann es, gerade bei Texten aus anderen Sprachen, zu sogenannten Encoding Issues kommen.
+Der Text sieht gut aus! Allerdings kann es, gerade bei Texten aus anderen Sprachen, zu sogenannten Encoding-Problemen kommen.
 
-Schauen wir uns ein Beispiel an: deutsche Umlaute. Was passiert wenn wir hier das Encoding ändern?
+**Ein Beispiel für Encoding-Probleme**: Schauen wir uns ein Beispiel an: deutsche Umlaute.
+
+Was passiert wenn wir hier das Encoding ändern?
 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 #Beispiel-Satz
@@ -80,36 +85,42 @@ Encoding(string) <- "latin1"
 string
 ```
 
-Wie könnten wir Encoding-Probleme adressieren?
+Wie können wir Encoding-Probleme adressieren?
 
-::: incremental
 -   Beim Einlesen das richtige Encoding als Argument mitgeben (siehe z.B. `fileEncoding`-Argument in `read.csv2()`)
 -   Mit Hilfe von regulären Ausdrücken bereinigen
-:::
 
-Beim manuellen Bereinigen kann die Funktion `gsub()` helfen, die Zeichenketten ersetzen kann. Zum Beispiel so:
+Beim manuellen Bereinigen können reguläre Ausdrücke (mehr dazu [hier](https://bookdown.org/valerie_hase/TextasData_HS2021/tutorial-9-searching-manipulating-string-patterns.html)) und die Funktion `gsub()` helfen, mit der wir Zeichen ersetzen können. Zum Beispiel so:
 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 #Mit Hilfe von regulären Ausdrücken bereinigen
-string_bereinigt <- string %>% 
+string %>% 
+  
+  #Ersatz für falsches Encoding "ö"
   gsub(pattern = "Ã¶", replacement ="ö") %>% 
+  
+  #Ersatz für falsches Encoding "ü"
   gsub(pattern = "Ã¼", replacement = "ü") %>% 
+  
+  #Ersatz für falsches Encoding "ß"
   gsub(pattern = "ÃŸ", replacement = "ß") 
-string_bereinigt
 ```
 
-Probieren wir das Ganze am Datensatz aus.
+**Ein Beispiel für Datenbereinigung mit regulären Ausdrücken**:
 
-Wir wollen die Nummer, den Punkt und das Leerzeichen vor dem Titel der Tv-Serie in der Variable `Title` mit `gsub()` entfernen:
+Probieren wir dies für unseren Datensatz aus. Wir wollen die Nummer, den Punkt und das Leerzeichen vor dem Titel der TV-Serie in der Variable `Title` mit `gsub()` entfernen:
 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 data %>%
   select(Title) %>%
+  head(5)
 ```
 
 Das ginge mit folgenden Befehlen:
 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+
+#Entfernung der Zeichen vor dem Titel der TV-Serie
 data <- data %>%
   mutate(Title = gsub("^[0-9]+[[:punct:]] ", "", Title))
 
@@ -119,9 +130,9 @@ data %>%
   head(5)
 ```
 
-Probieren wir das weiter aus:
+**Ein Beispiel für Datenfilterung mit regulären Ausdrücken**:
 
-Wir wollen nur TV-Serien behalten, die als "Drama" klassifiziert wurden.
+Mit regulären Ausdrücken können wir aber noch mehr machen, z.B. Daten filtern. Wir wollen nur TV-Serien behalten, die als "Drama" klassifiziert wurden.
 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 data %>%
@@ -139,7 +150,7 @@ Und jetzt behalten wir solche, die als "Drama" oder "Crime" klassifiziert wurden
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 data %>%
 
-  # filtern aller TV_Serien, die "Drama" in der Beschreibung beinhalten
+  # filtern aller TV_Serien, die "Drama"und "Crime" in der Beschreibung beinhalten
   filter(grepl("[D|d]rama|[C|c]rime", Description)) %>%
 
   # Inspektion der ersten fünf Titel
@@ -155,109 +166,134 @@ Könnt ihr...
 
 -   **Fortgeschritten**: Alle Serien identifizieren, in denen es um Superhelden geht und "*superhero/superheroes*” in der Variable `Description` mit "*fancy R programmers*“ ersetzen?
 
-## 2.2 Tokenisierung & Zahlen, URLs, etc. entfernen
+## 2.2 Normalisierung
 
-Die Funktion `tokens()`von quanteda ermöglicht es uns bei der Aufteilung von Text in tokens direkt bestimmte Zeichen zu entfernen. Hier entfernen wir Punkte, Zahlen, URLs und Symbole.
+Die Funktionen `tokens()` bzw. entsprechende Subfunktionen von `quanteda` ermöglichen es uns, mehrere Preprocessing-Schritte in einer einzigen Pipe (d.h. Analyse-Pipeline auf Basis des `tidyverse`) durchzuführen:
 
-```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
-daten_tokens <- tokens(data$Description, what = "word", remove_punct = TRUE, remove_numbers = TRUE, remove_url = TRUE, remove_symbols = TRUE) #wollen wir das alles entfernen?
-
-daten_tokens %>% 
-  head(n=3)
-```
-
-## 2.3 Anpassung auf Kleinschreibung
-
-Mit der Funktion `tokens_tolower()`aus dem quanteda Packet können alle Buchstaben in Kleinbuchstaben umgeformt werden.
+-   Tokenisierung: `tokens()` (hier können wir auch Sonderzeichen, wie Satzzeichen, entfernen)
+-   Kleinschreibung: `tokens_tolower()`
+-   Stoppwörter entfernen: `tokens_remove_stopwords()`. 
+-   Stemming: `tokens_wordstem()`
 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
-daten_tokens <- tokens_tolower(daten_tokens)
+tokens <- tokens(data$Description,
+                 what = "word", #Tokenisierung, hier zu Wörtern als Analyseeinheit
+                 remove_punct = TRUE, #Entfernung von Satzzeichen
+                 remove_numbers = TRUE) %>% #Entfernung von Zahlen
+  
+  #Kleinschreibung
+  tokens_tolower() %>% 
+  
+  #Entfernung von Stoppwörtern
+  tokens_remove(stopwords("english")) %>% 
+  
+  #Stemming
+  tokens_wordstem()
 
-daten_tokens %>% 
-  head(n=3)
+
+#So sah unser erster Text vor dem Preprocessing aus
+data$Description[1]
+
+#Und so danach
+tokens[1]
 ```
 
-## 2.4 Stoppwörter entfernen
-
-Es gibt verschiedene Möglichkeiten, Stoppwörter zu entfernen. Am einfachsten ist dies mithilfe der in quanteda integrierten Stoppwortlisten möglich. Diese sind in mehreren Sprachen verfügbar, darunter auch Deutsch.
-
-```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
-stopwords("english")
-daten_tokens <- tokens_remove(daten_tokens, stopwords("english"))
-```
-
-Je nach Forschungsfrage können Stoppwortlisten angepasst werden, indem Wörter entfernt oder hinzugefügt werden. Es ist aber auch möglich eine eigene Liste zu erstellen.
+**Mehr Infos zur Entfernung von Stoppwörtern**:
+Es gibt verschiedene Möglichkeiten, Stoppwörter zu entfernen. Am einfachsten ist dies mithilfe der in quanteda integrierten Stoppwortlisten möglich. Diese sind in mehreren Sprachen verfügbar, darunter auch Deutsch. Je nach Forschungsfrage können diese Stoppwortlisten angepasst werden, indem eigene Stppwörter definiert und dann entfernt werden. Es ist aber auch möglich eine eigene Stoppwortliste zu erstellen.
 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 #Wörter aus der quanteda Stoppwortliste entfernen
 stoppwörter <- stopwords("english")
 stoppwörter <- stoppwörter[!stoppwörter %in% c("i", "me")]
 
-#Wörter der quanteda Stoppwortliste hinzufügen
-stoppwörter <- c(stoppwörter, "i", "me")
-
-#Eigene Liste erstellen
-eigene_stoppwörter <- c("hier", "eigene", "stoppwörter")
+#Beispielhafte Anwendung 
+tokens(data$Description,
+                 what = "word", #Tokenisierung, hier zu Wörtern als Analyseeinheit
+                 remove_punct = TRUE, #Entfernung von Satzzeichen
+                 remove_numbers = TRUE) %>% #Entfernung von Zahlen
+  
+  #Kleinschreibung
+  tokens_tolower() %>% 
+  
+  #Entfernung von Stoppwörtern - hier z.B. reduzierte quanteda-Liste
+  tokens_remove(stoppwörter) %>% 
+  
+  #Stemming
+  tokens_wordstem() %>%
+  
+  #Ausgabe des ersten Textes
+  head(1)
 ```
 
-## 2.5 Vereinheitlichung
+### 📌Aufgabe 2
 
-Oft gibt es Wörter, die unterschiedliche Abkürzungen oder Schreibweisen haben. Nehmen wir das Beispiel der Europäischen Union, die auch mit EU oder E.U. abgekürzt wird. Mit Hilfe der Funktion `gsub()` können wir strings mit anderen strings ersetzen.
+Könnt ihr...
 
-```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
-string <- "Bei den EU Wahlen können alle Bürger*innen der Europäischen Union wählen gehen."
-string <- gsub("Europäischen Union", "EU", string)
-print(string)
-```
+-   **Basis**: Eine Liste mit 3-5 Stopwörtern erstellen und diese als Teil des Preprocessings zusätzlich entfernen?
 
-## 2.6 Stemming
+-   **Fortgeschritten**: Dafür sorgen, dass Namen von Städten (hier als Beispiel „New York“) als ein einzelnes Feature beibehalten werden?
 
-Mit der Funktion `tokens_wordstem()`aus quanteda reduzieren wir alle tokens auf ihren Wortstamm.
+# 3. Text-as-Data-Repräsentation
 
-```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
-daten_tokens <- daten_tokens %>% 
-  tokens_wordstem() 
+# 3.1 Erstellung einer DFM
 
-daten_tokens %>% 
-  head(n=3)
-```
-
-## 2.7 Document-Feature-Matrix
-
-Um aus unseren tokens eine dfm zu machen nutzen wir die `dfm()`Funktion aus dem quanteda package.
+Um aus unseren tokens eine Document-Feature-Matrix zu machen, damit der Computer "Text-as-Data", d.h. als numerisches Datenformat, verarbeiten kann, nutzen wir die `dfm()`Funktion aus dem `quanteda`-Paket.
 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
-datam <- daten_tokens %>% 
+#Wir erstellen eine Document-Feature matrix
+dfm <- tokens %>%
   dfm()
+
+#So sieht das Ergebnis aus
+dfm
 ```
 
-## 2.8 Seltene/häufige features entfernen
+Wir sehen:
 
-Im letzten Schritt des Preprocessings entfernen wir häufig und selten vorkommende features aus der dfm. Das geht mit der Funktion `dfm_trim()`aus dem quanteda Packet.
+- Die DFM besteht aus 900 Dokumenten.
+- Die DFM hat nach dem Preprocessing immer noch 4,246 individuelle Features, hier Wörter.
+- Die DFM ist 99.66% "spare", d.h. mehr als 99% der Zellen enthalten eine 0, weil viele Features nur sehr selten vorkommen. 
 
-Es können unterschiedliche thresholds gesetzt werden - hier lassen wir nur features in der dfm die mindestens in 0.5% und höchstens in 99% der Dokumente vorkommen. Das Argument `docfreq_type = "prop"`berechnet den Anteil der Dokumente, die ein bestimmtes feature beinhalten relativ zur Gesamtzahl der Dokumente. `verbose = TRUE`printed während der Ausführung der Funktion Informationen über den Rechenvorgang in die Konsole.
+# 3.2 Zusätzliche Normalisierung: Relative pruning
+Im letzten Schritt des Preprocessings entfernen wir häufig und selten vorkommende Features aus der DFM. Das geht mit der Funktion `dfm_trim()`aus dem quanteda Packet.
+
+Es können unterschiedliche Grenzwerte gesetzt werden. Hier behalten wir nur Features, die in mindestens in 0.5% und höchstens in 99% der Dokumente vorkommen. Das Argument `docfreq_type = "prop"`berechnet den Anteil der Dokumente, die ein bestimmtes Feature beinhalten relativ zur Gesamtzahl der Dokumente. `verbose = TRUE`printed während der Ausführung der Funktion Informationen über den Rechenvorgang in die Konsole.
 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
-datam <- datam %>% 
+#Anzahl Features vor relative pruning
+dfm
+
+#Anwendung des relative pruning
+dfm  <- dfm  %>% 
   dfm_trim( min_docfreq = 0.005, 
             max_docfreq = 0.99, 
             docfreq_type = "prop", 
             verbose = TRUE) 
+
+#Anzahl Features nach relative pruning
+dfm
 ```
+Wir sehen: Relative pruning kann unseren Datensatz noch einmal deutlich verkleinern (und damit z.B. Analysen beschleunigen).
 
-## 2.9 Word cloud: Erster Blick in die Daten
+# 4. Erste Analysen
 
-Für einen ersten Einblick in die Daten lassen wir uns mit der `topfeatures()`Funktion aus dem quanteda Packet die 10 am häufigsten vorkommenden features ausgeben.
+## 4.1 Top Features
+
+Für einen ersten Einblick in die Daten lassen wir uns mit der `topfeatures()`-Funktion aus dem `quanteda`-Packet die zehn am häufigsten vorkommenden Features ausgeben.
 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
-datam %>% 
-  topfeatures(n = 10)
+topfeatures(dfm, 10) %>%
+  
+  #Umwandlung in einen "schöneren" Dataframe mit der Spalte "Häufigkeit"
+  as.data.frame() %>%
+  rename("Häufigkeit" = '.')
 ```
 
-Das Ergebnis können wir mit einer word cloud visualisieren. Hierfür nutzen wir die `textplot_wordcloud()`Funktion aus dem quanteda.textplots Packet.
+## 4.2. Die berühmt-berüchtigte Word Cloud
+Das Ergebnis können wir mit einer Word Cloud visualisieren. Hierfür nutzen wir die `textplot_wordcloud()`Funktion aus dem `quanteda.textplots`-Paket.
+
+Dabei werden besonders "häufige" Features grösser dargestellt.
 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
-word_cloud <- datam %>% 
-  textplot_wordcloud(max_words = 100)
+textplot_wordcloud(dfm, max_words = 100)
 ```
-
