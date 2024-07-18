@@ -158,7 +158,7 @@ data %>%
   head(5)
 ```
 
-### 📌Aufgabe 1
+### 2.1.4 Aufgabe 1 📌
 
 Könnt ihr...
 
@@ -170,7 +170,7 @@ Könnt ihr...
 
 Die Funktionen `tokens()` bzw. entsprechende Subfunktionen von `quanteda` ermöglichen es uns, mehrere Preprocessing-Schritte in einer einzigen Pipe (d.h. Analyse-Pipeline auf Basis des `tidyverse`) durchzuführen:
 
--   Tokenisierung: `tokens()` (hier können wir auch Sonderzeichen, wie Satzzeichen, entfernen)
+-   Tokenisierung: `tokens()` (hier können Tokenisierung anwenden, aber bereits auch Sonderzeichen, wie Satzzeichen, entfernen)
 -   Kleinschreibung: `tokens_tolower()`
 -   Stoppwörter entfernen: `tokens_remove_stopwords()`. 
 -   Stemming: `tokens_wordstem()`
@@ -198,8 +198,10 @@ data$Description[1]
 tokens[1]
 ```
 
-**Mehr Infos zur Entfernung von Stoppwörtern**:
-Es gibt verschiedene Möglichkeiten, Stoppwörter zu entfernen. Am einfachsten ist dies mithilfe der in quanteda integrierten Stoppwortlisten möglich. Diese sind in mehreren Sprachen verfügbar, darunter auch Deutsch. Je nach Forschungsfrage können diese Stoppwortlisten angepasst werden, indem eigene Stppwörter definiert und dann entfernt werden. Es ist aber auch möglich eine eigene Stoppwortliste zu erstellen.
+### 2.2.1 Entfernung von Stoppwörtern
+Es gibt verschiedene Möglichkeiten, Stoppwörter zu entfernen. Am einfachsten ist dies mithilfe der im `quanteda`-Paket integrierten Stoppwortlisten möglich. Diese sind in mehreren Sprachen verfügbar, darunter auch Deutsch. 
+
+Je nach Forschungsfrage können diese Stoppwortlisten angepasst werden, indem eigene Stoppwörter definiert und dann entfernt werden. Es ist aber auch möglich, eigene Stoppwortlisten zu erstellen.
 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 #Wörter aus der quanteda Stoppwortliste entfernen
@@ -225,7 +227,7 @@ tokens(data$Description,
   head(1)
 ```
 
-### 📌Aufgabe 2
+### 2.2.2 Aufgabe 2 📌
 
 Könnt ihr...
 
@@ -254,8 +256,8 @@ Wir sehen:
 - Die DFM hat nach dem Preprocessing immer noch 4,246 individuelle Features, hier Wörter.
 - Die DFM ist 99.66% "spare", d.h. mehr als 99% der Zellen enthalten eine 0, weil viele Features nur sehr selten vorkommen. 
 
-##3.2 Zusätzliche Normalisierung: Relative pruning
-Im letzten Schritt des Preprocessings entfernen wir häufig und selten vorkommende Features aus der DFM. Das geht mit der Funktion `dfm_trim()`aus dem quanteda Packet.
+## 3.2 Zusätzliche Normalisierung: Relative Pruning
+Im letzten Schritt des Preprocessings entfernen wir häufig und selten vorkommende Features aus der DFM. Das geht mit der Funktion `dfm_trim()`aus dem `quanteda`-Paket.
 
 Es können unterschiedliche Grenzwerte gesetzt werden. Hier behalten wir nur Features, die in mindestens in 0.5% und höchstens in 99% der Dokumente vorkommen. Das Argument `docfreq_type = "prop"`berechnet den Anteil der Dokumente, die ein bestimmtes Feature beinhalten relativ zur Gesamtzahl der Dokumente. `verbose = TRUE`printed während der Ausführung der Funktion Informationen über den Rechenvorgang in die Konsole.
 
@@ -273,7 +275,7 @@ dfm  <- dfm  %>%
 #Anzahl Features nach relative pruning
 dfm
 ```
-Wir sehen: Relative pruning kann unseren Datensatz noch einmal deutlich verkleinern (und damit z.B. Analysen beschleunigen).
+Wir sehen: Relative pruning kann unseren Datensatz noch einmal deutlich verkleinern (und damit z.B. Analysen beschleunigen): Wir haben nun 605 anstelle von 4,246 Features!
 
 # 4. Erste Analysen
 
@@ -290,9 +292,7 @@ topfeatures(dfm, 10) %>%
 ```
 
 ## 4.2. Die berühmt-berüchtigte Word Cloud
-Das Ergebnis können wir mit einer Word Cloud visualisieren. Hierfür nutzen wir die `textplot_wordcloud()`Funktion aus dem `quanteda.textplots`-Paket.
-
-Dabei werden besonders "häufige" Features grösser dargestellt.
+Das Ergebnis können wir mit einer Word Cloud visualisieren. Hierfür nutzen wir die `textplot_wordcloud()`Funktion aus dem `quanteda.textplots`-Paket. Dabei werden besonders "häufige" Features grösser dargestellt.
 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 textplot_wordcloud(dfm, max_words = 100)
