@@ -1,5 +1,5 @@
 ---
-title: "Sitzung 1: Daten einlesen und bereinigen"
+title: "Sitzung 1: Einführung & Preprocessing"
 author: "Valerie Hase & Luisa Kutlar"
 format:
   html:
@@ -10,7 +10,7 @@ format:
 
 # 1. Pakete laden und Daten einlesen
 
-Zunächst installieren alle Pakete, die wir für diese Sitzung brauchten (z.B. *tidyverse*). Ihr braucht *install.packages()* nur, wenn ihr die Pakete im Methodencafe noch nicht installiert hattet.
+Zunächst installieren alle Pakete, die wir für diese Sitzung brauchten (z.B. `tidyverse`). Ihr braucht `install.packages()` nur, wenn ihr die Pakete im Methodencafe noch nicht installiert hattet.
 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 #install.packages("tidyverse)

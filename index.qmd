@@ -54,7 +54,23 @@ read.csv2("data/data_tvseries.csv") %>%
   download_this(
     output_name = "data_tvseries",
     output_extension = ".csv",
-    button_label = "Hier geht es zum Download des TV Datasets",
+    button_label = "Hier geht es zum Download des TV-Datasets",
+    button_type = "default",
+    has_icon = FALSE,
+    icon = "fa fa-save"
+  )
+```
+
+-   Datensatz 2: Dataset of Indian Newspaper Horoscopes. Verfügbar unter CC BY-NC-SA 4.0 Lizenz via [Kaggle](https://www.kaggle.com/datasets/thedivtagguy/times-of-india-horoscopes-dec-2019-to-june-2021), Autor: Aman Bhargava.
+
+```{r echo = FALSE, message = FALSE, warning = FALSE, error = FALSE}
+library("here")
+library("downloadthis")
+read.csv2("data/data_horoscope.csv") %>%
+  download_this(
+    output_name = "data_horoscope",
+    output_extension = ".csv",
+    button_label = "Hier geht es zum Download des Horoskop-Datasets",
     button_type = "default",
     has_icon = FALSE,
     icon = "fa fa-save"
@@ -76,8 +92,14 @@ Sitzung 1️⃣: *Einführung in die automatisierte Inhaltsanalyse & Preprocessi
 
 Sitzung 2️⃣: *Co-Occurence-Analysen*
 
--   Folien
--   Tutorial
+```{=html}
+<ul>
+<li><a href="slides/Sitzung2.pdf"> Folien</a></li>
+<li><a href="tutorial/02-coocccurence.html"> Tutorial</a></li>
+<li><a href="code/02-coocccurence.R" download="02-coocccurence.R"> R-Code</a></li>
+</ul>
+<p></p>
+```
 
 Sitzung 3️⃣: *Diktionäre*
 
