@@ -17,6 +17,8 @@ format:
 #install.packages("quanteda.textplots")
 #install.packages("quanteda.textstats")
 #install.packages("udpipe")
+#install.packages("stm") #überall ergänzen
+#install.packages("reshape2")
 
 library("RCurl")
 library("quanteda")
@@ -25,6 +27,8 @@ library("dplyr")
 library("quanteda.textplots")
 library("quanteda.textstats")
 library("udpipe")
+library("stm")
+library("reshape2")
 
 
 ```
@@ -54,4 +58,36 @@ daten_dfm <- daten_tokens %>%
             docfreq_type = "prop", 
             verbose = TRUE) 
 ```
+
 # 8 Topic Modeling
+Zunächst müssen wir unsere dfm in eine stm umwandeln, damit das stm Packet das Datenformat versteht. Das stm Packet brauchen wir um danach das topic model zu berechnen. 
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+#dfm in stm umwandeln
+daten_stm <- convert(daten_dfm, to = "stm")
+```
+
+Bevor das richtige model gerechnet wird, berechnen wir den statistical fit für unterschiedliche Ks. Beispielhaft einmal für K = 4 und für K = 6. Hierfür brauchen wir nun das stm Packet, dass wir davor laden. 
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+library(stm)
+statistical_fit_46 <- searchK(daten_stm$documents, daten_stm$vocab, K = c(4,6), verbose = TRUE)
+```
+
+Um das Ergebnis von der Berechnung zu interpretieren ploten wir die Daten. 
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+#K = c(4,6)
+# Graph
+#plot <- data.frame("K" = c(4,6),
+                   #"Coherence" = unlist(statistical_fit_46$results$semcoh),
+                   #"Perplexity" = unlist(statistical_fit_46$results$heldout))
+
+# Daten in das long-Format umwandeln
+#plot <- melt(plot, id = c())
+
+#Plot erstellen
+#ggplot(plot, aes(K, value, color = variable)) +
+ # geom_line(linewidth = 1.5, show.legend = FALSE) +
+  #scale_x_continuous(breaks = c(4, 6)) +
+  #facet_wrap(~ variable, scales = "free_y") +
+  #labs(x = "Number of topics K",
+   #    title = "Statistical fit of models with different K")
+```
