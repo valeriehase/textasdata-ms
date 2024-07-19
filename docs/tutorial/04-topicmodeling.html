@@ -1,0 +1,2946 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.555">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Valerie Hase &amp; Luisa Kutlar">
+<meta name="dcterms.date" content="2024-05-04">
+
+<title>Sitzung 4: Topic Modeling</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+        <div class="quarto-navbar-tools tools-end">
+    <a href="https://twitter.com/hase_va" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-twitter"></i></a>
+    <a href="https://github.com/valeriehase/textasdata-ms" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#topic-modeling" id="toc-topic-modeling" class="nav-link active" data-scroll-target="#topic-modeling">8 Topic Modeling</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Sitzung 4: Topic Modeling</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Valerie Hase &amp; Luisa Kutlar </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">May 4, 2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>#Packages laden und Objekte erstellen</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("RCurl")</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("quanteda")</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("tidyverse)</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("dplyr")</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("quanteda.textplots")</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("quanteda.textstats")</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("udpipe")</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("stm") #überall ergänzen</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("reshape2")</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"RCurl"</span>)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"quanteda"</span>)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"tidyverse"</span>)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"dplyr"</span>)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"quanteda.textplots"</span>)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"quanteda.textstats"</span>)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"udpipe"</span>)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"stm"</span>)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"reshape2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Daten laden</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span>  <span class="fu">getURL</span>(<span class="st">"https://raw.githubusercontent.com/valeriehase/Salamanca-CSS-SummerSchool/main/Processing%20text%20and%20text%20as%20data/data_tvseries.csv"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>daten_df <span class="ot">&lt;-</span>  <span class="fu">read.csv2</span>(<span class="at">text =</span> url)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Tokens</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">stopwords</span>(<span class="st">"english"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  [1] "i"          "me"         "my"         "myself"     "we"        
+  [6] "our"        "ours"       "ourselves"  "you"        "your"      
+ [11] "yours"      "yourself"   "yourselves" "he"         "him"       
+ [16] "his"        "himself"    "she"        "her"        "hers"      
+ [21] "herself"    "it"         "its"        "itself"     "they"      
+ [26] "them"       "their"      "theirs"     "themselves" "what"      
+ [31] "which"      "who"        "whom"       "this"       "that"      
+ [36] "these"      "those"      "am"         "is"         "are"       
+ [41] "was"        "were"       "be"         "been"       "being"     
+ [46] "have"       "has"        "had"        "having"     "do"        
+ [51] "does"       "did"        "doing"      "would"      "should"    
+ [56] "could"      "ought"      "i'm"        "you're"     "he's"      
+ [61] "she's"      "it's"       "we're"      "they're"    "i've"      
+ [66] "you've"     "we've"      "they've"    "i'd"        "you'd"     
+ [71] "he'd"       "she'd"      "we'd"       "they'd"     "i'll"      
+ [76] "you'll"     "he'll"      "she'll"     "we'll"      "they'll"   
+ [81] "isn't"      "aren't"     "wasn't"     "weren't"    "hasn't"    
+ [86] "haven't"    "hadn't"     "doesn't"    "don't"      "didn't"    
+ [91] "won't"      "wouldn't"   "shan't"     "shouldn't"  "can't"     
+ [96] "cannot"     "couldn't"   "mustn't"    "let's"      "that's"    
+[101] "who's"      "what's"     "here's"     "there's"    "when's"    
+[106] "where's"    "why's"      "how's"      "a"          "an"        
+[111] "the"        "and"        "but"        "if"         "or"        
+[116] "because"    "as"         "until"      "while"      "of"        
+[121] "at"         "by"         "for"        "with"       "about"     
+[126] "against"    "between"    "into"       "through"    "during"    
+[131] "before"     "after"      "above"      "below"      "to"        
+[136] "from"       "up"         "down"       "in"         "out"       
+[141] "on"         "off"        "over"       "under"      "again"     
+[146] "further"    "then"       "once"       "here"       "there"     
+[151] "when"       "where"      "why"        "how"        "all"       
+[156] "any"        "both"       "each"       "few"        "more"      
+[161] "most"       "other"      "some"       "such"       "no"        
+[166] "nor"        "not"        "only"       "own"        "same"      
+[171] "so"         "than"       "too"        "very"       "will"      </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>daten_tokens <span class="ot">&lt;-</span> daten_df<span class="sc">$</span>Description <span class="sc">%&gt;%</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tokens</span>(<span class="at">what =</span> <span class="st">"word"</span>,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">remove_punct =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">remove_numbers =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">remove_url =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">remove_symbols =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tokens_tolower</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tokens_remove</span>(<span class="fu">stopwords</span>(<span class="st">"english"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tokens_wordstem</span>()</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co">#dfm</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>daten_dfm <span class="ot">&lt;-</span> daten_tokens <span class="sc">%&gt;%</span> </span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dfm</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dfm_trim</span>( <span class="at">min_docfreq =</span> <span class="fl">0.005</span>, </span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>            <span class="at">max_docfreq =</span> <span class="fl">0.99</span>, </span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>            <span class="at">docfreq_type =</span> <span class="st">"prop"</span>, </span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>            <span class="at">verbose =</span> <span class="cn">TRUE</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="topic-modeling" class="level1">
+<h1>8 Topic Modeling</h1>
+<p>Zunächst müssen wir unsere dfm in eine stm umwandeln, damit das stm Packet das Datenformat versteht. Das stm Packet brauchen wir um danach das topic model zu berechnen.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#dfm in stm umwandeln</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>daten_stm <span class="ot">&lt;-</span> <span class="fu">convert</span>(daten_dfm, <span class="at">to =</span> <span class="st">"stm"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Bevor das richtige model gerechnet wird, berechnen wir den statistical fit für unterschiedliche Ks. Beispielhaft einmal für K = 4 und für K = 6. Hierfür brauchen wir nun das stm Packet, dass wir davor laden.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stm)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>statistical_fit_46 <span class="ot">&lt;-</span> <span class="fu">searchK</span>(daten_stm<span class="sc">$</span>documents, daten_stm<span class="sc">$</span>vocab, <span class="at">K =</span> <span class="fu">c</span>(<span class="dv">4</span>,<span class="dv">6</span>), <span class="at">verbose =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Beginning Spectral Initialization 
+     Calculating the gram matrix...
+     Finding anchor words...
+    ....
+     Recovering initialization...
+    ......
+Initialization complete.
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 1 (approx. per word bound = -6.353) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 2 (approx. per word bound = -6.168, relative change = 2.912e-02) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 3 (approx. per word bound = -6.114, relative change = 8.700e-03) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 4 (approx. per word bound = -6.092, relative change = 3.631e-03) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 5 (approx. per word bound = -6.081, relative change = 1.860e-03) 
+Topic 1: new, two, stori, town, earth 
+ Topic 2: life, young, world, year, citi 
+ Topic 3: famili, seri, mysteri, power, work 
+ Topic 4: live, find, friend, must, school 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 6 (approx. per word bound = -6.074, relative change = 1.089e-03) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 7 (approx. per word bound = -6.070, relative change = 6.991e-04) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 8 (approx. per word bound = -6.067, relative change = 4.804e-04) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 9 (approx. per word bound = -6.065, relative change = 3.476e-04) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 10 (approx. per word bound = -6.063, relative change = 2.625e-04) 
+Topic 1: new, two, stori, town, earth 
+ Topic 2: life, young, world, year, follow 
+ Topic 3: famili, seri, mysteri, power, work 
+ Topic 4: live, find, friend, must, school 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 11 (approx. per word bound = -6.062, relative change = 2.054e-04) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 12 (approx. per word bound = -6.061, relative change = 1.653e-04) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 13 (approx. per word bound = -6.060, relative change = 1.354e-04) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 14 (approx. per word bound = -6.060, relative change = 1.116e-04) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 15 (approx. per word bound = -6.059, relative change = 9.197e-05) 
+Topic 1: new, two, stori, town, earth 
+ Topic 2: life, young, world, follow, year 
+ Topic 3: famili, seri, mysteri, power, work 
+ Topic 4: live, friend, find, must, school 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 16 (approx. per word bound = -6.058, relative change = 7.609e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 17 (approx. per word bound = -6.058, relative change = 6.352e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 18 (approx. per word bound = -6.058, relative change = 5.387e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 19 (approx. per word bound = -6.058, relative change = 4.650e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 20 (approx. per word bound = -6.057, relative change = 4.086e-05) 
+Topic 1: new, two, stori, town, help 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, work 
+ Topic 4: live, friend, find, must, school 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 21 (approx. per word bound = -6.057, relative change = 3.647e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 22 (approx. per word bound = -6.057, relative change = 3.293e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 23 (approx. per word bound = -6.057, relative change = 3.011e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 24 (approx. per word bound = -6.056, relative change = 2.773e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 25 (approx. per word bound = -6.056, relative change = 2.580e-05) 
+Topic 1: new, two, stori, town, teenag 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, work 
+ Topic 4: live, friend, find, must, school 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 26 (approx. per word bound = -6.056, relative change = 2.416e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 27 (approx. per word bound = -6.056, relative change = 2.272e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 28 (approx. per word bound = -6.056, relative change = 2.160e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 29 (approx. per word bound = -6.056, relative change = 2.056e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 30 (approx. per word bound = -6.056, relative change = 1.968e-05) 
+Topic 1: new, two, stori, town, man 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, must, group 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 31 (approx. per word bound = -6.056, relative change = 1.893e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 32 (approx. per word bound = -6.055, relative change = 1.825e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 33 (approx. per word bound = -6.055, relative change = 1.765e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 34 (approx. per word bound = -6.055, relative change = 1.714e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 35 (approx. per word bound = -6.055, relative change = 1.672e-05) 
+Topic 1: new, two, stori, man, town 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, must, group 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 36 (approx. per word bound = -6.055, relative change = 1.642e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 37 (approx. per word bound = -6.055, relative change = 1.622e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 38 (approx. per word bound = -6.055, relative change = 1.616e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 39 (approx. per word bound = -6.055, relative change = 1.619e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 40 (approx. per word bound = -6.055, relative change = 1.639e-05) 
+Topic 1: new, two, stori, man, town 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, must 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 41 (approx. per word bound = -6.055, relative change = 1.667e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 42 (approx. per word bound = -6.054, relative change = 1.708e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 43 (approx. per word bound = -6.054, relative change = 1.760e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 44 (approx. per word bound = -6.054, relative change = 1.821e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 45 (approx. per word bound = -6.054, relative change = 1.886e-05) 
+Topic 1: new, two, stori, man, town 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, must 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 46 (approx. per word bound = -6.054, relative change = 1.967e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 47 (approx. per word bound = -6.054, relative change = 2.053e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 48 (approx. per word bound = -6.054, relative change = 2.154e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 49 (approx. per word bound = -6.054, relative change = 2.268e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 50 (approx. per word bound = -6.053, relative change = 2.400e-05) 
+Topic 1: new, two, stori, man, town 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, must 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 51 (approx. per word bound = -6.053, relative change = 2.553e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 52 (approx. per word bound = -6.053, relative change = 2.721e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 53 (approx. per word bound = -6.053, relative change = 2.902e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 54 (approx. per word bound = -6.053, relative change = 3.091e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 55 (approx. per word bound = -6.053, relative change = 3.278e-05) 
+Topic 1: new, two, stori, man, town 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, must 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 56 (approx. per word bound = -6.052, relative change = 3.451e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 57 (approx. per word bound = -6.052, relative change = 3.594e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 58 (approx. per word bound = -6.052, relative change = 3.703e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 59 (approx. per word bound = -6.052, relative change = 3.766e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 60 (approx. per word bound = -6.051, relative change = 3.782e-05) 
+Topic 1: new, two, stori, man, town 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, must 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 61 (approx. per word bound = -6.051, relative change = 3.759e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 62 (approx. per word bound = -6.051, relative change = 3.702e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 63 (approx. per word bound = -6.051, relative change = 3.618e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 64 (approx. per word bound = -6.051, relative change = 3.516e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 65 (approx. per word bound = -6.050, relative change = 3.390e-05) 
+Topic 1: new, two, york, stori, man 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, must 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 66 (approx. per word bound = -6.050, relative change = 3.245e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 67 (approx. per word bound = -6.050, relative change = 3.084e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 68 (approx. per word bound = -6.050, relative change = 2.921e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 69 (approx. per word bound = -6.050, relative change = 2.766e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 70 (approx. per word bound = -6.049, relative change = 2.632e-05) 
+Topic 1: new, two, york, stori, man 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, must 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 71 (approx. per word bound = -6.049, relative change = 2.520e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 72 (approx. per word bound = -6.049, relative change = 2.436e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 73 (approx. per word bound = -6.049, relative change = 2.384e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 74 (approx. per word bound = -6.049, relative change = 2.353e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 75 (approx. per word bound = -6.049, relative change = 2.347e-05) 
+Topic 1: new, two, york, citi, stori 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, must 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 76 (approx. per word bound = -6.049, relative change = 2.357e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 77 (approx. per word bound = -6.048, relative change = 2.385e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 78 (approx. per word bound = -6.048, relative change = 2.419e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 79 (approx. per word bound = -6.048, relative change = 2.462e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 80 (approx. per word bound = -6.048, relative change = 2.507e-05) 
+Topic 1: new, two, citi, york, stori 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, must 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 81 (approx. per word bound = -6.048, relative change = 2.552e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 82 (approx. per word bound = -6.048, relative change = 2.587e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 83 (approx. per word bound = -6.048, relative change = 2.615e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 84 (approx. per word bound = -6.047, relative change = 2.627e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 85 (approx. per word bound = -6.047, relative change = 2.615e-05) 
+Topic 1: new, citi, two, york, stori 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, must 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 86 (approx. per word bound = -6.047, relative change = 2.583e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 87 (approx. per word bound = -6.047, relative change = 2.533e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 88 (approx. per word bound = -6.047, relative change = 2.466e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 89 (approx. per word bound = -6.047, relative change = 2.390e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 90 (approx. per word bound = -6.046, relative change = 2.316e-05) 
+Topic 1: new, citi, two, york, stori 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, set 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 91 (approx. per word bound = -6.046, relative change = 2.252e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 92 (approx. per word bound = -6.046, relative change = 2.196e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 93 (approx. per word bound = -6.046, relative change = 2.159e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 94 (approx. per word bound = -6.046, relative change = 2.133e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 95 (approx. per word bound = -6.046, relative change = 2.119e-05) 
+Topic 1: new, citi, two, york, stori 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, set 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 96 (approx. per word bound = -6.046, relative change = 2.114e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 97 (approx. per word bound = -6.046, relative change = 2.112e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 98 (approx. per word bound = -6.045, relative change = 2.114e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 99 (approx. per word bound = -6.045, relative change = 2.124e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 100 (approx. per word bound = -6.045, relative change = 2.138e-05) 
+Topic 1: new, citi, two, york, stori 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, set 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 101 (approx. per word bound = -6.045, relative change = 2.157e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 102 (approx. per word bound = -6.045, relative change = 2.178e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 103 (approx. per word bound = -6.045, relative change = 2.204e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 104 (approx. per word bound = -6.045, relative change = 2.228e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 105 (approx. per word bound = -6.045, relative change = 2.250e-05) 
+Topic 1: new, citi, two, york, stori 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, set 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 106 (approx. per word bound = -6.044, relative change = 2.265e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 107 (approx. per word bound = -6.044, relative change = 2.270e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 108 (approx. per word bound = -6.044, relative change = 2.259e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 109 (approx. per word bound = -6.044, relative change = 2.227e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 110 (approx. per word bound = -6.044, relative change = 2.172e-05) 
+Topic 1: new, citi, two, york, stori 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, set 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 111 (approx. per word bound = -6.044, relative change = 2.098e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 112 (approx. per word bound = -6.044, relative change = 2.017e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 113 (approx. per word bound = -6.043, relative change = 1.935e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 114 (approx. per word bound = -6.043, relative change = 1.860e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 115 (approx. per word bound = -6.043, relative change = 1.801e-05) 
+Topic 1: new, citi, two, york, stori 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, set 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 116 (approx. per word bound = -6.043, relative change = 1.764e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 117 (approx. per word bound = -6.043, relative change = 1.743e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 118 (approx. per word bound = -6.043, relative change = 1.743e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 119 (approx. per word bound = -6.043, relative change = 1.767e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 120 (approx. per word bound = -6.043, relative change = 1.810e-05) 
+Topic 1: new, citi, two, york, stori 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, set 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 121 (approx. per word bound = -6.043, relative change = 1.879e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 122 (approx. per word bound = -6.043, relative change = 1.959e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 123 (approx. per word bound = -6.042, relative change = 2.072e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 124 (approx. per word bound = -6.042, relative change = 2.197e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 125 (approx. per word bound = -6.042, relative change = 2.341e-05) 
+Topic 1: new, citi, two, york, stori 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, set 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 126 (approx. per word bound = -6.042, relative change = 2.484e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 127 (approx. per word bound = -6.042, relative change = 2.614e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 128 (approx. per word bound = -6.042, relative change = 2.723e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 129 (approx. per word bound = -6.041, relative change = 2.795e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 130 (approx. per word bound = -6.041, relative change = 2.851e-05) 
+Topic 1: new, citi, two, york, stori 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, set 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 131 (approx. per word bound = -6.041, relative change = 2.898e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 132 (approx. per word bound = -6.041, relative change = 2.952e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 133 (approx. per word bound = -6.041, relative change = 3.005e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 134 (approx. per word bound = -6.041, relative change = 3.040e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 135 (approx. per word bound = -6.040, relative change = 3.059e-05) 
+Topic 1: new, citi, two, york, stori 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, set 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 136 (approx. per word bound = -6.040, relative change = 3.077e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 137 (approx. per word bound = -6.040, relative change = 3.110e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 138 (approx. per word bound = -6.040, relative change = 3.175e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 139 (approx. per word bound = -6.040, relative change = 3.278e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 140 (approx. per word bound = -6.039, relative change = 3.421e-05) 
+Topic 1: new, citi, two, york, stori 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, set 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 141 (approx. per word bound = -6.039, relative change = 3.585e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 142 (approx. per word bound = -6.039, relative change = 3.768e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 143 (approx. per word bound = -6.039, relative change = 3.948e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 144 (approx. per word bound = -6.038, relative change = 4.090e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 145 (approx. per word bound = -6.038, relative change = 4.184e-05) 
+Topic 1: new, citi, two, york, stori 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, set 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 146 (approx. per word bound = -6.038, relative change = 4.201e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 147 (approx. per word bound = -6.038, relative change = 4.145e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 148 (approx. per word bound = -6.037, relative change = 4.022e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 149 (approx. per word bound = -6.037, relative change = 3.857e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 150 (approx. per word bound = -6.037, relative change = 3.668e-05) 
+Topic 1: new, citi, two, york, stori 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, set 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 151 (approx. per word bound = -6.037, relative change = 3.495e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 152 (approx. per word bound = -6.037, relative change = 3.331e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 153 (approx. per word bound = -6.036, relative change = 3.203e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 154 (approx. per word bound = -6.036, relative change = 3.102e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 155 (approx. per word bound = -6.036, relative change = 3.046e-05) 
+Topic 1: new, citi, two, york, stori 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, set 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 156 (approx. per word bound = -6.036, relative change = 3.016e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 157 (approx. per word bound = -6.036, relative change = 3.026e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 158 (approx. per word bound = -6.036, relative change = 3.059e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 159 (approx. per word bound = -6.035, relative change = 3.122e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 160 (approx. per word bound = -6.035, relative change = 3.191e-05) 
+Topic 1: new, citi, two, york, stori 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, set 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 161 (approx. per word bound = -6.035, relative change = 3.255e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 162 (approx. per word bound = -6.035, relative change = 3.293e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 163 (approx. per word bound = -6.035, relative change = 3.290e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 164 (approx. per word bound = -6.034, relative change = 3.241e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 165 (approx. per word bound = -6.034, relative change = 3.158e-05) 
+Topic 1: new, citi, two, york, stori 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, set 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 166 (approx. per word bound = -6.034, relative change = 3.053e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 167 (approx. per word bound = -6.034, relative change = 2.957e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 168 (approx. per word bound = -6.034, relative change = 2.882e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 169 (approx. per word bound = -6.033, relative change = 2.828e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 170 (approx. per word bound = -6.033, relative change = 2.796e-05) 
+Topic 1: new, citi, two, york, stori 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, set 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 171 (approx. per word bound = -6.033, relative change = 2.781e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 172 (approx. per word bound = -6.033, relative change = 2.785e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 173 (approx. per word bound = -6.033, relative change = 2.809e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 174 (approx. per word bound = -6.033, relative change = 2.847e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 175 (approx. per word bound = -6.032, relative change = 2.904e-05) 
+Topic 1: new, citi, two, york, stori 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, set 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 176 (approx. per word bound = -6.032, relative change = 2.968e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 177 (approx. per word bound = -6.032, relative change = 3.052e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 178 (approx. per word bound = -6.032, relative change = 3.136e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 179 (approx. per word bound = -6.032, relative change = 3.220e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 180 (approx. per word bound = -6.031, relative change = 3.287e-05) 
+Topic 1: new, citi, two, york, stori 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, set 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 181 (approx. per word bound = -6.031, relative change = 3.336e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 182 (approx. per word bound = -6.031, relative change = 3.360e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 183 (approx. per word bound = -6.031, relative change = 3.344e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 184 (approx. per word bound = -6.031, relative change = 3.306e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 185 (approx. per word bound = -6.030, relative change = 3.245e-05) 
+Topic 1: new, citi, two, york, stori 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, set 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 186 (approx. per word bound = -6.030, relative change = 3.164e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 187 (approx. per word bound = -6.030, relative change = 3.051e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 188 (approx. per word bound = -6.030, relative change = 2.919e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 189 (approx. per word bound = -6.030, relative change = 2.763e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 190 (approx. per word bound = -6.030, relative change = 2.589e-05) 
+Topic 1: new, citi, two, york, stori 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, set 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 191 (approx. per word bound = -6.029, relative change = 2.412e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 192 (approx. per word bound = -6.029, relative change = 2.226e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 193 (approx. per word bound = -6.029, relative change = 2.054e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 194 (approx. per word bound = -6.029, relative change = 1.911e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 195 (approx. per word bound = -6.029, relative change = 1.785e-05) 
+Topic 1: new, citi, two, york, stori 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, set 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 196 (approx. per word bound = -6.029, relative change = 1.693e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 197 (approx. per word bound = -6.029, relative change = 1.621e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 198 (approx. per word bound = -6.029, relative change = 1.577e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 199 (approx. per word bound = -6.029, relative change = 1.559e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 200 (approx. per word bound = -6.028, relative change = 1.552e-05) 
+Topic 1: new, citi, two, york, stori 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, set 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 201 (approx. per word bound = -6.028, relative change = 1.561e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 202 (approx. per word bound = -6.028, relative change = 1.574e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 203 (approx. per word bound = -6.028, relative change = 1.593e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 204 (approx. per word bound = -6.028, relative change = 1.613e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 205 (approx. per word bound = -6.028, relative change = 1.639e-05) 
+Topic 1: new, citi, two, york, stori 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, set 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 206 (approx. per word bound = -6.028, relative change = 1.671e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 207 (approx. per word bound = -6.028, relative change = 1.715e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 208 (approx. per word bound = -6.028, relative change = 1.766e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 209 (approx. per word bound = -6.028, relative change = 1.831e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 210 (approx. per word bound = -6.027, relative change = 1.906e-05) 
+Topic 1: new, citi, two, york, stori 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, set 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 211 (approx. per word bound = -6.027, relative change = 1.995e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 212 (approx. per word bound = -6.027, relative change = 2.098e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 213 (approx. per word bound = -6.027, relative change = 2.208e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 214 (approx. per word bound = -6.027, relative change = 2.313e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 215 (approx. per word bound = -6.027, relative change = 2.399e-05) 
+Topic 1: new, citi, two, york, stori 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, set 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 216 (approx. per word bound = -6.027, relative change = 2.446e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 217 (approx. per word bound = -6.027, relative change = 2.461e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 218 (approx. per word bound = -6.026, relative change = 2.468e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 219 (approx. per word bound = -6.026, relative change = 2.487e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 220 (approx. per word bound = -6.026, relative change = 2.543e-05) 
+Topic 1: new, citi, two, york, stori 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, set 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 221 (approx. per word bound = -6.026, relative change = 2.642e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 222 (approx. per word bound = -6.026, relative change = 2.772e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 223 (approx. per word bound = -6.026, relative change = 2.906e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 224 (approx. per word bound = -6.025, relative change = 3.027e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 225 (approx. per word bound = -6.025, relative change = 3.125e-05) 
+Topic 1: new, citi, two, york, stori 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, set 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 226 (approx. per word bound = -6.025, relative change = 3.178e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 227 (approx. per word bound = -6.025, relative change = 3.207e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 228 (approx. per word bound = -6.025, relative change = 3.201e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 229 (approx. per word bound = -6.024, relative change = 3.140e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 230 (approx. per word bound = -6.024, relative change = 2.974e-05) 
+Topic 1: new, citi, two, york, stori 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, set 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 231 (approx. per word bound = -6.024, relative change = 2.663e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 232 (approx. per word bound = -6.024, relative change = 2.260e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 233 (approx. per word bound = -6.024, relative change = 1.868e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 234 (approx. per word bound = -6.024, relative change = 1.563e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 235 (approx. per word bound = -6.024, relative change = 1.356e-05) 
+Topic 1: new, citi, two, york, stori 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, set 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 236 (approx. per word bound = -6.024, relative change = 1.217e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 237 (approx. per word bound = -6.024, relative change = 1.138e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 238 (approx. per word bound = -6.023, relative change = 1.088e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 239 (approx. per word bound = -6.023, relative change = 1.061e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 240 (approx. per word bound = -6.023, relative change = 1.051e-05) 
+Topic 1: new, citi, two, york, stori 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, set 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 241 (approx. per word bound = -6.023, relative change = 1.047e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 242 (approx. per word bound = -6.023, relative change = 1.056e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 243 (approx. per word bound = -6.023, relative change = 1.073e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 244 (approx. per word bound = -6.023, relative change = 1.097e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 245 (approx. per word bound = -6.023, relative change = 1.125e-05) 
+Topic 1: new, citi, two, york, stori 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, set 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 246 (approx. per word bound = -6.023, relative change = 1.161e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 247 (approx. per word bound = -6.023, relative change = 1.200e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 248 (approx. per word bound = -6.023, relative change = 1.248e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 249 (approx. per word bound = -6.023, relative change = 1.295e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 250 (approx. per word bound = -6.023, relative change = 1.345e-05) 
+Topic 1: new, citi, two, york, stori 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, set 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 251 (approx. per word bound = -6.023, relative change = 1.390e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 252 (approx. per word bound = -6.022, relative change = 1.435e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 253 (approx. per word bound = -6.022, relative change = 1.468e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 254 (approx. per word bound = -6.022, relative change = 1.497e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 255 (approx. per word bound = -6.022, relative change = 1.514e-05) 
+Topic 1: new, citi, two, york, stori 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, set 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 256 (approx. per word bound = -6.022, relative change = 1.526e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 257 (approx. per word bound = -6.022, relative change = 1.534e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 258 (approx. per word bound = -6.022, relative change = 1.537e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 259 (approx. per word bound = -6.022, relative change = 1.550e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 260 (approx. per word bound = -6.022, relative change = 1.561e-05) 
+Topic 1: new, citi, two, york, stori 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, set 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 261 (approx. per word bound = -6.022, relative change = 1.576e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 262 (approx. per word bound = -6.022, relative change = 1.592e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 263 (approx. per word bound = -6.021, relative change = 1.612e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 264 (approx. per word bound = -6.021, relative change = 1.623e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 265 (approx. per word bound = -6.021, relative change = 1.630e-05) 
+Topic 1: new, citi, two, york, stori 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, set 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 266 (approx. per word bound = -6.021, relative change = 1.621e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 267 (approx. per word bound = -6.021, relative change = 1.600e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 268 (approx. per word bound = -6.021, relative change = 1.559e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 269 (approx. per word bound = -6.021, relative change = 1.509e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 270 (approx. per word bound = -6.021, relative change = 1.446e-05) 
+Topic 1: new, citi, two, york, stori 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, set 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 271 (approx. per word bound = -6.021, relative change = 1.373e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 272 (approx. per word bound = -6.021, relative change = 1.303e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 273 (approx. per word bound = -6.021, relative change = 1.241e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 274 (approx. per word bound = -6.020, relative change = 1.185e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 275 (approx. per word bound = -6.020, relative change = 1.147e-05) 
+Topic 1: new, citi, two, york, stori 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, set 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 276 (approx. per word bound = -6.020, relative change = 1.116e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 277 (approx. per word bound = -6.020, relative change = 1.097e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 278 (approx. per word bound = -6.020, relative change = 1.083e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 279 (approx. per word bound = -6.020, relative change = 1.076e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 280 (approx. per word bound = -6.020, relative change = 1.065e-05) 
+Topic 1: new, citi, two, york, stori 
+ Topic 2: life, world, young, follow, year 
+ Topic 3: famili, seri, mysteri, power, secret 
+ Topic 4: live, friend, find, group, set 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 281 (approx. per word bound = -6.020, relative change = 1.065e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 282 (approx. per word bound = -6.020, relative change = 1.043e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 283 (approx. per word bound = -6.020, relative change = 1.027e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 284 (approx. per word bound = -6.020, relative change = 1.004e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Model Converged 
+Beginning Spectral Initialization 
+     Calculating the gram matrix...
+     Finding anchor words...
+    ......
+     Recovering initialization...
+    ......
+Initialization complete.
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 1 (approx. per word bound = -6.328) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 2 (approx. per word bound = -6.169, relative change = 2.504e-02) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 3 (approx. per word bound = -6.102, relative change = 1.080e-02) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 4 (approx. per word bound = -6.068, relative change = 5.708e-03) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 5 (approx. per word bound = -6.048, relative change = 3.290e-03) 
+Topic 1: take, set, stori, teenag, love 
+ Topic 2: friend, school, best, adventur, three 
+ Topic 3: mysteri, father, way, forc, work 
+ Topic 4: new, investig, world, human, war 
+ Topic 5: life, citi, famili, tri, high 
+ Topic 6: live, find, power, man, follow 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 6 (approx. per word bound = -6.035, relative change = 2.011e-03) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 7 (approx. per word bound = -6.028, relative change = 1.307e-03) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 8 (approx. per word bound = -6.022, relative change = 8.987e-04) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 9 (approx. per word bound = -6.018, relative change = 6.535e-04) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 10 (approx. per word bound = -6.015, relative change = 4.986e-04) 
+Topic 1: set, stori, take, love, show 
+ Topic 2: friend, school, seri, adventur, best 
+ Topic 3: mysteri, forc, father, way, peopl 
+ Topic 4: new, world, human, investig, war 
+ Topic 5: life, famili, citi, year, tri 
+ Topic 6: live, find, power, man, follow 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 11 (approx. per word bound = -6.013, relative change = 4.024e-04) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 12 (approx. per word bound = -6.011, relative change = 3.361e-04) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 13 (approx. per word bound = -6.009, relative change = 2.850e-04) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 14 (approx. per word bound = -6.008, relative change = 2.479e-04) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 15 (approx. per word bound = -6.006, relative change = 2.234e-04) 
+Topic 1: set, stori, take, love, becom 
+ Topic 2: friend, seri, school, adventur, town 
+ Topic 3: mysteri, forc, father, way, detect 
+ Topic 4: new, world, human, war, group 
+ Topic 5: life, famili, citi, year, young 
+ Topic 6: find, live, power, man, team 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 16 (approx. per word bound = -6.005, relative change = 2.088e-04) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 17 (approx. per word bound = -6.004, relative change = 1.996e-04) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 18 (approx. per word bound = -6.003, relative change = 1.927e-04) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 19 (approx. per word bound = -6.002, relative change = 1.857e-04) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 20 (approx. per word bound = -6.000, relative change = 1.789e-04) 
+Topic 1: set, stori, becom, take, love 
+ Topic 2: friend, seri, school, town, adventur 
+ Topic 3: mysteri, forc, father, way, detect 
+ Topic 4: new, world, human, war, person 
+ Topic 5: life, famili, citi, young, year 
+ Topic 6: find, live, power, team, man 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 21 (approx. per word bound = -5.999, relative change = 1.705e-04) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 22 (approx. per word bound = -5.998, relative change = 1.596e-04) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 23 (approx. per word bound = -5.998, relative change = 1.474e-04) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 24 (approx. per word bound = -5.997, relative change = 1.376e-04) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 25 (approx. per word bound = -5.996, relative change = 1.311e-04) 
+Topic 1: set, becom, stori, live, take 
+ Topic 2: friend, seri, school, town, must 
+ Topic 3: mysteri, investig, secret, forc, father 
+ Topic 4: new, world, human, war, person 
+ Topic 5: life, famili, citi, young, year 
+ Topic 6: find, power, live, team, man 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 26 (approx. per word bound = -5.995, relative change = 1.271e-04) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 27 (approx. per word bound = -5.994, relative change = 1.233e-04) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 28 (approx. per word bound = -5.994, relative change = 1.188e-04) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 29 (approx. per word bound = -5.993, relative change = 1.132e-04) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 30 (approx. per word bound = -5.992, relative change = 1.064e-04) 
+Topic 1: live, set, becom, stori, take 
+ Topic 2: friend, seri, school, must, togeth 
+ Topic 3: mysteri, secret, investig, crime, forc 
+ Topic 4: new, world, human, war, person 
+ Topic 5: life, famili, young, citi, year 
+ Topic 6: find, power, team, live, work 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 31 (approx. per word bound = -5.992, relative change = 9.833e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 32 (approx. per word bound = -5.991, relative change = 8.959e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 33 (approx. per word bound = -5.991, relative change = 8.082e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 34 (approx. per word bound = -5.990, relative change = 7.319e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 35 (approx. per word bound = -5.990, relative change = 6.724e-05) 
+Topic 1: live, set, becom, stori, follow 
+ Topic 2: friend, seri, school, must, togeth 
+ Topic 3: mysteri, secret, investig, crime, forc 
+ Topic 4: new, world, human, war, person 
+ Topic 5: life, famili, young, citi, year 
+ Topic 6: find, power, team, work, man 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 36 (approx. per word bound = -5.990, relative change = 6.426e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 37 (approx. per word bound = -5.989, relative change = 6.356e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 38 (approx. per word bound = -5.989, relative change = 6.407e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 39 (approx. per word bound = -5.988, relative change = 6.395e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 40 (approx. per word bound = -5.988, relative change = 6.222e-05) 
+Topic 1: live, set, follow, becom, stori 
+ Topic 2: friend, seri, school, must, togeth 
+ Topic 3: mysteri, secret, investig, crime, forc 
+ Topic 4: new, world, human, war, person 
+ Topic 5: life, famili, young, citi, year 
+ Topic 6: find, power, team, work, man 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 41 (approx. per word bound = -5.988, relative change = 6.015e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 42 (approx. per word bound = -5.987, relative change = 5.954e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 43 (approx. per word bound = -5.987, relative change = 6.140e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 44 (approx. per word bound = -5.987, relative change = 6.576e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 45 (approx. per word bound = -5.986, relative change = 7.153e-05) 
+Topic 1: live, follow, set, becom, stori 
+ Topic 2: friend, seri, school, must, togeth 
+ Topic 3: mysteri, secret, investig, crime, forc 
+ Topic 4: new, world, human, war, person 
+ Topic 5: life, famili, young, citi, year 
+ Topic 6: find, power, work, team, man 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 46 (approx. per word bound = -5.986, relative change = 7.752e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 47 (approx. per word bound = -5.985, relative change = 8.124e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 48 (approx. per word bound = -5.985, relative change = 8.274e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 49 (approx. per word bound = -5.984, relative change = 8.242e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 50 (approx. per word bound = -5.984, relative change = 8.148e-05) 
+Topic 1: live, follow, set, becom, stori 
+ Topic 2: friend, seri, school, must, group 
+ Topic 3: mysteri, secret, investig, crime, forc 
+ Topic 4: new, world, human, war, york 
+ Topic 5: life, famili, young, citi, year 
+ Topic 6: find, power, work, team, man 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 51 (approx. per word bound = -5.983, relative change = 8.098e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 52 (approx. per word bound = -5.983, relative change = 8.085e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 53 (approx. per word bound = -5.982, relative change = 8.061e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 54 (approx. per word bound = -5.982, relative change = 7.923e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 55 (approx. per word bound = -5.981, relative change = 7.624e-05) 
+Topic 1: live, follow, set, becom, stori 
+ Topic 2: friend, seri, school, must, group 
+ Topic 3: mysteri, secret, investig, crime, forc 
+ Topic 4: new, world, human, york, war 
+ Topic 5: life, famili, young, citi, year 
+ Topic 6: find, power, work, team, man 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 56 (approx. per word bound = -5.981, relative change = 7.210e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 57 (approx. per word bound = -5.981, relative change = 6.740e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 58 (approx. per word bound = -5.980, relative change = 6.302e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 59 (approx. per word bound = -5.980, relative change = 5.919e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 60 (approx. per word bound = -5.979, relative change = 5.554e-05) 
+Topic 1: live, follow, set, becom, stori 
+ Topic 2: friend, seri, school, must, group 
+ Topic 3: mysteri, secret, investig, crime, forc 
+ Topic 4: new, world, human, york, war 
+ Topic 5: life, famili, young, citi, year 
+ Topic 6: find, power, work, team, man 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 61 (approx. per word bound = -5.979, relative change = 5.150e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 62 (approx. per word bound = -5.979, relative change = 4.696e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 63 (approx. per word bound = -5.979, relative change = 4.148e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 64 (approx. per word bound = -5.978, relative change = 3.630e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 65 (approx. per word bound = -5.978, relative change = 3.241e-05) 
+Topic 1: live, follow, set, becom, stori 
+ Topic 2: friend, seri, school, must, group 
+ Topic 3: mysteri, secret, investig, crime, forc 
+ Topic 4: new, world, human, york, war 
+ Topic 5: life, famili, young, citi, year 
+ Topic 6: find, power, work, team, man 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 66 (approx. per word bound = -5.978, relative change = 3.033e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 67 (approx. per word bound = -5.978, relative change = 2.987e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 68 (approx. per word bound = -5.978, relative change = 3.102e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 69 (approx. per word bound = -5.977, relative change = 3.324e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 70 (approx. per word bound = -5.977, relative change = 3.662e-05) 
+Topic 1: live, follow, set, becom, stori 
+ Topic 2: friend, seri, school, group, must 
+ Topic 3: mysteri, secret, investig, crime, forc 
+ Topic 4: new, world, human, york, war 
+ Topic 5: life, famili, young, citi, year 
+ Topic 6: find, power, work, team, discov 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 71 (approx. per word bound = -5.977, relative change = 4.058e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 72 (approx. per word bound = -5.977, relative change = 4.397e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 73 (approx. per word bound = -5.977, relative change = 4.574e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 74 (approx. per word bound = -5.976, relative change = 4.514e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 75 (approx. per word bound = -5.976, relative change = 4.260e-05) 
+Topic 1: live, follow, set, becom, stori 
+ Topic 2: friend, seri, school, group, must 
+ Topic 3: mysteri, secret, investig, crime, forc 
+ Topic 4: new, world, human, york, war 
+ Topic 5: life, famili, young, citi, year 
+ Topic 6: find, power, work, team, discov 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 76 (approx. per word bound = -5.976, relative change = 3.991e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 77 (approx. per word bound = -5.976, relative change = 3.782e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 78 (approx. per word bound = -5.975, relative change = 3.670e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 79 (approx. per word bound = -5.975, relative change = 3.601e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 80 (approx. per word bound = -5.975, relative change = 3.485e-05) 
+Topic 1: live, follow, set, becom, stori 
+ Topic 2: friend, seri, school, group, togeth 
+ Topic 3: mysteri, secret, investig, crime, forc 
+ Topic 4: new, world, human, york, war 
+ Topic 5: life, famili, young, citi, year 
+ Topic 6: find, power, work, team, discov 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 81 (approx. per word bound = -5.975, relative change = 3.275e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 82 (approx. per word bound = -5.974, relative change = 3.037e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 83 (approx. per word bound = -5.974, relative change = 2.794e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 84 (approx. per word bound = -5.974, relative change = 2.572e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 85 (approx. per word bound = -5.974, relative change = 2.389e-05) 
+Topic 1: live, follow, set, becom, stori 
+ Topic 2: friend, seri, school, group, togeth 
+ Topic 3: mysteri, secret, investig, crime, forc 
+ Topic 4: new, world, human, york, war 
+ Topic 5: life, famili, young, citi, year 
+ Topic 6: find, power, work, team, discov 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 86 (approx. per word bound = -5.974, relative change = 2.205e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 87 (approx. per word bound = -5.974, relative change = 2.070e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 88 (approx. per word bound = -5.974, relative change = 1.979e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 89 (approx. per word bound = -5.974, relative change = 1.929e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 90 (approx. per word bound = -5.973, relative change = 1.958e-05) 
+Topic 1: live, follow, set, becom, stori 
+ Topic 2: friend, seri, school, group, togeth 
+ Topic 3: mysteri, secret, investig, crime, forc 
+ Topic 4: new, world, human, york, war 
+ Topic 5: life, famili, young, citi, year 
+ Topic 6: find, power, work, team, discov 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 91 (approx. per word bound = -5.973, relative change = 2.017e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 92 (approx. per word bound = -5.973, relative change = 2.150e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 93 (approx. per word bound = -5.973, relative change = 2.310e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 94 (approx. per word bound = -5.973, relative change = 2.488e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 95 (approx. per word bound = -5.973, relative change = 2.670e-05) 
+Topic 1: live, follow, set, becom, stori 
+ Topic 2: friend, seri, school, group, togeth 
+ Topic 3: mysteri, secret, investig, crime, forc 
+ Topic 4: new, world, human, york, war 
+ Topic 5: life, famili, young, citi, year 
+ Topic 6: find, power, work, team, discov 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 96 (approx. per word bound = -5.973, relative change = 2.817e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 97 (approx. per word bound = -5.972, relative change = 2.915e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 98 (approx. per word bound = -5.972, relative change = 2.954e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 99 (approx. per word bound = -5.972, relative change = 2.922e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 100 (approx. per word bound = -5.972, relative change = 2.864e-05) 
+Topic 1: live, follow, set, becom, stori 
+ Topic 2: friend, seri, school, group, togeth 
+ Topic 3: mysteri, secret, investig, crime, forc 
+ Topic 4: new, world, human, york, war 
+ Topic 5: life, famili, young, citi, year 
+ Topic 6: find, power, work, team, discov 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 101 (approx. per word bound = -5.972, relative change = 2.813e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 102 (approx. per word bound = -5.972, relative change = 2.776e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 103 (approx. per word bound = -5.971, relative change = 2.744e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 104 (approx. per word bound = -5.971, relative change = 2.726e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 105 (approx. per word bound = -5.971, relative change = 2.729e-05) 
+Topic 1: live, follow, set, stori, becom 
+ Topic 2: friend, seri, school, group, togeth 
+ Topic 3: mysteri, secret, investig, crime, forc 
+ Topic 4: new, world, human, york, war 
+ Topic 5: life, famili, young, citi, year 
+ Topic 6: find, power, work, team, discov 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 106 (approx. per word bound = -5.971, relative change = 2.766e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 107 (approx. per word bound = -5.971, relative change = 2.838e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 108 (approx. per word bound = -5.971, relative change = 2.931e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 109 (approx. per word bound = -5.970, relative change = 2.973e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 110 (approx. per word bound = -5.970, relative change = 2.943e-05) 
+Topic 1: live, follow, set, stori, becom 
+ Topic 2: friend, seri, school, group, togeth 
+ Topic 3: mysteri, secret, investig, crime, forc 
+ Topic 4: new, world, human, york, war 
+ Topic 5: life, famili, young, citi, year 
+ Topic 6: find, power, work, team, discov 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 111 (approx. per word bound = -5.970, relative change = 2.770e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 112 (approx. per word bound = -5.970, relative change = 2.547e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 113 (approx. per word bound = -5.970, relative change = 2.346e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 114 (approx. per word bound = -5.970, relative change = 2.170e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 115 (approx. per word bound = -5.969, relative change = 2.086e-05) 
+Topic 1: live, follow, set, stori, take 
+ Topic 2: friend, seri, school, group, togeth 
+ Topic 3: mysteri, secret, investig, crime, forc 
+ Topic 4: new, world, human, york, war 
+ Topic 5: life, famili, young, citi, year 
+ Topic 6: find, power, work, team, discov 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 116 (approx. per word bound = -5.969, relative change = 2.033e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 117 (approx. per word bound = -5.969, relative change = 2.049e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 118 (approx. per word bound = -5.969, relative change = 2.102e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 119 (approx. per word bound = -5.969, relative change = 2.210e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 120 (approx. per word bound = -5.969, relative change = 2.323e-05) 
+Topic 1: live, follow, set, stori, take 
+ Topic 2: friend, seri, school, group, togeth 
+ Topic 3: mysteri, secret, investig, crime, forc 
+ Topic 4: new, world, human, york, war 
+ Topic 5: life, famili, young, citi, year 
+ Topic 6: find, power, work, team, discov 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 121 (approx. per word bound = -5.969, relative change = 2.419e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 122 (approx. per word bound = -5.969, relative change = 2.452e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 123 (approx. per word bound = -5.968, relative change = 2.405e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 124 (approx. per word bound = -5.968, relative change = 2.334e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 125 (approx. per word bound = -5.968, relative change = 2.314e-05) 
+Topic 1: live, follow, set, stori, take 
+ Topic 2: friend, seri, school, group, togeth 
+ Topic 3: mysteri, secret, investig, crime, forc 
+ Topic 4: new, world, human, york, war 
+ Topic 5: life, famili, young, citi, year 
+ Topic 6: find, power, work, team, discov 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 126 (approx. per word bound = -5.968, relative change = 2.355e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 127 (approx. per word bound = -5.968, relative change = 2.383e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 128 (approx. per word bound = -5.968, relative change = 2.350e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 129 (approx. per word bound = -5.968, relative change = 2.290e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 130 (approx. per word bound = -5.967, relative change = 2.246e-05) 
+Topic 1: live, follow, set, stori, take 
+ Topic 2: friend, seri, school, group, togeth 
+ Topic 3: mysteri, secret, investig, crime, forc 
+ Topic 4: new, world, human, york, war 
+ Topic 5: life, famili, young, citi, year 
+ Topic 6: find, power, work, team, discov 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 131 (approx. per word bound = -5.967, relative change = 2.224e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 132 (approx. per word bound = -5.967, relative change = 2.187e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 133 (approx. per word bound = -5.967, relative change = 2.153e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 134 (approx. per word bound = -5.967, relative change = 2.122e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 135 (approx. per word bound = -5.967, relative change = 2.148e-05) 
+Topic 1: live, follow, set, stori, take 
+ Topic 2: friend, seri, school, group, togeth 
+ Topic 3: mysteri, secret, investig, crime, forc 
+ Topic 4: new, world, human, york, war 
+ Topic 5: life, famili, young, citi, year 
+ Topic 6: find, power, work, team, discov 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 136 (approx. per word bound = -5.967, relative change = 2.206e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 137 (approx. per word bound = -5.967, relative change = 2.312e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 138 (approx. per word bound = -5.966, relative change = 2.431e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 139 (approx. per word bound = -5.966, relative change = 2.548e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 140 (approx. per word bound = -5.966, relative change = 2.631e-05) 
+Topic 1: live, follow, set, stori, take 
+ Topic 2: friend, seri, school, group, togeth 
+ Topic 3: mysteri, secret, investig, crime, forc 
+ Topic 4: new, world, human, york, war 
+ Topic 5: life, famili, young, citi, year 
+ Topic 6: find, power, work, team, discov 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 141 (approx. per word bound = -5.966, relative change = 2.662e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 142 (approx. per word bound = -5.966, relative change = 2.595e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 143 (approx. per word bound = -5.966, relative change = 2.481e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 144 (approx. per word bound = -5.965, relative change = 2.299e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 145 (approx. per word bound = -5.965, relative change = 2.115e-05) 
+Topic 1: live, follow, set, stori, take 
+ Topic 2: friend, seri, school, group, togeth 
+ Topic 3: mysteri, secret, investig, crime, forc 
+ Topic 4: new, world, human, york, war 
+ Topic 5: life, famili, young, citi, year 
+ Topic 6: find, power, work, team, discov 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 146 (approx. per word bound = -5.965, relative change = 1.948e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 147 (approx. per word bound = -5.965, relative change = 1.805e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 148 (approx. per word bound = -5.965, relative change = 1.699e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 149 (approx. per word bound = -5.965, relative change = 1.599e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 150 (approx. per word bound = -5.965, relative change = 1.505e-05) 
+Topic 1: live, follow, set, stori, take 
+ Topic 2: friend, seri, school, group, becom 
+ Topic 3: mysteri, secret, investig, crime, forc 
+ Topic 4: new, world, human, york, war 
+ Topic 5: life, famili, young, citi, year 
+ Topic 6: find, power, work, discov, team 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 151 (approx. per word bound = -5.965, relative change = 1.415e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 152 (approx. per word bound = -5.965, relative change = 1.335e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 153 (approx. per word bound = -5.965, relative change = 1.258e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 154 (approx. per word bound = -5.965, relative change = 1.229e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 155 (approx. per word bound = -5.964, relative change = 1.246e-05) 
+Topic 1: live, follow, set, stori, take 
+ Topic 2: friend, seri, school, becom, group 
+ Topic 3: mysteri, secret, investig, crime, forc 
+ Topic 4: new, world, human, york, war 
+ Topic 5: life, famili, young, citi, year 
+ Topic 6: find, power, work, discov, team 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 156 (approx. per word bound = -5.964, relative change = 1.295e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 157 (approx. per word bound = -5.964, relative change = 1.374e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 158 (approx. per word bound = -5.964, relative change = 1.516e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 159 (approx. per word bound = -5.964, relative change = 1.644e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 160 (approx. per word bound = -5.964, relative change = 1.758e-05) 
+Topic 1: live, follow, set, stori, take 
+ Topic 2: friend, seri, school, becom, group 
+ Topic 3: mysteri, secret, investig, crime, forc 
+ Topic 4: new, world, human, york, war 
+ Topic 5: life, famili, young, citi, year 
+ Topic 6: find, power, work, discov, man 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 161 (approx. per word bound = -5.964, relative change = 1.793e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 162 (approx. per word bound = -5.964, relative change = 1.723e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 163 (approx. per word bound = -5.964, relative change = 1.543e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 164 (approx. per word bound = -5.964, relative change = 1.298e-05) 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Completing Iteration 165 (approx. per word bound = -5.964, relative change = 1.039e-05) 
+Topic 1: live, follow, set, stori, take 
+ Topic 2: friend, seri, becom, school, togeth 
+ Topic 3: mysteri, secret, investig, crime, forc 
+ Topic 4: new, world, human, york, war 
+ Topic 5: life, famili, young, citi, year 
+ Topic 6: find, power, discov, work, man 
+....................................................................................................
+Completed E-Step (0 seconds). 
+Completed M-Step. 
+Model Converged </code></pre>
+</div>
+</div>
+<p>Um das Ergebnis von der Berechnung zu interpretieren ploten wir die Daten.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#K = c(4,6)</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Graph</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">#plot &lt;- data.frame("K" = c(4,6),</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>                   <span class="co">#"Coherence" = unlist(statistical_fit_46$results$semcoh),</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>                   <span class="co">#"Perplexity" = unlist(statistical_fit_46$results$heldout))</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Daten in das long-Format umwandeln</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">#plot &lt;- melt(plot, id = c())</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">#Plot erstellen</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co">#ggplot(plot, aes(K, value, color = variable)) +</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a> <span class="co"># geom_line(linewidth = 1.5, show.legend = FALSE) +</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="co">#scale_x_continuous(breaks = c(4, 6)) +</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="co">#facet_wrap(~ variable, scales = "free_y") +</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  <span class="co">#labs(x = "Number of topics K",</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>   <span class="co">#    title = "Statistical fit of models with different K")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

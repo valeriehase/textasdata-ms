@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.555">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Valerie Hase &amp; Luisa Kutlar">
+<meta name="dcterms.date" content="2024-05-04">
+
+<title>Gesamter Code Stand 15.07</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+        <div class="quarto-navbar-tools tools-end">
+    <a href="https://twitter.com/hase_va" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-twitter"></i></a>
+    <a href="https://github.com/valeriehase/textasdata-ms" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#packete-laden-und-daten-einlesen" id="toc-packete-laden-und-daten-einlesen" class="nav-link active" data-scroll-target="#packete-laden-und-daten-einlesen">1 Packete laden und Daten einlesen</a></li>
+  <li><a href="#preprocessing" id="toc-preprocessing" class="nav-link" data-scroll-target="#preprocessing">2 Preprocessing</a>
+  <ul class="collapse">
+  <li><a href="#encoding-issues-checken" id="toc-encoding-issues-checken" class="nav-link" data-scroll-target="#encoding-issues-checken">2.1 Encoding issues checken</a></li>
+  <li><a href="#tokenisierung-zahlen-urls-etc.-entfernen" id="toc-tokenisierung-zahlen-urls-etc.-entfernen" class="nav-link" data-scroll-target="#tokenisierung-zahlen-urls-etc.-entfernen">2.2 Tokenisierung &amp; Zahlen, URLs, etc. entfernen</a></li>
+  <li><a href="#anpassung-auf-kleinschreibung" id="toc-anpassung-auf-kleinschreibung" class="nav-link" data-scroll-target="#anpassung-auf-kleinschreibung">2.3 Anpassung auf Kleinschreibung</a></li>
+  <li><a href="#stoppwörter-entfernen" id="toc-stoppwörter-entfernen" class="nav-link" data-scroll-target="#stoppwörter-entfernen">2.4 Stoppwörter entfernen</a></li>
+  <li><a href="#vereinheitlichung" id="toc-vereinheitlichung" class="nav-link" data-scroll-target="#vereinheitlichung">2.5 Vereinheitlichung</a></li>
+  <li><a href="#stemming" id="toc-stemming" class="nav-link" data-scroll-target="#stemming">2.6 Stemming</a></li>
+  <li><a href="#document-feature-matrix" id="toc-document-feature-matrix" class="nav-link" data-scroll-target="#document-feature-matrix">2.7 Document-Feature-Matrix</a></li>
+  <li><a href="#seltenehäufige-features-entfernen" id="toc-seltenehäufige-features-entfernen" class="nav-link" data-scroll-target="#seltenehäufige-features-entfernen">2.8 Seltene/häufige features entfernen</a></li>
+  <li><a href="#word-cloud-erster-blick-in-die-daten" id="toc-word-cloud-erster-blick-in-die-daten" class="nav-link" data-scroll-target="#word-cloud-erster-blick-in-die-daten">2.9 Word cloud: Erster Blick in die Daten</a></li>
+  </ul></li>
+  <li><a href="#co-occurrence-analysen" id="toc-co-occurrence-analysen" class="nav-link" data-scroll-target="#co-occurrence-analysen">3 Co-Occurrence-Analysen</a></li>
+  <li><a href="#kollokationen-und-n-gramme" id="toc-kollokationen-und-n-gramme" class="nav-link" data-scroll-target="#kollokationen-und-n-gramme">4 Kollokationen und N-gramme</a></li>
+  <li><a href="#part-of-speech-tagging" id="toc-part-of-speech-tagging" class="nav-link" data-scroll-target="#part-of-speech-tagging">5 Part-of-speech tagging</a></li>
+  <li><a href="#named-entitiy-recognition" id="toc-named-entitiy-recognition" class="nav-link" data-scroll-target="#named-entitiy-recognition">6 Named entitiy recognition</a></li>
+  <li><a href="#diktionäre" id="toc-diktionäre" class="nav-link" data-scroll-target="#diktionäre">7 Diktionäre</a>
+  <ul class="collapse">
+  <li><a href="#off-the-shelf-diktionäre" id="toc-off-the-shelf-diktionäre" class="nav-link" data-scroll-target="#off-the-shelf-diktionäre">7.1 Off-the-shelf Diktionäre</a></li>
+  <li><a href="#eigene-diktionäre" id="toc-eigene-diktionäre" class="nav-link" data-scroll-target="#eigene-diktionäre">7.2 Eigene Diktionäre</a></li>
+  </ul></li>
+  <li><a href="#topic-modeling" id="toc-topic-modeling" class="nav-link" data-scroll-target="#topic-modeling">8 Topic Modeling</a></li>
+  <li><a href="#qualitätskriterien" id="toc-qualitätskriterien" class="nav-link" data-scroll-target="#qualitätskriterien">9 Qualitätskriterien</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Gesamter Code Stand 15.07</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Valerie Hase &amp; Luisa Kutlar </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">May 4, 2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="packete-laden-und-daten-einlesen" class="level1">
+<h1>1 Packete laden und Daten einlesen</h1>
+<p>Zunächst installieren und laden wir alle Packete, die wir heute und morgen brauchen.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("RCurl")</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("quanteda")</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("tidyverse)</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("dplyr")</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("quanteda.textplots")</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("quanteda.textstats")</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("udpipe")</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"RCurl"</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"quanteda"</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"tidyverse"</span>)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"dplyr"</span>)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"quanteda.textplots"</span>)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"quanteda.textstats"</span>)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"udpipe"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Dann laden wir die Datei die hinter dem Link liegt mit der Funktion <code>getURL()</code> aus dem package Rcurl herunter. Mit einem Blick in das Environment sehen wir, dass die einzelnen Wörter mit einem ; getrennt werden . Daher brauchen wir die Funktion <code>read.csv2()</code> aus dem utils Packet - das Packet ist vorinstalliert und immer geladen - um die Daten in R einzulesen. Der Datensatz wird im Objekt <code>daten_df</code> gespeichert.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span>  <span class="fu">getURL</span>(<span class="st">"https://raw.githubusercontent.com/valeriehase/Salamanca-CSS-SummerSchool/main/Processing%20text%20and%20text%20as%20data/data_tvseries.csv"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>daten_df <span class="ot">&lt;-</span>  <span class="fu">read.csv2</span>(<span class="at">text =</span> url)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Alternativ können Daten in einer .csv Datei auch mit einem , voneinander abgetrennt sein. Hier bräuchte es dann die Funktion <code>read.csv()</code> zum Einlesen.</p>
+<p>Nach dem Einlesen der Daten ist es üblich sich zunächst einen Überblick über die Daten zu verschaffen und zu kontrollieren, ob alles korrekt eingelesen wurde.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(daten_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                Title      Year Parental.Rating Rating Number.of.Votes
+1  1. Game of Thrones 2011–2019           TV-MA    9.2            2.3M
+2     2. Breaking Bad 2008–2013           TV-MA    9.5            2.1M
+3  3. Stranger Things 2016–2025           TV-14    8.7            1.3M
+4          4. Friends 1994–2004           TV-14    8.9            1.1M
+5 5. The Walking Dead 2010–2022           TV-MA    8.1            1.1M
+6         6. Sherlock 2010–2017           TV-14    9.1              1M
+                                                                                                                                                                                                                                    Description
+1                                                                                                           Nine noble families fight for control over the lands of Westeros, while an ancient enemy returns after being dormant for millennia.
+2                                                                    A chemistry teacher diagnosed with inoperable lung cancer turns to manufacturing and selling methamphetamine with a former student in order to secure his family's future.
+3                                                                                          When a young boy vanishes, a small town uncovers a mystery involving secret experiments, terrifying supernatural forces and one strange little girl.
+4                                                                                                        Follows the personal and professional lives of six twenty to thirty year-old friends living in the Manhattan borough of New York City.
+5                                                                                                              Sheriff Deputy Rick Grimes wakes up from a coma to learn the world is in ruins and must lead a group of survivors to stay alive.
+6 The quirky spin on Conan Doyle's iconic sleuth pitches him as a "high-functioning sociopath" in modern-day London. Assisting him in his investigations: Afghanistan War vet John Watson, who's introduced to Holmes by a mutual acquaintance.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(daten_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   900 obs. of  6 variables:
+ $ Title          : chr  "1. Game of Thrones" "2. Breaking Bad" "3. Stranger Things" "4. Friends" ...
+ $ Year           : chr  "2011–2019" "2008–2013" "2016–2025" "1994–2004" ...
+ $ Parental.Rating: chr  "TV-MA" "TV-MA" "TV-14" "TV-14" ...
+ $ Rating         : num  9.2 9.5 8.7 8.9 8.1 9.1 8.1 8.6 8.3 9 ...
+ $ Number.of.Votes: chr  "2.3M" "2.1M" "1.3M" "1.1M" ...
+ $ Description    : chr  "Nine noble families fight for control over the lands of Westeros, while an ancient enemy returns after being do"| __truncated__ "A chemistry teacher diagnosed with inoperable lung cancer turns to manufacturing and selling methamphetamine wi"| __truncated__ "When a young boy vanishes, a small town uncovers a mystery involving secret experiments, terrifying supernatura"| __truncated__ "Follows the personal and professional lives of six twenty to thirty year-old friends living in the Manhattan bo"| __truncated__ ...</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">View</span>(daten_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="preprocessing" class="level1">
+<h1>2 Preprocessing</h1>
+<section id="encoding-issues-checken" class="level2">
+<h2 class="anchored" data-anchor-id="encoding-issues-checken">2.1 Encoding issues checken</h2>
+<p>Nach dem Einlesen haben wir bereits einen Blick in den Datensatz geworfen. Nun schauen wir uns gezielt die Textvariable <code>description</code> an, um zu überprüfen, ob alle Zeichen richtig dargestellt werden.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>daten_df <span class="sc">%&gt;%</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>   <span class="fu">select</span>(Description) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                                                                                                                                                                                                                    Description
+1                                                                                                           Nine noble families fight for control over the lands of Westeros, while an ancient enemy returns after being dormant for millennia.
+2                                                                    A chemistry teacher diagnosed with inoperable lung cancer turns to manufacturing and selling methamphetamine with a former student in order to secure his family's future.
+3                                                                                          When a young boy vanishes, a small town uncovers a mystery involving secret experiments, terrifying supernatural forces and one strange little girl.
+4                                                                                                        Follows the personal and professional lives of six twenty to thirty year-old friends living in the Manhattan borough of New York City.
+5                                                                                                              Sheriff Deputy Rick Grimes wakes up from a coma to learn the world is in ruins and must lead a group of survivors to stay alive.
+6 The quirky spin on Conan Doyle's iconic sleuth pitches him as a "high-functioning sociopath" in modern-day London. Assisting him in his investigations: Afghanistan War vet John Watson, who's introduced to Holmes by a mutual acquaintance.</code></pre>
+</div>
+</div>
+<p>In diesem Fall gibt es keine Encoding issues.</p>
+<p>Was tun falls doch?</p>
+<div class="incremental">
+<ul class="incremental">
+<li>Beim Einlesen das richtige Encoding mitgeben</li>
+<li>Manuell bereinigen</li>
+</ul>
+</div>
+<p>Beim manuellen Bereinigen kann die Funktion <code>gsub()</code> helfen, die Zeichenketten ersetzen kann. Zum Beispiel so:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#string mit encoding issues</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>string <span class="ot">&lt;-</span> <span class="st">"SchÃ¶ne GrÃ¼Ãe aus MÃ¼nchen!"</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(string)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "SchÃ¶ne GrÃ¼Ã\u009fe aus MÃ¼nchen!"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Überprüfen, ob "München" in string vorhanden ist</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>contains_münchen <span class="ot">&lt;-</span> <span class="fu">grepl</span>(<span class="st">"München"</span>, string)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(contains_münchen)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Zeichen manuell ersetzen</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>string_bereinigt <span class="ot">&lt;-</span> string <span class="sc">%&gt;%</span> </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gsub</span>(<span class="at">pattern =</span> <span class="st">"Ã¶"</span>, <span class="at">replacement =</span><span class="st">"ö"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gsub</span>(<span class="at">pattern =</span> <span class="st">"Ã¼"</span>, <span class="at">replacement =</span> <span class="st">"ü"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gsub</span>(<span class="at">pattern =</span> <span class="st">"Ã\u009f"</span>, <span class="at">replacement =</span> <span class="st">"ß"</span>) </span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(string_bereinigt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Schöne Grüße aus München!"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Überprüfen, ob "München" in string_bereinigt vorhanden ist</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>contains_münchen <span class="ot">&lt;-</span> <span class="fu">grepl</span>(<span class="st">"aus"</span>, string_bereinigt)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(contains_münchen)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+</div>
+</section>
+<section id="tokenisierung-zahlen-urls-etc.-entfernen" class="level2">
+<h2 class="anchored" data-anchor-id="tokenisierung-zahlen-urls-etc.-entfernen">2.2 Tokenisierung &amp; Zahlen, URLs, etc. entfernen</h2>
+<p>Die Funktion <code>tokens()</code>von quanteda ermöglicht es uns bei der Aufteilung von Text in tokens direkt bestimmte Zeichen zu entfernen. Hier entfernen wir Punkte, Zahlen, URLs und Symbole.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>daten_tokens <span class="ot">&lt;-</span> <span class="fu">tokens</span>(daten_df<span class="sc">$</span>Description, <span class="at">what =</span> <span class="st">"word"</span>, <span class="at">remove_punct =</span> <span class="cn">TRUE</span>, <span class="at">remove_numbers =</span> <span class="cn">TRUE</span>, <span class="at">remove_url =</span> <span class="cn">TRUE</span>, <span class="at">remove_symbols =</span> <span class="cn">TRUE</span>) <span class="co">#wollen wir das alles entfernen?</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>daten_tokens <span class="sc">%&gt;%</span> </span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="at">n=</span><span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Tokens consisting of 3 documents.
+text1 :
+ [1] "Nine"     "noble"    "families" "fight"    "for"      "control" 
+ [7] "over"     "the"      "lands"    "of"       "Westeros" "while"   
+[ ... and 9 more ]
+
+text2 :
+ [1] "A"             "chemistry"     "teacher"       "diagnosed"    
+ [5] "with"          "inoperable"    "lung"          "cancer"       
+ [9] "turns"         "to"            "manufacturing" "and"          
+[ ... and 13 more ]
+
+text3 :
+ [1] "When"      "a"         "young"     "boy"       "vanishes"  "a"        
+ [7] "small"     "town"      "uncovers"  "a"         "mystery"   "involving"
+[ ... and 10 more ]</code></pre>
+</div>
+</div>
+</section>
+<section id="anpassung-auf-kleinschreibung" class="level2">
+<h2 class="anchored" data-anchor-id="anpassung-auf-kleinschreibung">2.3 Anpassung auf Kleinschreibung</h2>
+<p>Mit der Funktion <code>tokens_tolower()</code>aus dem quanteda Packet können alle Buchstaben in Kleinbuchstaben umgeformt werden.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>daten_tokens <span class="ot">&lt;-</span> <span class="fu">tokens_tolower</span>(daten_tokens)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>daten_tokens <span class="sc">%&gt;%</span> </span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="at">n=</span><span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Tokens consisting of 3 documents.
+text1 :
+ [1] "nine"     "noble"    "families" "fight"    "for"      "control" 
+ [7] "over"     "the"      "lands"    "of"       "westeros" "while"   
+[ ... and 9 more ]
+
+text2 :
+ [1] "a"             "chemistry"     "teacher"       "diagnosed"    
+ [5] "with"          "inoperable"    "lung"          "cancer"       
+ [9] "turns"         "to"            "manufacturing" "and"          
+[ ... and 13 more ]
+
+text3 :
+ [1] "when"      "a"         "young"     "boy"       "vanishes"  "a"        
+ [7] "small"     "town"      "uncovers"  "a"         "mystery"   "involving"
+[ ... and 10 more ]</code></pre>
+</div>
+</div>
+</section>
+<section id="stoppwörter-entfernen" class="level2">
+<h2 class="anchored" data-anchor-id="stoppwörter-entfernen">2.4 Stoppwörter entfernen</h2>
+<p>Es gibt verschiedene Möglichkeiten, Stoppwörter zu entfernen. Am einfachsten ist dies mithilfe der in quanteda integrierten Stoppwortlisten möglich. Diese sind in mehreren Sprachen verfügbar, darunter auch Deutsch.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stopwords</span>(<span class="st">"english"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  [1] "i"          "me"         "my"         "myself"     "we"        
+  [6] "our"        "ours"       "ourselves"  "you"        "your"      
+ [11] "yours"      "yourself"   "yourselves" "he"         "him"       
+ [16] "his"        "himself"    "she"        "her"        "hers"      
+ [21] "herself"    "it"         "its"        "itself"     "they"      
+ [26] "them"       "their"      "theirs"     "themselves" "what"      
+ [31] "which"      "who"        "whom"       "this"       "that"      
+ [36] "these"      "those"      "am"         "is"         "are"       
+ [41] "was"        "were"       "be"         "been"       "being"     
+ [46] "have"       "has"        "had"        "having"     "do"        
+ [51] "does"       "did"        "doing"      "would"      "should"    
+ [56] "could"      "ought"      "i'm"        "you're"     "he's"      
+ [61] "she's"      "it's"       "we're"      "they're"    "i've"      
+ [66] "you've"     "we've"      "they've"    "i'd"        "you'd"     
+ [71] "he'd"       "she'd"      "we'd"       "they'd"     "i'll"      
+ [76] "you'll"     "he'll"      "she'll"     "we'll"      "they'll"   
+ [81] "isn't"      "aren't"     "wasn't"     "weren't"    "hasn't"    
+ [86] "haven't"    "hadn't"     "doesn't"    "don't"      "didn't"    
+ [91] "won't"      "wouldn't"   "shan't"     "shouldn't"  "can't"     
+ [96] "cannot"     "couldn't"   "mustn't"    "let's"      "that's"    
+[101] "who's"      "what's"     "here's"     "there's"    "when's"    
+[106] "where's"    "why's"      "how's"      "a"          "an"        
+[111] "the"        "and"        "but"        "if"         "or"        
+[116] "because"    "as"         "until"      "while"      "of"        
+[121] "at"         "by"         "for"        "with"       "about"     
+[126] "against"    "between"    "into"       "through"    "during"    
+[131] "before"     "after"      "above"      "below"      "to"        
+[136] "from"       "up"         "down"       "in"         "out"       
+[141] "on"         "off"        "over"       "under"      "again"     
+[146] "further"    "then"       "once"       "here"       "there"     
+[151] "when"       "where"      "why"        "how"        "all"       
+[156] "any"        "both"       "each"       "few"        "more"      
+[161] "most"       "other"      "some"       "such"       "no"        
+[166] "nor"        "not"        "only"       "own"        "same"      
+[171] "so"         "than"       "too"        "very"       "will"      </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>daten_tokens <span class="ot">&lt;-</span> <span class="fu">tokens_remove</span>(daten_tokens, <span class="fu">stopwords</span>(<span class="st">"english"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Je nach Forschungsfrage können Stoppwortlisten angepasst werden, indem Wörter entfernt oder hinzugefügt werden. Es ist aber auch möglich eine eigene Liste zu erstellen.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Wörter aus der quanteda Stoppwortliste entfernen</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>stoppwörter <span class="ot">&lt;-</span> <span class="fu">stopwords</span>(<span class="st">"english"</span>)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>stoppwörter <span class="ot">&lt;-</span> stoppwörter[<span class="sc">!</span>stoppwörter <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"i"</span>, <span class="st">"me"</span>)]</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Wörter der quanteda Stoppwortliste hinzufügen</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>stoppwörter <span class="ot">&lt;-</span> <span class="fu">c</span>(stoppwörter, <span class="st">"i"</span>, <span class="st">"me"</span>)</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="co">#Eigene Liste erstellen</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>eigene_stoppwörter <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"hier"</span>, <span class="st">"eigene"</span>, <span class="st">"stoppwörter"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="vereinheitlichung" class="level2">
+<h2 class="anchored" data-anchor-id="vereinheitlichung">2.5 Vereinheitlichung</h2>
+<p>Oft gibt es Wörter, die unterschiedliche Abkürzungen oder Schreibweisen haben. Nehmen wir das Beispiel der Europäischen Union, die auch mit EU oder E.U. abgekürzt wird. Mit Hilfe der Funktion <code>gsub()</code> können wir strings mit anderen strings ersetzen.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>string <span class="ot">&lt;-</span> <span class="st">"Bei den EU Wahlen können alle Bürger*innen der Europäischen Union wählen gehen."</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>string <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"Europäischen Union"</span>, <span class="st">"EU"</span>, string)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(string)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Bei den EU Wahlen können alle Bürger*innen der EU wählen gehen."</code></pre>
+</div>
+</div>
+</section>
+<section id="stemming" class="level2">
+<h2 class="anchored" data-anchor-id="stemming">2.6 Stemming</h2>
+<p>Mit der Funktion <code>tokens_wordstem()</code>aus quanteda reduzieren wir alle tokens auf ihren Wortstamm.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>daten_tokens <span class="ot">&lt;-</span> daten_tokens <span class="sc">%&gt;%</span> </span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tokens_wordstem</span>() </span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>daten_tokens <span class="sc">%&gt;%</span> </span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="at">n=</span><span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Tokens consisting of 3 documents.
+text1 :
+ [1] "nine"      "nobl"      "famili"    "fight"     "control"   "land"     
+ [7] "westero"   "ancient"   "enemi"     "return"    "dormant"   "millennia"
+
+text2 :
+ [1] "chemistri"      "teacher"        "diagnos"        "inoper"        
+ [5] "lung"           "cancer"         "turn"           "manufactur"    
+ [9] "sell"           "methamphetamin" "former"         "student"       
+[ ... and 4 more ]
+
+text3 :
+ [1] "young"      "boy"        "vanish"     "small"      "town"      
+ [6] "uncov"      "mysteri"    "involv"     "secret"     "experi"    
+[11] "terrifi"    "supernatur"
+[ ... and 5 more ]</code></pre>
+</div>
+</div>
+</section>
+<section id="document-feature-matrix" class="level2">
+<h2 class="anchored" data-anchor-id="document-feature-matrix">2.7 Document-Feature-Matrix</h2>
+<p>Um aus unseren tokens eine dfm zu machen nutzen wir die <code>dfm()</code>Funktion aus dem quanteda package.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>daten_dfm <span class="ot">&lt;-</span> daten_tokens <span class="sc">%&gt;%</span> </span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dfm</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="seltenehäufige-features-entfernen" class="level2">
+<h2 class="anchored" data-anchor-id="seltenehäufige-features-entfernen">2.8 Seltene/häufige features entfernen</h2>
+<p>Im letzten Schritt des Preprocessings entfernen wir häufig und selten vorkommende features aus der dfm. Das geht mit der Funktion <code>dfm_trim()</code>aus dem quanteda Packet.</p>
+<p>Es können unterschiedliche thresholds gesetzt werden - hier lassen wir nur features in der dfm die mindestens in 0.5% und höchstens in 99% der Dokumente vorkommen. Das Argument <code>docfreq_type = "prop"</code>berechnet den Anteil der Dokumente, die ein bestimmtes feature beinhalten relativ zur Gesamtzahl der Dokumente. <code>verbose = TRUE</code>printed während der Ausführung der Funktion Informationen über den Rechenvorgang in die Konsole.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>daten_dfm <span class="ot">&lt;-</span> daten_dfm <span class="sc">%&gt;%</span> </span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dfm_trim</span>( <span class="at">min_docfreq =</span> <span class="fl">0.005</span>, </span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">max_docfreq =</span> <span class="fl">0.99</span>, </span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">docfreq_type =</span> <span class="st">"prop"</span>, </span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">verbose =</span> <span class="cn">TRUE</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="word-cloud-erster-blick-in-die-daten" class="level2">
+<h2 class="anchored" data-anchor-id="word-cloud-erster-blick-in-die-daten">2.9 Word cloud: Erster Blick in die Daten</h2>
+<p>Für einen ersten Einblick in die Daten lassen wir uns mit der <code>topfeatures()</code>Funktion aus dem quanteda Packet die 10 am häufigsten vorkommenden features ausgeben.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>daten_dfm <span class="sc">%&gt;%</span> </span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">topfeatures</span>(<span class="at">n =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  live   life famili    new  young follow  world friend   find   seri 
+   108    108    107    103     74     74     74     70     69     65 </code></pre>
+</div>
+</div>
+<p>Das Ergebnis können wir mit einer word cloud visualisieren. Hierfür nutzen wir die <code>textplot_wordcloud()</code>Funktion aus dem quanteda.textplots Packet.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>word_cloud <span class="ot">&lt;-</span> daten_dfm <span class="sc">%&gt;%</span> </span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">textplot_wordcloud</span>(<span class="at">max_words =</span> <span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Tutorial_gesamt_alt_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Übung: mit emoji einleiten “test your knowledge” mit anderem Datensatz, der nicht zu groß ist</p>
+</section>
+</section>
+<section id="co-occurrence-analysen" class="level1">
+<h1>3 Co-Occurrence-Analysen</h1>
+<p>ab hier neues Dokument hier mit kwic() anfangen</p>
+<p>Für die Co-Occurence-Analyse müssen wir zunächst die dfm in eine Feature Co-occurrence Matrix (fcm) umwandeln. Das machen wir mit der Funktion <code>fcm()</code> aus dem quanteda Packet.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>daten_fcm <span class="ot">&lt;-</span> daten_dfm <span class="sc">%&gt;%</span> </span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fcm</span>()</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>daten_fcm <span class="sc">%&gt;%</span> </span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Feature co-occurrence matrix of: 6 by 603 features.
+         features
+features  famili fight control land ancient enemi return turn former student
+  famili       8     6       2    3       1     4      6    3      4       2
+  fight        0     1       2    2       2     2      2    1      0       2
+  control      0     0       0    1       1     1      1    0      0       0
+  land         0     0       0    0       1     1      1    0      0       1
+  ancient      0     0       0    0       0     2      1    0      0       0
+  enemi        0     0       0    0       0     0      2    0      0       0
+[ reached max_nfeat ... 593 more features ]</code></pre>
+</div>
+</div>
+<p>Beim nächsten Schritt wählen wir die features aus, die uns in unserer Analyse interessieren. Das machen wir mit der Funktion <code>fcm_select()</code>aus dem quanteda Packet.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>daten_fcm <span class="ot">&lt;-</span> daten_fcm <span class="sc">%&gt;%</span> </span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fcm_select</span>(<span class="at">pattern =</span> <span class="fu">c</span>(<span class="st">"famili"</span>, <span class="st">"crime"</span>, <span class="st">"america"</span>, <span class="st">"school"</span>), <span class="co">#hier noch bessere Begriffe vielleicht über topfeatures oder topic modeling</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">selection =</span> <span class="st">"keep"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Dann visualisieren wir die fcm mit der <code>textplot_network()</code>Funktion aus dem<code>quanteda.textplots()</code> Paket. Wenn features im selben Dokument vorkommen, werden sie mit einer Linie verbunden. Umso dicker die Linie, desto öfter kommen die features miteinander vor.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">textplot_network</span>(daten_fcm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Tutorial_gesamt_alt_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Diese Visualisierung gibt uns nun aber noch keine genauen Angaben dazu, wie oft ein feature mit einem anderen vorkommt. Um das herauszufinden, müssen wir die fcm mit der <code>convert()</code>Funktion aus dem quanteda Packet in einen data frame umwandeln.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>daten_fcm_df <span class="ot">&lt;-</span> daten_fcm <span class="sc">%&gt;%</span> </span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">convert</span>(<span class="at">to =</span> <span class="st">"data.frame"</span>)</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>daten_fcm_df <span class="sc">%&gt;%</span> </span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   doc_id famili america crime school
+1  famili      8       3     3      7
+2 america      0       0     2      0
+3   crime      0       0     2      0
+4  school      0       0     0      2</code></pre>
+</div>
+</div>
+<p>Mit Hilfe von <code>select()</code>können wir uns nun einzelne Häufigkeiten, wie oft ein feature mit einem anderen feature vorkommt, ausgeben lassen.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>daten_fcm_df <span class="sc">%&gt;%</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(doc_id <span class="sc">==</span> <span class="st">"crime"</span>) <span class="sc">%&gt;%</span> <span class="co">#Zeile</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(america) <span class="co">#Spalte #Frage: Wie kann es sein, dass crime america 0 ist und america crime 2?</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  america
+1       0</code></pre>
+</div>
+</div>
+</section>
+<section id="kollokationen-und-n-gramme" class="level1">
+<h1>4 Kollokationen und N-gramme</h1>
+<p>Um herauszufinden, welche tokens oft hintereinander vorkommen, können wir die Funktion <code>textstat_collocations</code>aus dem quanteda.textstats Packet verwenden.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>daten_tokens <span class="sc">%&gt;%</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">textstat_collocations</span>(<span class="at">min_count =</span> <span class="dv">10</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>lambda) <span class="sc">%&gt;%</span></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        collocation count count_nested length    lambda         z
+8         los angel    22            0      2 11.990140  7.854600
+9          new york    39            0      2  9.632780  6.742807
+5     serial killer    10            0      2  8.663529 11.845880
+4 person profession    13            0      2  7.814954 12.187824
+7     antholog seri    10            0      2  7.630410  8.609360
+1       high school    22            0      2  7.038983 16.485340
+3       best friend    25            0      2  7.003630 15.082901
+2         york citi    19            0      2  5.808506 16.064692
+6       seri follow    10            0      2  4.321093 11.356399</code></pre>
+</div>
+</div>
+<p>In einem weiteren Schritt kann es manchmal sinnvoll sein, Kollokationen für die Analyse zu einem token zusammenzufassen (dieser Schritt wäre dann Teil des Preprocessings). Das lässt sich mit der <code>tokens_compound()</code>Funktion aus dem quanteda.textstats Packet umsetzen. Die Funktion verbindet die gegebenen tokens mit einem Unterstrich zu einem token.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>ngramme <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"los angel"</span>,<span class="st">"new york citi"</span>, <span class="st">"serial killer"</span>, <span class="st">"high school"</span>, <span class="st">"best friend"</span>)</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>daten_tokens_ngramme <span class="ot">&lt;-</span> <span class="fu">tokens_compound</span>(daten_tokens, <span class="at">pattern =</span> <span class="fu">phrase</span>(ngramme))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Wie das nun in den Daten aussieht können wir mit Hilfe der <code>kwic()</code>Funktion aus dem quanteda Packet herausfinden (kwic steht für keywords in context).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>daten_tokens_ngramme <span class="sc">%&gt;%</span> </span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kwic</span>(<span class="at">pattern =</span> <span class="fu">c</span>(<span class="st">"los angel"</span>,<span class="st">"new york citi"</span>, <span class="st">"serial killer"</span>, <span class="st">"high school"</span>, <span class="st">"best friend"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="at">n=</span><span class="dv">30</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Keyword-in-context with 0 matches.</code></pre>
+</div>
+</div>
+</section>
+<section id="part-of-speech-tagging" class="level1">
+<h1>5 Part-of-speech tagging</h1>
+<p>Für das part of speech tagging nutzen wir das Packet UDPipe. Bevor wir unseren data frame in die <code>udipie()</code>Funktion geben, müssen wir ihn ins tibble Format umformen und eine ID Variable erstellen. Des Weiteren bennen wir die Spalte value in text um. Das ist notwendig, weil <code>as_tibble()</code>die ursprüngliche Spalte <code>Description</code> in <code>value</code> umbenannt hat. Am Ende lassen wir uns nur einen Teil der Variablen ausgeben, damit das Ergebnis übersichtlich bleibt.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>daten_df_udpipe <span class="ot">&lt;-</span> daten_df<span class="sc">$</span>Description <span class="sc">%&gt;%</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Format für das udpipe Packet anpassen</span></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">doc_id =</span> <span class="fu">paste0</span>(<span class="st">"text"</span>, <span class="dv">1</span><span class="sc">:</span><span class="fu">n</span>())) <span class="sc">%&gt;%</span> </span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">text =</span> value) <span class="sc">%&gt;%</span></span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a><span class="co">#Der Einfachheit halber nur für einen Text</span></span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a><span class="co">#part-of-speech tagging</span></span>
+<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">udpipe</span>(<span class="st">"english"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Wenn wir jetzt beispielsweise herausfinden wollen, mit welchen Adjektiven das Wort “family” beschrieben wird, sieht der Code dafür wie folgt aus:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Dataframe nach Nomen mit dem lemma "family" filtern</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>adjectives_describing_family <span class="ot">&lt;-</span> daten_df_udpipe <span class="sc">%&gt;%</span></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(upos <span class="sc">==</span> <span class="st">"NOUN"</span> <span class="sc">&amp;</span> lemma <span class="sc">==</span> <span class="st">"family"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Den gefilterten Dataframe mit dem ungefilterten Dataframe joinen</span></span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(daten_df_udpipe, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"doc_id"</span>, <span class="st">"sentence_id"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a><span class="co">#Großen Dataframe nach Adjektiven filtern, die bei ihrer head_token Variable die family token_id haben</span></span>
+<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(upos.y <span class="sc">==</span> <span class="st">"ADJ"</span> <span class="sc">&amp;</span> head_token_id.y <span class="sc">==</span> token_id.x) <span class="sc">%&gt;%</span></span>
+<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a><span class="co">#relevanten Variablen auswählen</span></span>
+<span id="cb49-12"><a href="#cb49-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(doc_id, sentence_id, <span class="at">token_id =</span> token_id.y, <span class="at">token =</span> token.y, <span class="at">upos =</span> upos.y)</span>
+<span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-14"><a href="#cb49-14" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(adjectives_describing_family)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  doc_id sentence_id token_id token upos
+1  text1           1        2 noble  ADJ</code></pre>
+</div>
+</div>
+</section>
+<section id="named-entitiy-recognition" class="level1">
+<h1>6 Named entitiy recognition</h1>
+</section>
+<section id="diktionäre" class="level1">
+<h1>7 Diktionäre</h1>
+<section id="off-the-shelf-diktionäre" class="level2">
+<h2 class="anchored" data-anchor-id="off-the-shelf-diktionäre">7.1 Off-the-shelf Diktionäre</h2>
+<p>Es gibt viele off-the-shelf Diktionäre. Der Einfachkeit halber nutzen wir hier zur Demonstation den <code>data_dictionary_LSD2015</code>aus dem quanteda Packet (Young &amp; Soroka, 2012).</p>
+<p>– Soll hier noch ein Disclaimer wegen Validität und Auswahl Diktionär etc. hin?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>diktionär <span class="ot">&lt;-</span> data_dictionary_LSD2015</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>diktionär <span class="sc">%&gt;%</span> </span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Dictionary object with 4 key entries.
+- [negative]:
+  - a lie, abandon*, abas*, abattoir*, abdicat*, aberra*, abhor*, abject*, abnormal*, abolish*, abominab*, abominat*, abrasiv*, absent*, abstrus*, absurd*, abus*, accident*, accost*, accursed* [ ... and 2,838 more ]
+- [positive]:
+  - ability*, abound*, absolv*, absorbent*, absorption*, abundanc*, abundant*, acced*, accentuat*, accept*, accessib*, acclaim*, acclamation*, accolad*, accommodat*, accomplish*, accord, accordan*, accorded*, accords [ ... and 1,689 more ]
+- [neg_positive]:
+  - best not, better not, no damag*, no no, not ability*, not able, not abound*, not absolv*, not absorbent*, not absorption*, not abundanc*, not abundant*, not acced*, not accentuat*, not accept*, not accessib*, not acclaim*, not acclamation*, not accolad*, not accommodat* [ ... and 1,701 more ]
+- [neg_negative]:
+  - not a lie, not abandon*, not abas*, not abattoir*, not abdicat*, not aberra*, not abhor*, not abject*, not abnormal*, not abolish*, not abominab*, not abominat*, not abrasiv*, not absent*, not abstrus*, not absurd*, not abus*, not accident*, not accost*, not accursed* [ ... and 2,840 more ]</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>?data_dictionary_LSD2015</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Nun wollen wir den Diktionär auf unsere Daten anwenden. Diese müssen dafür im dfm-Format sein. Mit der Funktion <code>dfm_lookup()</code> aus dem quanteda Packet wird für jeden Text, also in diesem Fall für jede TV Show, geschaut, wie viele Wörter aus den ersten zwei Spalten des Diktionärs vorkommen. Die Funktion <code>dfm_weight(scheme = "prop")</code>setzt die Anzahl der dictionary Wörter ins Verhältnis mit der Länge des Textes.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>sentiment_tvshows <span class="ot">&lt;-</span>  daten_dfm <span class="sc">%&gt;%</span> </span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dfm_weight</span>(<span class="at">scheme =</span> <span class="st">"prop"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dfm_lookup</span>(<span class="at">dictionary =</span> data_dictionary_LSD2015[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>])</span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>sentiment_tvshows <span class="sc">%&gt;%</span> </span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Document-feature matrix of: 6 documents, 2 features (50.00% sparse) and 0 docvars.
+       features
+docs      negative   positive
+  text1 0.28571429 0         
+  text2 0          0         
+  text3 0.06666667 0         
+  text4 0          0.09090909
+  text5 0          0.22222222
+  text6 0.16666667 0.16666667</code></pre>
+</div>
+</div>
+</section>
+<section id="eigene-diktionäre" class="level2">
+<h2 class="anchored" data-anchor-id="eigene-diktionäre">7.2 Eigene Diktionäre</h2>
+</section>
+</section>
+<section id="topic-modeling" class="level1">
+<h1>8 Topic Modeling</h1>
+</section>
+<section id="qualitätskriterien" class="level1">
+<h1>9 Qualitätskriterien</h1>
+<p>Irgendwo einbauen: write.csv()/write.csv2() writeRDS()/readRDS() save.image()</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
