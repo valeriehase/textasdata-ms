@@ -61,7 +61,7 @@ read.csv2("data/data_tvseries.csv") %>%
   )
 ```
 
--   Datensatz 2: Dataset of Indian Newspaper Horoscopes. Verfügbar unter CC BY-NC-SA 4.0 Lizenz via [Kaggle](https://www.kaggle.com/datasets/thedivtagguy/times-of-india-horoscopes-dec-2019-to-june-2021), Autor: Aman Bhargava.
+-   Datensatz 2: Dataset of Indian Newspaper Horoscopes. Verfügbar unter CC BY-NC-SA 4.0 Lizenz via [Kaggle](https://www.kaggle.com/datasets/thedivtagguy/times-of-india-horoscopes-dec-2019-to-june-2021), Autor: Aman Bhargava. Edited by reducing the data set to the first 1,000 observations only.
 
 ```{r echo = FALSE, message = FALSE, warning = FALSE, error = FALSE}
 library("here")
@@ -90,13 +90,13 @@ Sitzung 1️⃣: *Einführung in die automatisierte Inhaltsanalyse & Preprocessi
 <p></p>
 ```
 
-Sitzung 2️⃣: *Co-Occurence-Analysen*
+Sitzung 2️⃣: *Co-Occurrence-Analysen*
 
 ```{=html}
 <ul>
 <li><a href="slides/Sitzung2.pdf"> Folien</a></li>
-<li><a href="tutorial/02-cooccurence.html"> Tutorial</a></li>
-<li><a href="code/02-cooccurence.R" download="02-cooccurence.R"> R-Code</a></li>
+<li><a href="tutorial/02-cooccurrence.html"> Tutorial</a></li>
+<li><a href="code/02-cooccurrence.R" download="02-cooccurrence.R"> R-Code</a></li>
 </ul>
 <p></p>
 ```
