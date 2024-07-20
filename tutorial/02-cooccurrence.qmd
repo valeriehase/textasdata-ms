@@ -14,17 +14,17 @@ Zunächst installieren alle Pakete, die wir für diese Sitzung brauchten (z.B. `
 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 #install.packages("tidyverse)
-#install.packages("quanteda")
-#install.packages("quanteda.textplots")
 #install.packages("RCurl")
+#install.packages("quanteda")
 #install.packages("quanteda.textstats")
+#install.packages("quanteda.textplots")
 #install.packages("udpipe")
 
 library("tidyverse")
-library("quanteda")
-library("quanteda.textplots")
 library("RCurl")
+library("quanteda")
 library("quanteda.textstats")
+library("quanteda.textplots")
 library("udpipe")
 ```
 
