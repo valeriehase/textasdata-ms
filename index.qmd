@@ -95,8 +95,8 @@ Sitzung 2️⃣: *Co-Occurence-Analysen*
 ```{=html}
 <ul>
 <li><a href="slides/Sitzung2.pdf"> Folien</a></li>
-<li><a href="tutorial/02-coocccurence.html"> Tutorial</a></li>
-<li><a href="code/02-coocccurence.R" download="02-coocccurence.R"> R-Code</a></li>
+<li><a href="tutorial/02-cooccurence.html"> Tutorial</a></li>
+<li><a href="code/02-cooccurence.R" download="02-cooccurence.R"> R-Code</a></li>
 </ul>
 <p></p>
 ```
