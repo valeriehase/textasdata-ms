@@ -111,6 +111,43 @@ tokens %>%
 
 Wir sehen, dass unter den häufigsten bigrams einige Features sind, die in Kombination miteinander eine andere Bedeutung haben als als einzelne unigrams. Dazu gehören z.B. Orte (z.B. *New York*) oder Ausdrücke (z. B. *serial killer*).
 
+In einem weiteren Schritt kann es manchmal sinnvoll sein, Ngrams für die weitere Analyse zu einem Feature zusammenzufassen (dieser Schritt wäre dann Teil des Preprocessings). Beispielsweise wollen wir, dass *United* immer mit *States* als ein Feature *United States* verstanden wird, sobald diese beiden Features in dieser Abfolge genutzt werden (statt diese in einzelne Features zu splitten).
+
+Dieses Zusammenfassen (*compounding*) lässt sich mit der `tokens_compound()`-Funktion aus dem `quanteda.textstats`-Paket umsetzen.
+
+Die Funktion verbindet unigrams mit einem Unterstrich zu einem ngram, das als ein einziges Feature weiter analysiert wird. Dieser Schritt wird zwischen dem `tokens`-Befehl und dem `dfm`-Befehle (d.h. der Tokenisierung und der Erstellung einer Document-Feature-Matrix) eingefügt.
+
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+
+#Definition häufiger Collocations auf Basis der vorherigen Ausgabe
+ngrams <- c("los angel","new york citi", "serial killer", "high school", "best friend")
+
+#Text-as-Data Repräsentation als Document-Feature-Matrix
+dfm <- tokens %>% 
+  
+  #Zusätzlicher Schritt, um Collocations als einzelnes Feature einzulesen
+  tokens_compound(pattern = phrase(ngrams)) %>%
+  
+  #reguläre DFM, inkl. Relative Pruning
+  dfm() %>% 
+  dfm_trim( min_docfreq = 0.005, 
+            max_docfreq = 0.99, 
+            docfreq_type = "prop", 
+            verbose = TRUE) 
+
+#Beispiel: Wie wird das Feature "Los Angeles" eingelesen?
+dfm %>%
+  
+  #Umwandlung zu Data-Frame
+  convert(to = "data.frame") %>%
+  
+  #Reduktion auf Doc ID und Features, die mit "los" beginnen
+  select(doc_id, starts_with("los")) %>%
+  
+  #Ausgabe ausgewählter Serien (Zeile 125 bis 130)
+  slice(125:130)
+```
+
 ## 2.2 Keywords-in-Context (KWIC)
 
 Als eher qualitativer Einblick bietet sich die Analyse von *Konkordanzen*, d.h. der Analyse von Schlüsselwörtern und ihres Kontexts, im Text an.
@@ -130,7 +167,29 @@ data$Description %>%
   head()
 ```
 
-## 2.3 Semantische Netzwerke auf Basis von Co-Occurrenzen
+## 2.3 Collocations
+
+Ein weiterer, eher quantitativer Ansatz sind Collocations. Collocations bezeichnen Features, die häufig (und damit vermutlich nicht-zufällig) *nacheinander* auftreten, was auf eine gemeinsame semantische Bedeutung hindeutet (z.B. *United* und *States*).
+
+Um herauszufinden, welche Features vorkommen, können wir die Funktion `textstat_collocations()` aus dem `quanteda.textstats`-Paket verwenden.
+
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+tokens %>%
+  
+  #Identifikation von Collocations, die mind. 10 Mal vorkommen
+  textstat_collocations(min_count = 10) %>%
+  
+  #Sortierung nach lambda: Je grösser, 
+  #desto wahrscheinlicher handelt es sich um nicht-zufällige Collocations
+  arrange(-lambda) %>%
+  
+  #Ausgabe der häufigsten 10 Collocation
+  head(10)
+```
+
+Das kennen wir doch schon - nämlich aus Abschnitt 2.1 zu *ngrams*.
+
+## 2.4 Semantische Netzwerke
 
 Als stärker quantifizierende Analyse bietet sich die Visualisierung von Co-Occurrenzen mittels semantischer Netzwerke an. Diese visualisieren, welche Features häufig in einem gemeinsamen Kontext (z.B. in direkter Abfolge, innerhalb eines Textes) vorkommen.
 
@@ -183,67 +242,6 @@ Dabei können wir sehen, dass Männer wie Frauen häufig als "jung" beschrieben 
 
 #Plot des semantischen Netzwerks
 textplot_network(fcm)
-```
-
-## 2.4 Collocations
-
-Ein weiterer Ansatz sind Collocations. Collocations bezeichnen Features, die häufig (und damit vermutlich nicht-zufällig) *nacheinander* auftreten, was auf eine gemeinsame semantische Bedeutung hindeutet (z.B. *United* und *States*).
-
-Um herauszufinden, welche Features vorkommen, können wir die Funktion `textstat_collocations()` aus dem `quanteda.textstats`-Paket verwenden.
-
-```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
-tokens %>%
-  
-  #Identifikation von Collocations, die mind. 10 Mal vorkommen
-  textstat_collocations(min_count = 10) %>%
-  
-  #Sortierung nach lambda: Je grösser, 
-  #desto wahrscheinlicher handelt es sich um nicht-zufällige Collocations
-  arrange(-lambda) %>%
-  
-  #Ausgabe der häufigsten 10 Collocation
-  head(10)
-```
-
-Das kennen wir doch schon - nämlich aus Abschnitt 2.1 zu *ngrams*.
-
-## 2.5 Ngrams zu einem Feature zusammenfassen
-
-In einem weiteren Schritt kann es manchmal sinnvoll sein, Collocations für die weitere Analyse zu einem Feature zusammenzufassen (dieser Schritt wäre dann Teil des Preprocessings). Beispielsweise wollen wir, dass *United* immer mit *States* als ein Feature *United States* verstanden wird, sobald diese beiden Features in dieser Abfolge genutzt werden (statt diese in einzelne Features zu splitten).
-
-Dieses Zusammenfassen (*compounding*) lässt sich mit der `tokens_compound()`-Funktion aus dem `quanteda.textstats`-Paket umsetzen.
-
-Die Funktion verbindet unigrams mit einem Unterstrich zu einem ngram, das als ein einziges Feature weiter analysiert wird. Dieser Schritt wird zwischen dem `tokens`-Befehl und dem `dfm`-Befehle (d.h. der Tokenisierung und der Erstellung einer Document-Feature-Matrix) eingefügt.
-
-```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
-
-#Definition häufiger Collocations auf Basis der vorherigen Ausgabe
-ngrams <- c("los angel","new york citi", "serial killer", "high school", "best friend")
-
-#Text-as-Data Repräsentation als Document-Feature-Matrix
-dfm <- tokens %>% 
-  
-  #Zusätzlicher Schritt, um Collocations als einzelnes Feature einzulesen
-  tokens_compound(pattern = phrase(ngrams)) %>%
-  
-  #reguläre DFM, inkl. Relative Pruning
-  dfm() %>% 
-  dfm_trim( min_docfreq = 0.005, 
-            max_docfreq = 0.99, 
-            docfreq_type = "prop", 
-            verbose = TRUE) 
-
-#Beispiel: Wie wird das Feature "Los Angeles" eingelesen?
-dfm %>%
-  
-  #Umwandlung zu Data-Frame
-  convert(to = "data.frame") %>%
-  
-  #Reduktion auf Doc ID und Features, die mit "los" beginnen
-  select(doc_id, starts_with("los")) %>%
-  
-  #Ausgabe ausgewählter Serien (Zeile 125 bis 130)
-  slice(125:130)
 ```
 
 # 3. Part-of-Speech Tagging

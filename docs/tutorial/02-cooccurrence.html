@@ -133,9 +133,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#n-grams" id="toc-n-grams" class="nav-link" data-scroll-target="#n-grams">2.1 N-grams</a></li>
   <li><a href="#keywords-in-context-kwic" id="toc-keywords-in-context-kwic" class="nav-link" data-scroll-target="#keywords-in-context-kwic">2.2 Keywords-in-Context (KWIC)</a></li>
-  <li><a href="#semantische-netzwerke-auf-basis-von-co-occurrenzen" id="toc-semantische-netzwerke-auf-basis-von-co-occurrenzen" class="nav-link" data-scroll-target="#semantische-netzwerke-auf-basis-von-co-occurrenzen">2.3 Semantische Netzwerke auf Basis von Co-Occurrenzen</a></li>
-  <li><a href="#collocations" id="toc-collocations" class="nav-link" data-scroll-target="#collocations">2.4 Collocations</a></li>
-  <li><a href="#ngrams-azu-einem-feature-zusammenfassen" id="toc-ngrams-azu-einem-feature-zusammenfassen" class="nav-link" data-scroll-target="#ngrams-azu-einem-feature-zusammenfassen">2.5 Ngrams azu einem Feature zusammenfassen</a></li>
+  <li><a href="#collocations" id="toc-collocations" class="nav-link" data-scroll-target="#collocations">2.3 Collocations</a></li>
+  <li><a href="#semantische-netzwerke" id="toc-semantische-netzwerke" class="nav-link" data-scroll-target="#semantische-netzwerke">2.4 Semantische Netzwerke</a></li>
   </ul></li>
   <li><a href="#part-of-speech-tagging" id="toc-part-of-speech-tagging" class="nav-link" data-scroll-target="#part-of-speech-tagging">3. Part-of-Speech Tagging</a></li>
   <li><a href="#dependency-parsing" id="toc-dependency-parsing" class="nav-link" data-scroll-target="#dependency-parsing">4. Dependency Parsing</a></li>
@@ -287,6 +286,47 @@ young_boy                  9</code></pre>
 </div>
 </div>
 <p>Wir sehen, dass unter den häufigsten bigrams einige Features sind, die in Kombination miteinander eine andere Bedeutung haben als als einzelne unigrams. Dazu gehören z.B. Orte (z.B. <em>New York</em>) oder Ausdrücke (z. B. <em>serial killer</em>).</p>
+<p>In einem weiteren Schritt kann es manchmal sinnvoll sein, Ngrams für die weitere Analyse zu einem Feature zusammenzufassen (dieser Schritt wäre dann Teil des Preprocessings). Beispielsweise wollen wir, dass <em>United</em> immer mit <em>States</em> als ein Feature <em>United States</em> verstanden wird, sobald diese beiden Features in dieser Abfolge genutzt werden (statt diese in einzelne Features zu splitten).</p>
+<p>Dieses Zusammenfassen (<em>compounding</em>) lässt sich mit der <code>tokens_compound()</code>-Funktion aus dem <code>quanteda.textstats</code>-Paket umsetzen.</p>
+<p>Die Funktion verbindet unigrams mit einem Unterstrich zu einem ngram, das als ein einziges Feature weiter analysiert wird. Dieser Schritt wird zwischen dem <code>tokens</code>-Befehl und dem <code>dfm</code>-Befehle (d.h. der Tokenisierung und der Erstellung einer Document-Feature-Matrix) eingefügt.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Definition häufiger Collocations auf Basis der vorherigen Ausgabe</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>ngrams <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"los angel"</span>,<span class="st">"new york citi"</span>, <span class="st">"serial killer"</span>, <span class="st">"high school"</span>, <span class="st">"best friend"</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Text-as-Data Repräsentation als Document-Feature-Matrix</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>dfm <span class="ot">&lt;-</span> tokens <span class="sc">%&gt;%</span> </span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Zusätzlicher Schritt, um Collocations als einzelnes Feature einzulesen</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tokens_compound</span>(<span class="at">pattern =</span> <span class="fu">phrase</span>(ngrams)) <span class="sc">%&gt;%</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="co">#reguläre DFM, inkl. Relative Pruning</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dfm</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dfm_trim</span>( <span class="at">min_docfreq =</span> <span class="fl">0.005</span>, </span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>            <span class="at">max_docfreq =</span> <span class="fl">0.99</span>, </span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>            <span class="at">docfreq_type =</span> <span class="st">"prop"</span>, </span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>            <span class="at">verbose =</span> <span class="cn">TRUE</span>) </span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="co">#Beispiel: Wie wird das Feature "Los Angeles" eingelesen?</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>dfm <span class="sc">%&gt;%</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Umwandlung zu Data-Frame</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">convert</span>(<span class="at">to =</span> <span class="st">"data.frame"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Reduktion auf Doc ID und Features, die mit "los" beginnen</span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(doc_id, <span class="fu">starts_with</span>(<span class="st">"los"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Ausgabe ausgewählter Serien (Zeile 125 bis 130)</span></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">125</span><span class="sc">:</span><span class="dv">130</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   doc_id lost los_angel
+1 text125    0         0
+2 text126    0         1
+3 text127    0         0
+4 text128    0         0
+5 text129    0         1
+6 text130    0         0</code></pre>
+</div>
+</div>
 </section>
 <section id="keywords-in-context-kwic" class="level2">
 <h2 class="anchored" data-anchor-id="keywords-in-context-kwic">2.2 Keywords-in-Context (KWIC)</h2>
@@ -294,14 +334,14 @@ young_boy                  9</code></pre>
 <p>Die <code>kwic()</code>Funktion aus dem <code>quanteda</code>-Paket identifiziert hierzu Schlüsselwörter und Wörter vor bzw. nach diesen. Wir schauen uns also Wörter an, die um ein sogenanntes <em>Window</em> von z.B. einem oder mehr Wörtern vor oder nach dem Schlüsselwort vorkommen.</p>
 <p>Mit folgendem Code können wir beispielsweise herausfinden, in welchem Kontext das Wort <em>hero</em> vorkommt. In der Ausgabe werden jeweils das Wort vor und nach dem Wort <em>hero</em> angezeigt. Um die Bedeutung dieser Wörter besser zu verstehen, nutzen wir dabei die “unbereinigte” <code>Description</code>-Variable aus dem Objekt <code>data</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>Description <span class="sc">%&gt;%</span> </span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Keywords-in-Context mit Window von 1 Wort vor und nach Schlüsselwort</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kwic</span>(<span class="at">pattern =</span> <span class="st">"hero"</span>, </span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">window =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Ausgabe der ersten Zeilen</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>Description <span class="sc">%&gt;%</span> </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Keywords-in-Context mit Window von 1 Wort vor und nach Schlüsselwort</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kwic</span>(<span class="at">pattern =</span> <span class="st">"hero"</span>, </span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">window =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Ausgabe der ersten Zeilen</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Keyword-in-context with 5 matches.                                           
   [text124, 7]           a | hero | that   
@@ -312,19 +352,50 @@ young_boy                  9</code></pre>
 </div>
 </div>
 </section>
-<section id="semantische-netzwerke-auf-basis-von-co-occurrenzen" class="level2">
-<h2 class="anchored" data-anchor-id="semantische-netzwerke-auf-basis-von-co-occurrenzen">2.3 Semantische Netzwerke auf Basis von Co-Occurrenzen</h2>
+<section id="collocations" class="level2">
+<h2 class="anchored" data-anchor-id="collocations">2.3 Collocations</h2>
+<p>Ein weiterer, eher quantitativer Ansatz sind Collocations. Collocations bezeichnen Features, die häufig (und damit vermutlich nicht-zufällig) <em>nacheinander</em> auftreten, was auf eine gemeinsame semantische Bedeutung hindeutet (z.B. <em>United</em> und <em>States</em>).</p>
+<p>Um herauszufinden, welche Features vorkommen, können wir die Funktion <code>textstat_collocations()</code> aus dem <code>quanteda.textstats</code>-Paket verwenden.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>tokens <span class="sc">%&gt;%</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Identifikation von Collocations, die mind. 10 Mal vorkommen</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">textstat_collocations</span>(<span class="at">min_count =</span> <span class="dv">10</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Sortierung nach lambda: Je grösser, </span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">#desto wahrscheinlicher handelt es sich um nicht-zufällige Collocations</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>lambda) <span class="sc">%&gt;%</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Ausgabe der häufigsten 10 Collocation</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        collocation count count_nested length    lambda         z
+8         los angel    22            0      2 11.992530  7.856166
+9          new york    39            0      2  9.635186  6.744491
+5     serial killer    10            0      2  8.665918 11.849150
+4 person profession    13            0      2  7.817347 12.191558
+7     antholog seri    10            0      2  7.632806  8.612064
+1       high school    22            0      2  7.041380 16.490961
+3       best friend    25            0      2  7.006030 15.088077
+2         york citi    19            0      2  5.810906 16.071342
+6       seri follow    10            0      2  4.323497 11.362725</code></pre>
+</div>
+</div>
+<p>Das kennen wir doch schon - nämlich aus Abschnitt 2.1 zu <em>ngrams</em>.</p>
+</section>
+<section id="semantische-netzwerke" class="level2">
+<h2 class="anchored" data-anchor-id="semantische-netzwerke">2.4 Semantische Netzwerke</h2>
 <p>Als stärker quantifizierende Analyse bietet sich die Visualisierung von Co-Occurrenzen mittels semantischer Netzwerke an. Diese visualisieren, welche Features häufig in einem gemeinsamen Kontext (z.B. in direkter Abfolge, innerhalb eines Textes) vorkommen.</p>
 <p>Hierfür müssen wir zunächst die DFM in eine Feature-Co-Occurrence Matrix (FCM) umwandeln. Das machen wir mit der Funktion <code>fcm()</code> aus dem <code>quanteda</code>-Paket.</p>
 <p>Uns interessiert zunächst, wie häufig Features <em>innerhalb eines Textes</em> vorkommen, weshalb wir das <code>context</code>-Argument nutzen und auf <code>document</code> setzen.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>tokens <span class="sc">%&gt;%</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Umwandlung in eine Feature-Co-Occurrence-Matrix</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fcm</span>(<span class="at">context =</span> <span class="st">"document"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Ausgabe der ersten Zeilen</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>tokens <span class="sc">%&gt;%</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Umwandlung in eine Feature-Co-Occurrence-Matrix</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fcm</span>(<span class="at">context =</span> <span class="st">"document"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Ausgabe der ersten Zeilen</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Feature co-occurrence matrix of: 6 by 4,246 features.
          features
@@ -348,103 +419,28 @@ features  nine nobl famili fight control land westero ancient enemi return
 <p>Beispielsweise wollen wir uns anschauen, ob Männer (<em>man</em>) und Frauen (<em>woman</em>) in Serienbeschreibungen stereotypisiert, z. B. im Hinblick auf Geschlechterrollen, dargestellt werden.</p>
 <p>Dafür schauen wir, welche Wörter (z.B. <em>fight</em> vs.&nbsp;<em>romance</em>) häufiger in Verbindung mit Männern bzw. Frauen genannt werden</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>fcm <span class="ot">&lt;-</span> tokens <span class="sc">%&gt;%</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Erstellung einer FCM mit einem Window von 8</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fcm</span>(<span class="at">window =</span> <span class="dv">8</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Reduktion auf ausgewähler Features</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fcm_select</span>(<span class="at">pattern =</span> <span class="fu">c</span>(<span class="st">"fight"</span>, <span class="st">"man"</span>, </span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"love"</span>, <span class="st">"young"</span>, <span class="st">"woman"</span>), </span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">selection =</span> <span class="st">"keep"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>fcm <span class="ot">&lt;-</span> tokens <span class="sc">%&gt;%</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Erstellung einer FCM mit einem Window von 8</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fcm</span>(<span class="at">window =</span> <span class="dv">8</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Reduktion auf ausgewähler Features</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fcm_select</span>(<span class="at">pattern =</span> <span class="fu">c</span>(<span class="st">"fight"</span>, <span class="st">"man"</span>, </span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"love"</span>, <span class="st">"young"</span>, <span class="st">"woman"</span>), </span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">selection =</span> <span class="st">"keep"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Wir visualisieren die Ergebnisse als semantisches Netzwerk mit der <code>textplot_network()</code>Funktion aus dem <code>quanteda.textplots()</code>-Paket.</p>
 <p>Wenn Features im selben Kontext (hier 8 Wörter) vorkommen, werden sie mit einer Linie verbunden. Umso dicker die Linie, desto öfter kommen Features gemeinsam vor.</p>
 <p>Dabei können wir sehen, dass Männer wie Frauen häufig als “jung” beschrieben werden - Männer aber häufiger mit “Kämpfen” und Frauen mit “Liebe” assoziiert werden:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Plot des semantischen Netzwerks</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">textplot_network</span>(fcm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Plot des semantischen Netzwerks</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">textplot_network</span>(fcm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="02-cooccurrence_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="02-cooccurrence_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
-</div>
-</div>
-</section>
-<section id="collocations" class="level2">
-<h2 class="anchored" data-anchor-id="collocations">2.4 Collocations</h2>
-<p>Ein weiterer Ansatz sind Collocations. Collocations bezeichnen Features, die häufig (und damit vermutlich nicht-zufällig) <em>nacheinander</em> auftreten, was auf eine gemeinsame semantische Bedeutung hindeutet (z.B. <em>United</em> und <em>States</em>).</p>
-<p>Um herauszufinden, welche Features vorkommen, können wir die Funktion <code>textstat_collocations()</code> aus dem <code>quanteda.textstats</code>-Paket verwenden.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>tokens <span class="sc">%&gt;%</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Identifikation von Collocations, die mind. 10 Mal vorkommen</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">textstat_collocations</span>(<span class="at">min_count =</span> <span class="dv">10</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Sortierung nach lambda: Je grösser, </span></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">#desto wahrscheinlicher handelt es sich um nicht-zufällige Collocations</span></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>lambda) <span class="sc">%&gt;%</span></span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Ausgabe der häufigsten 10 Collocation</span></span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>        collocation count count_nested length    lambda         z
-8         los angel    22            0      2 11.992530  7.856166
-9          new york    39            0      2  9.635186  6.744491
-5     serial killer    10            0      2  8.665918 11.849150
-4 person profession    13            0      2  7.817347 12.191558
-7     antholog seri    10            0      2  7.632806  8.612064
-1       high school    22            0      2  7.041380 16.490961
-3       best friend    25            0      2  7.006030 15.088077
-2         york citi    19            0      2  5.810906 16.071342
-6       seri follow    10            0      2  4.323497 11.362725</code></pre>
-</div>
-</div>
-<p>Das kennen wir doch schon - nämlich aus Abschnitt 2.1 zu <em>ngrams</em>.</p>
-</section>
-<section id="ngrams-azu-einem-feature-zusammenfassen" class="level2">
-<h2 class="anchored" data-anchor-id="ngrams-azu-einem-feature-zusammenfassen">2.5 Ngrams azu einem Feature zusammenfassen</h2>
-<p>In einem weiteren Schritt kann es manchmal sinnvoll sein, Collocations für die weitere Analyse zu einem Feature zusammenzufassen (dieser Schritt wäre dann Teil des Preprocessings). Beispielsweise wollen wir, dass <em>United</em> immer mit <em>States</em> als ein Feature <em>United States</em> verstanden wird, sobald diese beiden Features in dieser Abfolge genutzt werden (statt diese in einzelne Features zu splitten).</p>
-<p>Dieses Zusammenfassen (<em>compounding</em>) lässt sich mit der <code>tokens_compound()</code>-Funktion aus dem <code>quanteda.textstats</code>-Paket umsetzen.</p>
-<p>Die Funktion verbindet unigrams mit einem Unterstrich zu einem ngram, das als ein einziges Feature weiter analysiert wird. Dieser Schritt wird zwischen dem <code>tokens</code>-Befehl und dem <code>dfm</code>-Befehle (d.h. der Tokenisierung und der Erstellung einer Document-Feature-Matrix) eingefügt.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Definition häufiger Collocations auf Basis der vorherigen Ausgabe</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>ngrams <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"los angel"</span>,<span class="st">"new york citi"</span>, <span class="st">"serial killer"</span>, <span class="st">"high school"</span>, <span class="st">"best friend"</span>)</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Text-as-Data Repräsentation als Document-Feature-Matrix</span></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>dfm <span class="ot">&lt;-</span> tokens <span class="sc">%&gt;%</span> </span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Zusätzlicher Schritt, um Collocations als einzelnes Feature einzulesen</span></span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tokens_compound</span>(<span class="at">pattern =</span> <span class="fu">phrase</span>(ngrams)) <span class="sc">%&gt;%</span></span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  <span class="co">#reguläre DFM, inkl. Relative Pruning</span></span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dfm</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dfm_trim</span>( <span class="at">min_docfreq =</span> <span class="fl">0.005</span>, </span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>            <span class="at">max_docfreq =</span> <span class="fl">0.99</span>, </span>
-<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>            <span class="at">docfreq_type =</span> <span class="st">"prop"</span>, </span>
-<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>            <span class="at">verbose =</span> <span class="cn">TRUE</span>) </span>
-<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="co">#Beispiel: Wie wird das Feature "Los Angeles" eingelesen?</span></span>
-<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>dfm <span class="sc">%&gt;%</span></span>
-<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Umwandlung zu Data-Frame</span></span>
-<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">convert</span>(<span class="at">to =</span> <span class="st">"data.frame"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Reduktion auf Doc ID und Features, die mit "los" beginnen</span></span>
-<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(doc_id, <span class="fu">starts_with</span>(<span class="st">"los"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Ausgabe ausgewählter Serien (Zeile 125 bis 130)</span></span>
-<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">125</span><span class="sc">:</span><span class="dv">130</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>   doc_id lost los_angel
-1 text125    0         0
-2 text126    0         1
-3 text127    0         0
-4 text128    0         0
-5 text129    0         1
-6 text130    0         0</code></pre>
 </div>
 </div>
 </section>
