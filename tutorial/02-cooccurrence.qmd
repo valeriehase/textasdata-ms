@@ -355,16 +355,14 @@ udpipe("My only goal in life is to understand dependency parsing", "english") %>
 
 ![Beispiel für Dependency Parsing](images/dependency_tree.PNG){fig-alt="Beispiel für Dependency Parsing" fig-align="left"}
 
-### Aufgabe 1 📌
+# Aufgabe 1 📌
 
 Die folgende Übung fasst alles zusammen, was wir bisher gelernt haben: Preprocessing und Co-Occurrence Analysen.
 
 Bitte arbeitet für die Übung mit dem Horoskop-Datensatz (Download der CSV-Datei entweder via der Webseite oder Einlesen via [dieser](https://raw.githubusercontent.com/valeriehase/textasdata-ms/main/data/data_horoscope.csv) URL)
 
-#### Aufgabe 1.1 📌
-
+## Aufgabe 1.1
 Lest den Datensatz ein und verschafft euch einen Überblick über die Daten. Welche Variablen sind dort vorhanden?
-
 ```{r echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 #Daten einlesen
 url <- getURL("https://raw.githubusercontent.com/valeriehase/textasdata-ms/main/data/data_horoscope.csv")
@@ -374,8 +372,7 @@ horoscope_df <- read.csv2(text = url)
 #str(horoscope_df)
 ```
 
-#### Aufgabe 1.2 📌
-
+## Aufgabe 1.2
 Bereitet den Datensatz durch Preprocessing und das Umwandeln in eine DFM für die Analyse vor. Hinterfragt kritisch, welche Bereinigung- und Normalisierungsschritte ihr tatsächlich braucht.
 ```{r echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 
@@ -403,8 +400,8 @@ horoscope_dfm <- horoscope_tokens %>%
 
 #head(horoscope_dfm)
 ```
-#### Aufgabe 1.3 📌
-Schaut euch als erste Analyse an, welcher Ausdrück häufiger vorkommt: "secret fear" oder "in love"?
+## Aufgabe 1.3
+Schaut euch als erste Analyse an, welcher Ausdrück häufiger vorkommt: "**secret fear**" oder "**in love**"?
 ```{r echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 #Lösung mit regulären Ausdrücken
 #horoscope_df %>%
@@ -413,8 +410,8 @@ Schaut euch als erste Analyse an, welcher Ausdrück häufiger vorkommt: "secret 
 #  summarize("Häufigkeit: in love" = sum(grepl("in love", tolower(Horoscope))),
 #            "Häufigkeit: secret secret" = sum(grepl("secret fear",  tolower(Horoscope))))
 ```
-#### Aufgabe 1.4 📌
-Jetzt wollen wir wissen, bei welchem Sternzeichen es am mysteriösesten wird: Bei welchem Sternzeichen fällt am häufigsten das Stichwort "secret"?
+## Aufgabe 1.4
+Jetzt wollen wir wissen, bei welchem Sternzeichen es am mysteriösesten wird: Bei welchem Sternzeichen fällt am häufigsten das Stichwort "**secret**"?
 ```{r echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 #Version 1: Mit regulären Ausdrücken
 #horoscope_df %>%
@@ -441,8 +438,8 @@ Jetzt wollen wir wissen, bei welchem Sternzeichen es am mysteriösesten wird: Be
 #  arrange(desc(docfreq))
 ```
 
-#### Aufgabe 1.5 📌
-Visualisiert auf Basis eines semantischen Netzwerk, mit welchen Adjektiven die Sternzeichen "Aquarius" (Wassermann) vs. "Gemini" (Zwilling) häufig in den Horoskopen assoziiert werden.
+## Aufgabe 1.5
+Visualisiert auf Basis eines semantischen Netzwerk, mit welchen Adjektiven die Sternzeichen "**Aquarius**" (Wassermann) vs. "**Gemini**" (Zwilling) häufig in den Horoskopen assoziiert werden.
 
 Das Netzwerk könnte etwa so aussehen:
 ```{r echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, error = FALSE}
@@ -512,4 +509,3 @@ tokens(horoscope_df_filtered$Horoscope,
   #Wir erstellen das semantische Netzwerk
   textplot_network(min_freq = 5)
 ```
-

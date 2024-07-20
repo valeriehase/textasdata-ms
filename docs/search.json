@@ -789,5 +789,40 @@
     "title": "Sitzung 2: Co-Occurrence Analysen",
     "section": "2.5 Ngrams azu einem Feature zusammenfassen",
     "text": "2.5 Ngrams azu einem Feature zusammenfassen\nIn einem weiteren Schritt kann es manchmal sinnvoll sein, Collocations für die weitere Analyse zu einem Feature zusammenzufassen (dieser Schritt wäre dann Teil des Preprocessings). Beispielsweise wollen wir, dass United immer mit States als ein Feature United States verstanden wird, sobald diese beiden Features in dieser Abfolge genutzt werden (statt diese in einzelne Features zu splitten).\nDieses Zusammenfassen (compounding) lässt sich mit der tokens_compound()-Funktion aus dem quanteda.textstats-Paket umsetzen.\nDie Funktion verbindet unigrams mit einem Unterstrich zu einem ngram, das als ein einziges Feature weiter analysiert wird. Dieser Schritt wird zwischen dem tokens-Befehl und dem dfm-Befehle (d.h. der Tokenisierung und der Erstellung einer Document-Feature-Matrix) eingefügt.\n\n#Definition häufiger Collocations auf Basis der vorherigen Ausgabe\nngrams &lt;- c(\"los angel\",\"new york citi\", \"serial killer\", \"high school\", \"best friend\")\n\n#Text-as-Data Repräsentation als Document-Feature-Matrix\ndfm &lt;- tokens %&gt;% \n  \n  #Zusätzlicher Schritt, um Collocations als einzelnes Feature einzulesen\n  tokens_compound(pattern = phrase(ngrams)) %&gt;%\n  \n  #reguläre DFM, inkl. Relative Pruning\n  dfm() %&gt;% \n  dfm_trim( min_docfreq = 0.005, \n            max_docfreq = 0.99, \n            docfreq_type = \"prop\", \n            verbose = TRUE) \n\n#Beispiel: Wie wird das Feature \"Los Angeles\" eingelesen?\ndfm %&gt;%\n  \n  #Umwandlung zu Data-Frame\n  convert(to = \"data.frame\") %&gt;%\n  \n  #Reduktion auf Doc ID und Features, die mit \"los\" beginnen\n  select(doc_id, starts_with(\"los\")) %&gt;%\n  \n  #Ausgabe ausgewählter Serien (Zeile 125 bis 130)\n  slice(125:130)\n\n   doc_id lost los_angel\n1 text125    0         0\n2 text126    0         1\n3 text127    0         0\n4 text128    0         0\n5 text129    0         1\n6 text130    0         0"
+  },
+  {
+    "objectID": "tutorial/02-cooccurrence.html#aufgabe-1.1",
+    "href": "tutorial/02-cooccurrence.html#aufgabe-1.1",
+    "title": "Sitzung 2: Co-Occurrence Analysen",
+    "section": "Aufgabe 1.1",
+    "text": "Aufgabe 1.1\nLest den Datensatz ein und verschafft euch einen Überblick über die Daten. Welche Variablen sind dort vorhanden?"
+  },
+  {
+    "objectID": "tutorial/02-cooccurrence.html#aufgabe-1.2",
+    "href": "tutorial/02-cooccurrence.html#aufgabe-1.2",
+    "title": "Sitzung 2: Co-Occurrence Analysen",
+    "section": "Aufgabe 1.2",
+    "text": "Aufgabe 1.2\nBereitet den Datensatz durch Preprocessing und das Umwandeln in eine DFM für die Analyse vor. Hinterfragt kritisch, welche Bereinigung- und Normalisierungsschritte ihr tatsächlich braucht."
+  },
+  {
+    "objectID": "tutorial/02-cooccurrence.html#aufgabe-1.3",
+    "href": "tutorial/02-cooccurrence.html#aufgabe-1.3",
+    "title": "Sitzung 2: Co-Occurrence Analysen",
+    "section": "Aufgabe 1.3",
+    "text": "Aufgabe 1.3\nSchaut euch als erste Analyse an, welcher Ausdrück häufiger vorkommt: “secret fear” oder “in love”?"
+  },
+  {
+    "objectID": "tutorial/02-cooccurrence.html#aufgabe-1.4",
+    "href": "tutorial/02-cooccurrence.html#aufgabe-1.4",
+    "title": "Sitzung 2: Co-Occurrence Analysen",
+    "section": "Aufgabe 1.4",
+    "text": "Aufgabe 1.4\nJetzt wollen wir wissen, bei welchem Sternzeichen es am mysteriösesten wird: Bei welchem Sternzeichen fällt am häufigsten das Stichwort “secret”?"
+  },
+  {
+    "objectID": "tutorial/02-cooccurrence.html#aufgabe-1.5",
+    "href": "tutorial/02-cooccurrence.html#aufgabe-1.5",
+    "title": "Sitzung 2: Co-Occurrence Analysen",
+    "section": "Aufgabe 1.5",
+    "text": "Aufgabe 1.5\nVisualisiert auf Basis eines semantischen Netzwerk, mit welchen Adjektiven die Sternzeichen “Aquarius” (Wassermann) vs. “Gemini” (Zwilling) häufig in den Horoskopen assoziiert werden.\nDas Netzwerk könnte etwa so aussehen:"
   }
 ]
