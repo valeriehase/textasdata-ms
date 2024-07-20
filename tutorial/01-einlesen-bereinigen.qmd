@@ -60,10 +60,10 @@ Nach dem Einlesen haben wir bereits einen Blick in den Datensatz geworfen. Nun s
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 data %>%
   
-  #Auswahl der Variable "Description"
+  # Auswahl der Variable "Description"
   select(Description) %>% 
   
-  #Reduktion auf ersten Text
+  # Reduktion auf ersten Text
   slice(1)
 ```
 
@@ -74,13 +74,13 @@ Der Text sieht gut aus! Allerdings kann es, gerade bei Texten aus anderen Sprach
 Schauen wir uns ein Beispiel an: deutsche Umlaute. Was passiert wenn wir hier das Encoding ändern?
 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
-#Beispiel-Satz
+# Beispiel-Satz
 string <- "Schöne Grüße aus München"
 
-#Encoding prüfen
+# Encoding prüfen
 Encoding(string)
 
-#Encoding testweise ändern
+# Encoding testweise ändern
 Encoding(string) <- "latin1"
 string
 ```
@@ -93,16 +93,16 @@ Wie können wir Encoding-Probleme adressieren?
 Beim manuellen Bereinigen können reguläre Ausdrücke (mehr dazu [hier](https://bookdown.org/valerie_hase/TextasData_HS2021/tutorial-9-searching-manipulating-string-patterns.html)) und die Funktion `gsub()` helfen, mit der wir Zeichen ersetzen können. Zum Beispiel so:
 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
-#Mit Hilfe von regulären Ausdrücken bereinigen
+# Mit Hilfe von regulären Ausdrücken bereinigen
 string %>% 
   
-  #Ersatz für falsches Encoding "ö"
+  # Ersatz für falsches Encoding "ö"
   gsub(pattern = "Ã¶", replacement ="ö") %>% 
   
-  #Ersatz für falsches Encoding "ü"
+  # Ersatz für falsches Encoding "ü"
   gsub(pattern = "Ã¼", replacement = "ü") %>% 
   
-  #Ersatz für falsches Encoding "ß"
+  # Ersatz für falsches Encoding "ß"
   gsub(pattern = "ÃŸ", replacement = "ß") 
 ```
 
@@ -120,11 +120,11 @@ Das ginge mit folgenden Befehlen:
 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 
-#Entfernung der Zeichen vor dem Titel der TV-Serie
+# Entfernung der Zeichen vor dem Titel der TV-Serie
 data <- data %>%
   mutate(Title = gsub("^[0-9]+[[:punct:]] ", "", Title))
 
-#So sieht das Ergebnis aus:
+# So sieht das Ergebnis aus:
 data %>%
   select(Title) %>%
   head(5)
@@ -181,20 +181,20 @@ tokens <- tokens(data$Description,
                  remove_punct = TRUE, #Entfernung von Satzzeichen
                  remove_numbers = TRUE) %>% #Entfernung von Zahlen
   
-  #Kleinschreibung
+  # Kleinschreibung
   tokens_tolower() %>% 
   
-  #Entfernung von Stoppwörtern
+  # Entfernung von Stoppwörtern
   tokens_remove(stopwords("english")) %>% 
   
-  #Stemming
+  # Stemming
   tokens_wordstem()
 
 
-#So sah unser erster Text vor dem Preprocessing aus
+# So sah unser erster Text vor dem Preprocessing aus
 data$Description[1]
 
-#Und so danach
+# Und so danach
 tokens[1]
 ```
 
@@ -204,26 +204,26 @@ Es gibt verschiedene Möglichkeiten, Stoppwörter zu entfernen. Am einfachsten i
 Je nach Forschungsfrage können diese Stoppwortlisten angepasst werden, indem eigene Stoppwörter definiert und dann entfernt werden. Es ist aber auch möglich, eigene Stoppwortlisten zu erstellen.
 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
-#Wörter aus der quanteda Stoppwortliste entfernen
+# Wörter aus der quanteda Stoppwortliste entfernen
 stoppwörter <- stopwords("english")
 stoppwörter <- stoppwörter[!stoppwörter %in% c("i", "me")]
 
-#Beispielhafte Anwendung 
+# Beispielhafte Anwendung 
 tokens(data$Description,
                  what = "word", #Tokenisierung, hier zu Wörtern als Analyseeinheit
                  remove_punct = TRUE, #Entfernung von Satzzeichen
                  remove_numbers = TRUE) %>% #Entfernung von Zahlen
   
-  #Kleinschreibung
+  # Kleinschreibung
   tokens_tolower() %>% 
   
-  #Entfernung von Stoppwörtern - hier z.B. reduzierte quanteda-Liste
+  # Entfernung von Stoppwörtern - hier z.B. reduzierte quanteda-Liste
   tokens_remove(stoppwörter) %>% 
   
-  #Stemming
+  # Stemming
   tokens_wordstem() %>%
   
-  #Ausgabe des ersten Textes
+  # Ausgabe des ersten Textes
   head(1)
 ```
 
@@ -242,11 +242,11 @@ Könnt ihr...
 Um aus unseren tokens eine Document-Feature-Matrix zu machen, damit der Computer "Text-as-Data", d.h. als numerisches Datenformat, verarbeiten kann, nutzen wir die `dfm()`Funktion aus dem `quanteda`-Paket.
 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
-#Wir erstellen eine Document-Feature matrix
+# Wir erstellen eine Document-Feature matrix
 dfm <- tokens %>%
   dfm()
 
-#So sieht das Ergebnis aus
+# So sieht das Ergebnis aus
 dfm
 ```
 
@@ -262,17 +262,17 @@ Im letzten Schritt des Preprocessings entfernen wir häufig und selten vorkommen
 Es können unterschiedliche Grenzwerte gesetzt werden. Hier behalten wir nur Features, die in mindestens in 0.5% und höchstens in 99% der Dokumente vorkommen. Das Argument `docfreq_type = "prop"`berechnet den Anteil der Dokumente, die ein bestimmtes Feature beinhalten relativ zur Gesamtzahl der Dokumente. `verbose = TRUE`printed während der Ausführung der Funktion Informationen über den Rechenvorgang in die Konsole.
 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
-#Anzahl Features vor relative pruning
+# Anzahl Features vor relative pruning
 dfm
 
-#Anwendung des relative pruning
+# Anwendung des relative pruning
 dfm  <- dfm  %>% 
   dfm_trim( min_docfreq = 0.005, 
             max_docfreq = 0.99, 
             docfreq_type = "prop", 
             verbose = TRUE) 
 
-#Anzahl Features nach relative pruning
+# Anzahl Features nach relative pruning
 dfm
 ```
 Wir sehen: Relative pruning kann unseren Datensatz noch einmal deutlich verkleinern (und damit z.B. Analysen beschleunigen): Wir haben nun 605 anstelle von 4,246 Features!
@@ -286,7 +286,7 @@ Für einen ersten Einblick in die Daten lassen wir uns mit der `topfeatures()`-F
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 topfeatures(dfm, 10) %>%
   
-  #Umwandlung in einen "schöneren" Dataframe mit der Spalte "Häufigkeit"
+  # Umwandlung in einen "schöneren" Dataframe mit der Spalte "Häufigkeit"
   as.data.frame() %>%
   rename("Häufigkeit" = '.')
 ```

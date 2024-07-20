@@ -42,30 +42,30 @@ library("rsyntax")
 Nun lesen wir die Daten wieder ein und führen die bereits erlernten Preprocessing-Schritte, inkl. der Transformation in eine Document-Feature-Matrix, aus:
 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
-#Daten laden
+# Daten laden
 url <-  getURL("https://raw.githubusercontent.com/valeriehase/textasdata-ms/main/data/data_tvseries.csv")
 data <- read.csv2(text = url)
 
-#Preprocessing
+# Preprocessing
 tokens <- tokens(data$Description,
                  what = "word", #Tokenisierung, hier zu Wörtern als Analyseeinheit
                  remove_punct = TRUE, #Entfernung von Satzzeichen
                  remove_numbers = TRUE) %>% #Entfernung von Zahlen
   
-  #Kleinschreibung
+  # Kleinschreibung
   tokens_tolower() %>% 
   
-  #Entfernung von Stoppwörtern
+  # Entfernung von Stoppwörtern
   tokens_remove(stopwords("english")) %>% 
   
-  #Stemming
+  # Stemming
   tokens_wordstem()
 
-#Text-as-Data Repräsentation als Document-Feature-Matrix
+# Text-as-Data Repräsentation als Document-Feature-Matrix
 dfm <- tokens %>% 
   dfm() %>% 
   
-  #Relative pruning
+  # Relative pruning
   dfm_trim( min_docfreq = 0.005, 
             max_docfreq = 0.99, 
             docfreq_type = "prop", 
@@ -83,10 +83,10 @@ Zunächst schauen wir uns als Beispiel für ngrams **bigrams**, d.h. Abfolgen zw
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 tokens %>%
   
-  #Umwandlung in bigrams
+  # Umwandlung in bigrams
   tokens_ngrams(n = 2) %>%
   
-  #Ausgabe für erstes Dokument
+  # Ausgabe für erstes Dokument
   head(1)
 ```
 
@@ -95,16 +95,16 @@ Aus Sitzung 1 kennen wir ja bereits den Befehl `topfeatures()`, um uns die häuf
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 tokens %>%
   
-  #Umwandlung in bigrams
+  # Umwandlung in bigrams
   tokens_ngrams(n = 2) %>%
   
-  #Umwandlung in dfm für topfeatures-Befehl
+  # Umwandlung in dfm für topfeatures-Befehl
   dfm() %>%
   
-  #Ausgabe der häufigsten Features
+  # Ausgabe der häufigsten Features
   topfeatures(10) %>%
   
-  #Umwandlung in einen "schöneren" Dataframe mit der Spalte "Häufigkeit"
+  # Umwandlung in einen "schöneren" Dataframe mit der Spalte "Häufigkeit"
   as.data.frame() %>%
   rename("Häufigkeit" = '.')
 ```
@@ -119,32 +119,32 @@ Die Funktion verbindet unigrams mit einem Unterstrich zu einem ngram, das als ei
 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 
-#Definition häufiger Collocations auf Basis der vorherigen Ausgabe
+# Definition häufiger Ngrams auf Basis der vorherigen Ausgabe
 ngrams <- c("los angel","new york citi", "serial killer", "high school", "best friend")
 
-#Text-as-Data Repräsentation als Document-Feature-Matrix
+# Text-as-Data Repräsentation als Document-Feature-Matrix
 dfm <- tokens %>% 
   
-  #Zusätzlicher Schritt, um Collocations als einzelnes Feature einzulesen
+  # Zusätzlicher Schritt, um Ngrams als einzelnes Feature einzulesen
   tokens_compound(pattern = phrase(ngrams)) %>%
   
-  #reguläre DFM, inkl. Relative Pruning
+  # reguläre DFM, inkl. Relative Pruning
   dfm() %>% 
   dfm_trim( min_docfreq = 0.005, 
             max_docfreq = 0.99, 
             docfreq_type = "prop", 
             verbose = TRUE) 
 
-#Beispiel: Wie wird das Feature "Los Angeles" eingelesen?
+# Beispiel: Wie wird das Feature "Los Angeles" eingelesen?
 dfm %>%
   
-  #Umwandlung zu Data-Frame
+  # Umwandlung zu Data-Frame
   convert(to = "data.frame") %>%
   
-  #Reduktion auf Doc ID und Features, die mit "los" beginnen
+  # Reduktion auf Doc ID und Features, die mit "los" beginnen
   select(doc_id, starts_with("los")) %>%
   
-  #Ausgabe ausgewählter Serien (Zeile 125 bis 130)
+  # Ausgabe ausgewählter Serien (Zeile 125 bis 130)
   slice(125:130)
 ```
 
@@ -159,11 +159,11 @@ Mit folgendem Code können wir beispielsweise herausfinden, in welchem Kontext d
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 data$Description %>% 
   
-  #Keywords-in-Context mit Window von 1 Wort vor und nach Schlüsselwort
+  # Keywords-in-Context mit Window von 1 Wort vor und nach Schlüsselwort
   kwic(pattern = "hero", 
        window = 1) %>%
   
-  #Ausgabe der ersten Zeilen
+  # Ausgabe der ersten Zeilen
   head()
 ```
 
@@ -176,14 +176,14 @@ Um herauszufinden, welche Features vorkommen, können wir die Funktion `textstat
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 tokens %>%
   
-  #Identifikation von Collocations, die mind. 10 Mal vorkommen
+  # Identifikation von Collocations, die mind. 10 Mal vorkommen
   textstat_collocations(min_count = 10) %>%
   
-  #Sortierung nach lambda: Je grösser, 
-  #desto wahrscheinlicher handelt es sich um nicht-zufällige Collocations
+  # Sortierung nach lambda: Je grösser, 
+  # desto wahrscheinlicher handelt es sich um nicht-zufällige Collocations
   arrange(-lambda) %>%
   
-  #Ausgabe der häufigsten 10 Collocation
+  # Ausgabe der häufigsten 10 Collocation
   head(10)
 ```
 
@@ -200,10 +200,10 @@ Uns interessiert zunächst, wie häufig Features *innerhalb eines Textes* vorkom
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 tokens %>%
   
-  #Umwandlung in eine Feature-Co-Occurrence-Matrix
+  # Umwandlung in eine Feature-Co-Occurrence-Matrix
   fcm(context = "document") %>%
   
-  #Ausgabe der ersten Zeilen
+  # Ausgabe der ersten Zeilen
   head()
 ```
 
@@ -223,10 +223,10 @@ Dafür schauen wir, welche Wörter (z.B. *fight* vs. *romance*) häufiger in Ver
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 fcm <- tokens %>%
   
-  #Erstellung einer FCM mit einem Window von 8
+  # Erstellung einer FCM mit einem Window von 8
   fcm(window = 8) %>%
   
-  #Reduktion auf ausgewähler Features
+  # Reduktion auf ausgewähler Features
   fcm_select(pattern = c("fight", "man", 
                          "love", "young", "woman"), 
              selection = "keep")
@@ -239,8 +239,7 @@ Wenn Features im selben Kontext (hier 8 Wörter) vorkommen, werden sie mit einer
 Dabei können wir sehen, dass Männer wie Frauen häufig als "jung" beschrieben werden - Männer aber häufiger mit "Kämpfen" und Frauen mit "Liebe" assoziiert werden:
 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
-
-#Plot des semantischen Netzwerks
+# Plot des semantischen Netzwerks
 textplot_network(fcm)
 ```
 
@@ -255,18 +254,18 @@ Dafür nutzen wir den "ursprünglichen", unbereinigten Datensatz, da die Part-of
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 data_pos_tagged <- data$Description %>%
   
-  #Format für das udpipe Paket anpassen
+  # Format für das udpipe Paket anpassen
   as_tibble() %>%
   mutate(doc_id = paste0("text", 1:n())) %>% 
   rename(text = value) %>%
 
- #Part-of-speech tagging
+ # Part-of-speech tagging
   udpipe("english") %>% 
   
-  #Wir reduzieren die Ausgabe auf relevante Variablen (z.B. Text-ID, Tag)
+  # Wir reduzieren die Ausgabe auf relevante Variablen (z.B. Text-ID, Tag)
   select(doc_id, sentence_id, token_id, token, lemma, upos, head_token_id)
 
-#Wir schauen uns die Ausgabe an
+# Wir schauen uns die Ausgabe an
 head(data_pos_tagged)
 ```
 
@@ -286,25 +285,25 @@ Und das geht so:
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 data_pos_tagged %>%
   
-  #Wir filtern den Datensatz nach dem Substantiv "Family"
+  # Wir filtern den Datensatz nach dem Substantiv "Family"
   filter(upos == "NOUN" & lemma == "family") %>%
   
-  #Für alle gefundenen Fälle suchen wir die zugehörigen Sätze im "vollen" Datensatz
-  #Das Matching geschieht via doc_id (ID des Dokuments) und sentence_ic (ID des Satzes im Dokument)
+  # Für alle gefundenen Fälle suchen wir die zugehörigen Sätze im "vollen" Datensatz
+  # Das Matching geschieht via doc_id (ID des Dokuments) und sentence_ic (ID des Satzes im Dokument)
   inner_join(data_pos_tagged, by = c("doc_id", "sentence_id")) %>%
   
-  #Wir behalten mit filter nur Adjektive, die sich auf Familie beziehen
-  #Nämlich solche, die bei "head_token" die "token_id" des Features "Family" haben
+  # Wir behalten mit filter nur Adjektive, die sich auf Familie beziehen
+  # Nämlich solche, die bei "head_token" die "token_id" des Features "Family" haben
   filter(upos.y == "ADJ" & head_token_id.y == token_id.x) %>%
   
-  #Wir benennen manche Variablen um, damit das Ganze besser verständlich ist
+  # Wir benennen manche Variablen um, damit das Ganze besser verständlich ist
   rename(token_id = token_id.y,
          token = token.y) %>%
   
-  #Wir wählen nur relevante Variablen aus
+  # Wir wählen nur relevante Variablen aus
   select(doc_id, sentence_id, token_id, token) %>%
   
-  #erste Zeilen ausgeben
+  # erste Zeilen ausgeben
   head()
 ```
 
@@ -317,21 +316,21 @@ Für Dependency Parsing können wir wieder die Funktion `udpipe()` aus dem Paket
 ```{r eval = TRUE}
 data$Description %>%
   
-  #Format für das udpipe Paket anpassen
+  # Format für das udpipe Paket anpassen
   as_tibble() %>%
   mutate(doc_id = paste0("text", 1:n())) %>% 
   rename(text = value) %>%
   
-  #Der Einfachheit halber machen wir diese Analyse nur für einen Text
+  # Der Einfachheit halber machen wir diese Analyse nur für einen Text
   slice(1) %>%
   
-  #dependency parsing
+  # dependency parsing
   udpipe("english") %>% 
   
-  #relevanten Variablen auswählen
+  # relevanten Variablen auswählen
   select(doc_id, sentence_id, token_id, token, head_token_id, dep_rel) %>%
   
-  #erste Zeilen ausgeben
+  # erste Zeilen ausgeben
   head(5)
 ```
 
@@ -341,13 +340,13 @@ Zusätzlich lassen sich solche Dependency Relations auch visualisieren, etwa via
 
 ```{r echo = TRUE, eval = FALSE, message = FALSE, warning = FALSE, error = FALSE}
 
-#Beispielsatz in udpipe
+# Beispielsatz in udpipe
 udpipe("My only goal in life is to understand dependency parsing", "english") %>%
   
-  #Umwandlung in Format für rsyntax-Paket
+  # Umwandlung in Format für rsyntax-Paket
   as_tokenindex() %>%
   
-  #Visualisierung
+  # Visualisierung
   plot_tree(., token, lemma, upos)
 ```
 
@@ -374,7 +373,7 @@ horoscope_df <- read.csv2(text = url)
 Bereitet den Datensatz durch Preprocessing und das Umwandeln in eine DFM für die Analyse vor. Hinterfragt kritisch, welche Bereinigung- und Normalisierungsschritte ihr tatsächlich braucht.
 ```{r echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 
-#Normalisierung
+# Normalisierung
 horoscope_tokens <- horoscope_df$Horoscope %>% 
   tokens(what = "word",
          remove_punct = TRUE, 
@@ -384,11 +383,11 @@ horoscope_tokens <- horoscope_df$Horoscope %>%
   tokens_remove(stopwords("english")) %>% 
   tokens_wordstem()
 
-#Wie sehen die Features aus?
-#horoscope_tokens[1]
+# Wie sehen die Features aus?
+# horoscope_tokens[1]
 ```
 ```{r echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, error = FALSE}
-#Umwandlung in eine DFM
+# Umwandlung in eine DFM
 horoscope_dfm <- horoscope_tokens %>% 
   dfm() %>% 
   dfm_trim( min_docfreq = 0.005, 
@@ -396,15 +395,15 @@ horoscope_dfm <- horoscope_tokens %>%
             docfreq_type = "prop", 
             verbose = TRUE) 
 
-#head(horoscope_dfm)
+# head(horoscope_dfm)
 ```
 ## Aufgabe 1.3
 Schaut euch als erste Analyse an, welcher Ausdrück häufiger vorkommt: "**secret fear**" oder "**in love**"?
 ```{r echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, error = FALSE}
-#Lösung mit regulären Ausdrücken
-#horoscope_df %>%
+# Lösung mit regulären Ausdrücken
+# horoscope_df %>%
 #  
-#  #Auszählen
+#  # Auszählen
 #  summarize("Häufigkeit: in love" = sum(grepl("in love", tolower(Horoscope))),
 #            "Häufigkeit: secret secret" = sum(grepl("secret fear",  tolower(Horoscope))))
 ```

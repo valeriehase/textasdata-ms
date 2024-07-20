@@ -17,7 +17,7 @@ library("RCurl")
 url <-  getURL("https://raw.githubusercontent.com/valeriehase/textasdata-ms/main/data/data_tvseries.csv")
 data <- read.csv2(text = url)
 
-#Check der Daten
+# Check der Daten
 head(data)
 
 #### 2. Preprocessing ####
@@ -25,55 +25,55 @@ head(data)
 ##### 2.1 Bereinigung (z. B. Encoding-Probleme) ##### 
 data %>%
   
-  #Auswahl der Variable "Description"
+  # Auswahl der Variable "Description"
   select(Description) %>% 
   
-  #Reduktion auf ersten Text
+  # Reduktion auf ersten Text
   slice(1)
 
 ###### 2.1.1 Encoding-Probleme ######
 
-#Beispiel-Satz
+# Beispiel-Satz
 string <- "Schöne Grüße aus München"
 
-#Encoding prüfen
+# Encoding prüfen
 Encoding(string)
 
-#Encoding testweise ändern
+# Encoding testweise ändern
 Encoding(string) <- "latin1"
 string
 
-#Mit Hilfe von regulären Ausdrücken bereinigen
+# Mit Hilfe von regulären Ausdrücken bereinigen
 string %>% 
   
-  #Ersatz für falsches Encoding "ö"
+  # Ersatz für falsches Encoding "ö"
   gsub(pattern = "Ã¶", replacement ="ö") %>% 
   
-  #Ersatz für falsches Encoding "ü"
+  # Ersatz für falsches Encoding "ü"
   gsub(pattern = "Ã¼", replacement = "ü") %>% 
   
-  #Ersatz für falsches Encoding "ß"
+  # Ersatz für falsches Encoding "ß"
   gsub(pattern = "ÃŸ", replacement = "ß") 
 
 ###### 2.1.2 Datenbereinigung mit regulären Ausdrücken ######
 
-#Schauen wir uns den Titel an
+# Schauen wir uns den Titel an
 data %>%
   select(Title) %>%
   head(5)
 
-#Entfernung der Zeichen vor dem Titel der TV-Serie
+# Entfernung der Zeichen vor dem Titel der TV-Serie
 data <- data %>%
   mutate(Title = gsub("^[0-9]+[[:punct:]] ", "", Title))
 
-#So sieht das Ergebnis aus:
+# So sieht das Ergebnis aus:
 data %>%
   select(Title) %>%
   head(5)
 
 ###### 2.1.3 Datenfilterung mit regulären Ausdrücken ######
 
-#TV-Serien, die sich um Drama drehen
+# TV-Serien, die sich um Drama drehen
 data %>%
   
   # filtern aller TV_Serien, die "Drama" in der Beschreibung beinhalten
@@ -83,7 +83,7 @@ data %>%
   select(Title) %>%
   head(5)
 
-#TV-Serien, die sich um Drama oder Crime drehen
+# TV-Serien, die sich um Drama oder Crime drehen
 data %>%
   
   # filtern aller TV_Serien, die "Drama"und "Crime" in der Beschreibung beinhalten
@@ -105,75 +105,75 @@ tokens <- tokens(data$Description,
                  remove_punct = TRUE, #Entfernung von Satzzeichen
                  remove_numbers = TRUE) %>% #Entfernung von Zahlen
   
-  #Kleinschreibung
+  # Kleinschreibung
   tokens_tolower() %>% 
   
-  #Entfernung von Stoppwörtern
+  # Entfernung von Stoppwörtern
   tokens_remove(stopwords("english")) %>% 
   
-  #Stemming
+  # Stemming
   tokens_wordstem()
 
-#So sah unser erster Text vor dem Preprocessing aus
+# So sah unser erster Text vor dem Preprocessing aus
 data$Description[1]
 
-#Und so danach
+# Und so danach
 tokens[1]
 
 ###### 2.2.1 Mehr Infos zur Entfernung von Stoppwörtern ######
 
-#Wörter aus der quanteda Stoppwortliste entfernen
+# Wörter aus der quanteda Stoppwortliste entfernen
 stoppwörter <- stopwords("english")
 stoppwörter <- stoppwörter[!stoppwörter %in% c("i", "me")]
 
-#Beispielhafte Anwendung 
+# Beispielhafte Anwendung 
 tokens(data$Description,
        what = "word", #Tokenisierung, hier zu Wörtern als Analyseeinheit
        remove_punct = TRUE, #Entfernung von Satzzeichen
        remove_numbers = TRUE) %>% #Entfernung von Zahlen
   
-  #Kleinschreibung
+  # Kleinschreibung
   tokens_tolower() %>% 
   
-  #Entfernung von Stoppwörtern - hier z.B. reduzierte quanteda-Liste
+  # Entfernung von Stoppwörtern - hier z.B. reduzierte quanteda-Liste
   tokens_remove(stoppwörter) %>% 
   
-  #Stemming
+  # Stemming
   tokens_wordstem() %>%
   
-  #Ausgabe des ersten Textes
+  # Ausgabe des ersten Textes
   head(1)
 
 ####### 2.2.2 Aufgabe 2 📌 #######
 
-#Basis: Eine Liste mit 3-5 Stopwörtern erstellen und diese als Teil des Preprocessings zusätzlich entfernen?
+# Basis: Eine Liste mit 3-5 Stopwörtern erstellen und diese als Teil des Preprocessings zusätzlich entfernen?
   
-#Fortgeschritten: Dafür sorgen, dass Namen von Städten (hier als Beispiel „New York“) als ein einzelnes Feature beibehalten werden?
+# Fortgeschritten: Dafür sorgen, dass Namen von Städten (hier als Beispiel „New York“) als ein einzelnes Feature beibehalten werden?
   
 ##### 3. Text-as-Data-Repräsentation #####
   
 ###### 3.1 Erstellung einer DFM ######
   
-#Wir erstellen eine Document-Feature matrix
+# Wir erstellen eine Document-Feature matrix
 dfm <- tokens %>%
   dfm()
 
-#So sieht das Ergebnis aus
+# So sieht das Ergebnis aus
 dfm
 
 ###### 3.2 Zusätzliche Normalisierung: Relative Pruning ######
 
-#Anzahl Features vor relative pruning
+# Anzahl Features vor relative pruning
 dfm
 
-#Anwendung des relative pruning
+# Anwendung des relative pruning
 dfm  <- dfm  %>% 
   dfm_trim( min_docfreq = 0.005, 
             max_docfreq = 0.99, 
             docfreq_type = "prop", 
             verbose = TRUE) 
 
-#Anzahl Features nach relative pruning
+# Anzahl Features nach relative pruning
 dfm
   
 ##### 4. Erste Analysen #####
@@ -181,7 +181,7 @@ dfm
 ###### 4.1 Top Features ######
 topfeatures(dfm, 10) %>%
   
-  #Umwandlung in einen "schöneren" Dataframe mit der Spalte "Häufigkeit"
+  # Umwandlung in einen "schöneren" Dataframe mit der Spalte "Häufigkeit"
   as.data.frame() %>%
   rename("Häufigkeit" = '.')
 
