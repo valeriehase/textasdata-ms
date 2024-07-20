@@ -89,7 +89,6 @@ Sitzung 1️⃣: *Einführung in die automatisierte Inhaltsanalyse & Preprocessi
 </ul>
 <p></p>
 ```
-
 Sitzung 2️⃣: *Co-Occurrence-Analysen*
 
 ```{=html}
@@ -100,7 +99,6 @@ Sitzung 2️⃣: *Co-Occurrence-Analysen*
 </ul>
 <p></p>
 ```
-
 Sitzung 3️⃣: *Diktionäre*
 
 -   Folien
@@ -130,6 +128,8 @@ Sitzung 6️⃣: *Ausblick*
 -   Hase, V. (2022). Text as Data Methods in R. [Link](https://bookdown.org/valerie_hase/TextasData_HS2021/)
 
 -   Hase, V. (2023). Advanced Text Analysis. [Link](https://github.com/valeriehase/SICSS-Munich-Advanced-Text-Analysis)
+
+-   Language Technology and Data Analysis Laboratory (2024). [Link](https://ladal.edu.au/tutorials.html#5_Text_Analytics)
 
 -   Sanchez, G. (2014). Handling Strings with R. [Link](https://www.gastonsanchez.com/r4strings/)
 
