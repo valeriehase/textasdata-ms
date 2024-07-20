@@ -357,23 +357,27 @@ udpipe("My only goal in life is to understand dependency parsing", "english") %>
 
 ### Aufgabe 1 📌
 
-Die folgende Übung fasst alles zusammen, was wir bisher gelernt haben: Preprocessing und N-Grams.
+Die folgende Übung fasst alles zusammen, was wir bisher gelernt haben: Preprocessing und Co-Occurrence Analysen.
 
-Bitte arbeite für die Übung mit dem Horoskop-Datensatz (Download der CSV-Datei entweder via der Webseite oder Einlesen via [dieser](https://raw.githubusercontent.com/valeriehase/textasdata-ms/main/data/data_horoscope.csv) URL)
+Bitte arbeitet für die Übung mit dem Horoskop-Datensatz (Download der CSV-Datei entweder via der Webseite oder Einlesen via [dieser](https://raw.githubusercontent.com/valeriehase/textasdata-ms/main/data/data_horoscope.csv) URL)
 
-1.  Lese den Datensatz ein und verschaffe dir einen Überblick über die Daten. Welche Variablen sind dort vorhanden?
+#### Aufgabe 1.1 📌
 
-```{r echo = FALSE, eval = FALSE, message = FALSE, warning = FALSE, error = FALSE}
+Lest den Datensatz ein und verschafft euch einen Überblick über die Daten. Welche Variablen sind dort vorhanden?
+
+```{r echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 #Daten einlesen
 url <- getURL("https://raw.githubusercontent.com/valeriehase/textasdata-ms/main/data/data_horoscope.csv")
 horoscope_df <- read.csv2(text = url) 
 
 #Überblick über Datensatz verschaffen
-str(horoscope_df)
+#str(horoscope_df)
 ```
 
-2.  Bereite den Datensatz durch Preprocessing und das Umwandeln in eine DFM für die Analyse vor. Hinterfrage kritisch, welche Bereinigung- und Normalisierungsschritte du tatsächlich braucht.
-```{r echo = FALSE, eval = FALSE, message = FALSE, warning = FALSE, error = FALSE}
+#### Aufgabe 1.2 📌
+
+Bereitet den Datensatz durch Preprocessing und das Umwandeln in eine DFM für die Analyse vor. Hinterfragt kritisch, welche Bereinigung- und Normalisierungsschritte ihr tatsächlich braucht.
+```{r echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 
 #Normalisierung
 horoscope_tokens <- horoscope_df$Horoscope %>% 
@@ -386,9 +390,9 @@ horoscope_tokens <- horoscope_df$Horoscope %>%
   tokens_wordstem()
 
 #Wie sehen die Features aus?
-horoscope_tokens[1]
+#horoscope_tokens[1]
 ```
-```{r echo = FALSE, eval = FALSE, message = FALSE, warning = FALSE, error = FALSE}
+```{r echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 #Umwandlung in eine DFM
 horoscope_dfm <- horoscope_tokens %>% 
   dfm() %>% 
@@ -397,38 +401,115 @@ horoscope_dfm <- horoscope_tokens %>%
             docfreq_type = "prop", 
             verbose = TRUE) 
 
-head(horoscope_dfm)
+#head(horoscope_dfm)
 ```
-
-3.  Schauen wir uns für eine erste Analyse an, bei welchem Sternzeichen es am mysteriösesten wird: Bei welchem Sternzeichen fällt am häufigsten das Stichwort "secret"?
-```{r echo = FALSE, eval = FALSE, message = FALSE, warning = FALSE, error = FALSE}
+#### Aufgabe 1.3 📌
+Schaut euch als erste Analyse an, welcher Ausdrück häufiger vorkommt: "secret fear" oder "in love"?
+```{r echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+#Lösung mit regulären Ausdrücken
+#horoscope_df %>%
+#  
+#  #Auszählen
+#  summarize("Häufigkeit: in love" = sum(grepl("in love", tolower(Horoscope))),
+#            "Häufigkeit: secret secret" = sum(grepl("secret fear",  tolower(Horoscope))))
+```
+#### Aufgabe 1.4 📌
+Jetzt wollen wir wissen, bei welchem Sternzeichen es am mysteriösesten wird: Bei welchem Sternzeichen fällt am häufigsten das Stichwort "secret"?
+```{r echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 #Version 1: Mit regulären Ausdrücken
-horoscope_df %>%
-  
-  #Gruppierung nach Sternzeichen
-  group_by(Signs) %>%
-  
-  #Auszählen
-  summarize(Geheimnis = sum(grepl("secret", Horoscope))) %>%
-  
-  #Absteigend sortieren
-  arrange(desc(Geheimnis))
+#horoscope_df %>%
+#  
+#  #Gruppierung nach Sternzeichen
+#  group_by(Signs) %>%
+#  
+#  #Auszählen
+#  summarize(Geheimnis = sum(grepl("secret", Horoscope))) %>%
+#  
+#  #Absteigend sortieren
+#  arrange(desc(Geheimnis))
 ```
-```{r echo = FALSE, eval = FALSE, message = FALSE, warning = FALSE, error = FALSE}
+```{r echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 #Version 2: Mit Quanteda
 
 #Wir analysieren die Häufigkeit des Features gruppiert nach Sternzeichen
-textstat_frequency(horoscope_dfm, groups = horoscope_df$Signs) %>%
-  
-  #Wir filtern nur für das Feature "secret"
-  filter(feature == "secret") %>%
-  
-  #Absteigend sortieren
-  arrange(desc(docfreq))
+#textstat_frequency(horoscope_dfm, groups = horoscope_df$Signs) %>%
+#  
+#  #Wir filtern nur für das Feature "secret"
+#  filter(feature == "secret") %>%
+#  
+#  #Absteigend sortieren
+#  arrange(desc(docfreq))
 ```
 
-4.  Was kommt öfter vor: "secret fears" oder "in love"? #Notiz für uns: n-gramme
+#### Aufgabe 1.5 📌
+Visualisiert auf Basis eines semantischen Netzwerk, mit welchen Adjektiven die Sternzeichen "Aquarius" (Wassermann) vs. "Gemini" (Zwilling) häufig in den Horoskopen assoziiert werden.
 
-5.  Finde heraus welcher der Planeten am meisten in Zusammenhang mit Veränderungen und Neuanfängen genannt wird. #Notiz für uns: Co-Occurrence
+Das Netzwerk könnte etwa so aussehen:
+```{r echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+horoscope_df_filtered <- horoscope_df %>%
+  
+  #Reduktion des Datensatzes auf ausgewählte Sternzeichen
+  filter(Signs %in% c("AQUARIUS", "GEMINI"))
 
-6.  Was wird den Lesenden geraten mit ihrem Geld zu machen? #Notiz für uns: POS tagging und dann Verben zu money oder dependency parsing
+horoscope_df_adj <- horoscope_df_filtered %>%
+  
+  #Reduktion auf Textvariable "Horoscope"
+  select(Horoscope) %>%
+
+  #Format für das udpipe Paket anpassen
+  as_tibble() %>%
+  mutate(doc_id = paste0("text", 1:n())) %>% 
+  rename(text = Horoscope) %>%
+
+ #Part-of-speech tagging, um Adjektive zu identifizieren
+  udpipe("english") %>%
+    
+  #Wir behalten mit filter nur Adjektive 
+  as_tibble() %>%
+  filter(upos == "ADJ") %>%
+  
+  #Wir reduzieren die Ausgabe auf relevante Variablen (Text-ID, Feature - in diesem Fall Adjektive)
+  select(doc_id, token) %>%
+  
+  #Wir erstellen einen auf Adjektive reduzierten Text je Horoskop
+  group_by(doc_id) %>%
+  summarize(Horoscope_adj = paste0(token, collapse = " ")) %>%
+  distinct(doc_id, .keep_all = T) 
+
+#Wir bringen den auf Adjektive reduzierten Datensatz &
+#die Informationen zu den einzelnen Horoskopen zusammen
+horoscope_df_filtered <- horoscope_df_filtered %>%
+  
+  #Wir erstellen einen ID, um die Informationen zu matchen
+  mutate(doc_id = paste0("text", 1:n())) %>%
+  
+  #Wir fügen die beiden Datensätze zusammen
+  left_join(horoscope_df_adj) %>%
+  
+  #Wir fügen das Sternzeichen zum jeweiligen Text hinzu, quasi als "Titel"
+  mutate(Horoscope = paste0(Horoscope_adj, " ", Signs))
+
+#Semantisches Netzwerk
+
+#Preprocessing des Textes
+tokens(horoscope_df_filtered$Horoscope,
+       what = "word", #Tokenisierung, hier zu Wörtern als Analyseeinheit
+       remove_punct = TRUE, #Entfernung von Satzzeichen
+       remove_numbers = TRUE) %>% #Entfernung von Zahlen
+  
+  #Kleinschreibung
+  tokens_tolower() %>% 
+  
+  #Entfernung von Stoppwörtern
+  tokens_remove(stopwords("english")) %>% 
+  
+  #Stemming
+  tokens_wordstem() %>%
+  
+  #Wir erstellen die Feature Co-Occurrence-Matrix
+  fcm(context = "document") %>%
+  
+  #Wir erstellen das semantische Netzwerk
+  textplot_network(min_freq = 5)
+```
+
