@@ -364,30 +364,68 @@ Bitte arbeite für die Übung mit dem Horoskop-Datensatz (Download der CSV-Datei
 1.  Lese den Datensatz ein und verschaffe dir einen Überblick über die Daten. Welche Variablen sind dort vorhanden?
 
 ```{r echo = FALSE, eval = FALSE, message = FALSE, warning = FALSE, error = FALSE}
-
 #Daten einlesen
 url <- getURL("https://raw.githubusercontent.com/valeriehase/textasdata-ms/main/data/data_horoscope.csv")
-horoscope_df <- read.csv(text = url) #mit read.csv() und nicht read.csv2(), weil Spalten mit , getrennt sind
-
-#hab jetzt hier nochmal gefiltert, weil die dfm so groß wird
-horoscope_df <- horoscope_df[1:1000,]
+horoscope_df <- read.csv2(text = url) 
 
 #Überblick über Datensatz verschaffen
 str(horoscope_df)
-View(horoscope_df)
-
-horoscope_df$Horoscope %>%
-  head() %>% 
-  writeLines()
-
-#Variable Date in ein Datum umwandeln
-horoscope_df$Date <- as.Date(horoscope_df$Date, format = "%d-%m-%Y")
-str(horoscope_df)
 ```
 
-2.  Bereinige und Normalisiere den Datensatz. Hinterfrage kritisch welche Bereinigungsschritte es tatsächlich braucht. Am Ende solltest du eine Document-Feature-Matrix haben.
+2.  Bereite den Datensatz durch Preprocessing und das Umwandeln in eine DFM für die Analyse vor. Hinterfrage kritisch, welche Bereinigung- und Normalisierungsschritte du tatsächlich braucht.
+```{r echo = FALSE, eval = FALSE, message = FALSE, warning = FALSE, error = FALSE}
 
-3.  Bei welchem Sternzeichen fällt am meisten das Stichwort "winning"?
+#Normalisierung
+horoscope_tokens <- horoscope_df$Horoscope %>% 
+  tokens(what = "word",
+         remove_punct = TRUE, 
+         remove_numbers = TRUE, 
+         remove_symbols = TRUE) %>% 
+  tokens_tolower() %>% 
+  tokens_remove(stopwords("english")) %>% 
+  tokens_wordstem()
+
+#Wie sehen die Features aus?
+horoscope_tokens[1]
+```
+```{r echo = FALSE, eval = FALSE, message = FALSE, warning = FALSE, error = FALSE}
+#Umwandlung in eine DFM
+horoscope_dfm <- horoscope_tokens %>% 
+  dfm() %>% 
+  dfm_trim( min_docfreq = 0.005, 
+            max_docfreq = 0.99, 
+            docfreq_type = "prop", 
+            verbose = TRUE) 
+
+head(horoscope_dfm)
+```
+
+3.  Schauen wir uns für eine erste Analyse an, bei welchem Sternzeichen es am mysteriösesten wird: Bei welchem Sternzeichen fällt am häufigsten das Stichwort "secret"?
+```{r echo = FALSE, eval = FALSE, message = FALSE, warning = FALSE, error = FALSE}
+#Version 1: Mit regulären Ausdrücken
+horoscope_df %>%
+  
+  #Gruppierung nach Sternzeichen
+  group_by(Signs) %>%
+  
+  #Auszählen
+  summarize(Geheimnis = sum(grepl("secret", Horoscope))) %>%
+  
+  #Absteigend sortieren
+  arrange(desc(Geheimnis))
+```
+```{r echo = FALSE, eval = FALSE, message = FALSE, warning = FALSE, error = FALSE}
+#Version 2: Mit Quanteda
+
+#Wir analysieren die Häufigkeit des Features gruppiert nach Sternzeichen
+textstat_frequency(horoscope_dfm, groups = horoscope_df$Signs) %>%
+  
+  #Wir filtern nur für das Feature "secret"
+  filter(feature == "secret") %>%
+  
+  #Absteigend sortieren
+  arrange(desc(docfreq))
+```
 
 4.  Was kommt öfter vor: "secret fears" oder "in love"? #Notiz für uns: n-gramme
 
