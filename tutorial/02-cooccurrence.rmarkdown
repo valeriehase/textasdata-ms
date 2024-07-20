@@ -8,9 +8,11 @@ format:
     css: styles.css
 ---
 
+
 # 1. Pakete laden und Daten einlesen
 
 Zunächst installieren alle Pakete, die wir für diese Sitzung brauchten (z.B. `tidyverse`). Ihr braucht `install.packages()` nur, wenn ihr die Pakete im Methodencafe noch nicht installiert hattet.
+
 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 #install.packages("tidyverse)
@@ -28,7 +30,9 @@ library("quanteda.textstats")
 library("udpipe")
 ```
 
+
 Neu hinzugekommen seit dem Methodencafe ist das `rsyntax`-Paket, das ihr neu installieren müsstest:
+
 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE, eval = FALSE}
 install.packages("rsyntax")
@@ -39,7 +43,9 @@ library("rsyntax")
 library("rsyntax")
 ```
 
+
 Nun lesen wir die Daten wieder ein und führen die bereits erlernten Preprocessing-Schritte, inkl. der Transformation in eine Document-Feature-Matrix, aus:
+
 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 #Daten laden
@@ -72,6 +78,7 @@ dfm <- tokens %>%
             verbose = TRUE) 
 ```
 
+
 Jetzt sind wir bereit für die ersten Co-Occurrence-Analysen!
 
 # 2. Co-Occurrence Analysen
@@ -79,6 +86,7 @@ Jetzt sind wir bereit für die ersten Co-Occurrence-Analysen!
 ## 2.1 N-grams
 
 Zunächst schauen wir uns als Beispiel für ngrams **bigrams**, d.h. Abfolgen zweier Wörter, an:
+
 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 tokens %>%
@@ -90,7 +98,9 @@ tokens %>%
   head(1)
 ```
 
+
 Aus Sitzung 1 kennen wir ja bereits den Befehl `topfeatures()`, um uns die häufigsten Features ausgeben zu lassen. Nun lassen wir uns nicht die häufigsten **unigrams** (einzelne Wörter), sondern die häufigsten **bigrams** (Abfolge von zwei Wörtern) ausgeben.
+
 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 tokens %>%
@@ -109,6 +119,7 @@ tokens %>%
   rename("Häufigkeit" = '.')
 ```
 
+
 Wir sehen, dass unter den häufigsten bigrams einige Features sind, die in Kombination miteinander eine andere Bedeutung haben als als einzelne unigrams. Dazu gehören z.B. Orte (z.B. *New York*) oder Ausdrücke (z. B. *serial killer*).
 
 ## 2.2 Keywords-in-Context (KWIC)
@@ -118,6 +129,7 @@ Als eher qualitativer Einblick bietet sich die Analyse von *Konkordanzen*, d.h. 
 Die `kwic()`Funktion aus dem `quanteda`-Paket identifiziert hierzu Schlüsselwörter und Wörter vor bzw. nach diesen. Wir schauen uns also Wörter an, die um ein sogenanntes *Window* von z.B. einem oder mehr Wörtern vor oder nach dem Schlüsselwort vorkommen.
 
 Mit folgendem Code können wir beispielsweise herausfinden, in welchem Kontext das Wort *hero* vorkommt. In der Ausgabe werden jeweils das Wort vor und nach dem Wort *hero* angezeigt. Um die Bedeutung dieser Wörter besser zu verstehen, nutzen wir dabei die "unbereinigte" `Description`-Variable aus dem Objekt `data`.
+
 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 data$Description %>% 
@@ -130,6 +142,7 @@ data$Description %>%
   head()
 ```
 
+
 ## 2.3 Semantische Netzwerke auf Basis von Co-Occurrenzen
 
 Als stärker quantifizierende Analyse bietet sich die Visualisierung von Co-Occurrenzen mittels semantischer Netzwerke an. Diese visualisieren, welche Features häufig in einem gemeinsamen Kontext (z.B. in direkter Abfolge, innerhalb eines Textes) vorkommen.
@@ -137,6 +150,7 @@ Als stärker quantifizierende Analyse bietet sich die Visualisierung von Co-Occu
 Hierfür müssen wir zunächst die DFM in eine Feature-Co-Occurrence Matrix (FCM) umwandeln. Das machen wir mit der Funktion `fcm()` aus dem `quanteda`-Paket.
 
 Uns interessiert zunächst, wie häufig Features *innerhalb eines Textes* vorkommen, weshalb wir das `context`-Argument nutzen und auf `document` setzen.
+
 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 tokens %>%
@@ -147,6 +161,7 @@ tokens %>%
   #Ausgabe der ersten Zeilen
   head()
 ```
+
 
 Wir sehen:
 
@@ -161,6 +176,7 @@ Beispielsweise wollen wir uns anschauen, ob Männer (*man*) und Frauen (*woman*)
 
 Dafür schauen wir, welche Wörter (z.B. *fight* vs. *romance*) häufiger in Verbindung mit Männern bzw. Frauen genannt werden
 
+
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 fcm <- tokens %>%
   
@@ -173,11 +189,13 @@ fcm <- tokens %>%
              selection = "keep")
 ```
 
+
 Wir visualisieren die Ergebnisse als semantisches Netzwerk mit der `textplot_network()`Funktion aus dem `quanteda.textplots()`-Paket.
 
 Wenn Features im selben Kontext (hier 8 Wörter) vorkommen, werden sie mit einer Linie verbunden. Umso dicker die Linie, desto öfter kommen Features gemeinsam vor.
 
 Dabei können wir sehen, dass Männer wie Frauen häufig als "jung" beschrieben werden - Männer aber häufiger mit "Kämpfen" und Frauen mit "Liebe" assoziiert werden:
+
 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 
@@ -185,11 +203,13 @@ Dabei können wir sehen, dass Männer wie Frauen häufig als "jung" beschrieben 
 textplot_network(fcm)
 ```
 
+
 ## 2.4 Collocations
 
 Ein weiterer Ansatz sind Collocations. Collocations bezeichnen Features, die häufig (und damit vermutlich nicht-zufällig) *nacheinander* auftreten, was auf eine gemeinsame semantische Bedeutung hindeutet (z.B. *United* und *States*).
 
 Um herauszufinden, welche Features vorkommen, können wir die Funktion `textstat_collocations()` aus dem `quanteda.textstats`-Paket verwenden.
+
 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 tokens %>%
@@ -205,6 +225,7 @@ tokens %>%
   head(10)
 ```
 
+
 Das kennen wir doch schon - nämlich aus Abschnitt 2.1 zu *ngrams*.
 
 ## 2.5 Ngrams zu einem Feature zusammenfassen
@@ -214,6 +235,7 @@ In einem weiteren Schritt kann es manchmal sinnvoll sein, Collocations für die 
 Dieses Zusammenfassen (*compounding*) lässt sich mit der `tokens_compound()`-Funktion aus dem `quanteda.textstats`-Paket umsetzen.
 
 Die Funktion verbindet unigrams mit einem Unterstrich zu einem ngram, das als ein einziges Feature weiter analysiert wird. Dieser Schritt wird zwischen dem `tokens`-Befehl und dem `dfm`-Befehle (d.h. der Tokenisierung und der Erstellung einer Document-Feature-Matrix) eingefügt.
+
 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 
@@ -246,6 +268,7 @@ dfm %>%
   slice(125:130)
 ```
 
+
 # 3. Part-of-Speech Tagging
 
 Part-of-Speech Tagging (PoS Tagging) bezeichnet die Zuordnung von Features zu Wortarten (z.B. ob es sich bei einem Feature um ein Verb oder ein Substantiv handelt).
@@ -253,6 +276,7 @@ Part-of-Speech Tagging (PoS Tagging) bezeichnet die Zuordnung von Features zu Wo
 Für das PoS Tagging nutzen wir das Paket `udpipe`. Dafür müssen wir die Daten erst für die Analyse vorbereiten (den Text in `Description` in ein `tibble`-Format bringen, eine Variable `doc_id` erstellen, welche alle Texte numerisch identifiziert, und die relevanten Daten, die Serienbeschreibungen, in der Variable `Text` abspeichern).
 
 Dafür nutzen wir den "ursprünglichen", unbereinigten Datensatz, da die Part-of-Speech Tagger nicht nur das Feature selbst, sondern auch Kontext wie z.B. Satzzeichen nutzen, um zu verstehen, welche Funktion Wörter in Sätzen haben.
+
 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 data_pos_tagged <- data$Description %>%
@@ -272,6 +296,7 @@ data_pos_tagged <- data$Description %>%
 head(data_pos_tagged)
 ```
 
+
 Wie kann man PoS Tagging jetzt für wissenschaftliche Analysen nutzen?
 
 Wir können auf Basis der PoS Tags z. B. analysieren, mit welchen Adjektiven das Wort *family* beschrieben wird.
@@ -284,6 +309,7 @@ Dafür...
 -   Und verschönern mit `rename()`, `select()` und `head()` die Ausgabe so, dass wir nur ausgewählte Ergebnisse erhalten.
 
 Und das geht so:
+
 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 data_pos_tagged %>%
@@ -310,11 +336,13 @@ data_pos_tagged %>%
   head()
 ```
 
+
 # 4. Dependency Parsing
 
 Als letzte Analysemöglichkeit schauen wir uns Dependency Parsing an. Dependency Parsing beschreibt die Abhängigkeit von Features innerhalb von Sätzen (z.B. welche Adjektive sich auf welche Substantive beziehen, etc.).
 
 Für Dependency Parsing können wir wieder die Funktion `udpipe()` aus dem Paket `udpipe` nutzen. Wir bereiten die Daten ähnlich vor wie für das PoS Tagging. Der einzige Unterschied ist, dass wir uns nun mit `select()` zusätzlich `dep_rel` als Art der syntaktischen Beziehung, die das jeweilige Feature zu `head_token` hat, ausgeben lassen.
+
 
 ```{r eval = TRUE}
 data$Description %>%
@@ -337,9 +365,11 @@ data$Description %>%
   head(5)
 ```
 
+
 Wer sich nun fragt, was diese Abkürzungen bedeuten, kann [hier](https://universaldependencies.org/u/dep/index.html) mehr Infos erhalten.
 
 Zusätzlich lassen sich solche Dependency Relations auch visualisieren, etwa via dem `rsyntax`-Paket. Probieren wir dies für einen einfacheren, kürzeren Satz:
+
 
 ```{r echo = TRUE, eval = FALSE, message = FALSE, warning = FALSE, error = FALSE}
 
@@ -353,6 +383,7 @@ udpipe("My only goal in life is to understand dependency parsing", "english") %>
   plot_tree(., token, lemma, upos)
 ```
 
+
 ![Beispiel für Dependency Parsing](images/dependency_tree.PNG){fig-alt="Beispiel für Dependency Parsing" fig-align="left"}
 
 # Aufgabe 1 📌
@@ -363,6 +394,7 @@ Bitte arbeitet für die Übung mit dem Horoskop-Datensatz (Download der CSV-Date
 
 ## Aufgabe 1.1
 Lest den Datensatz ein und verschafft euch einen Überblick über die Daten. Welche Variablen sind dort vorhanden?
+
 ```{r echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 #Daten einlesen
 url <- getURL("https://raw.githubusercontent.com/valeriehase/textasdata-ms/main/data/data_horoscope.csv")
@@ -372,8 +404,10 @@ horoscope_df <- read.csv2(text = url)
 #str(horoscope_df)
 ```
 
+
 ## Aufgabe 1.2
 Bereitet den Datensatz durch Preprocessing und das Umwandeln in eine DFM für die Analyse vor. Hinterfragt kritisch, welche Bereinigung- und Normalisierungsschritte ihr tatsächlich braucht.
+
 ```{r echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 
 #Normalisierung
@@ -389,6 +423,7 @@ horoscope_tokens <- horoscope_df$Horoscope %>%
 #Wie sehen die Features aus?
 #horoscope_tokens[1]
 ```
+
 ```{r echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 #Umwandlung in eine DFM
 horoscope_dfm <- horoscope_tokens %>% 
@@ -400,8 +435,10 @@ horoscope_dfm <- horoscope_tokens %>%
 
 #head(horoscope_dfm)
 ```
+
 ## Aufgabe 1.3
 Schaut euch als erste Analyse an, welcher Ausdrück häufiger vorkommt: "**secret fear**" oder "**in love**"?
+
 ```{r echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 #Lösung mit regulären Ausdrücken
 #horoscope_df %>%
@@ -410,8 +447,10 @@ Schaut euch als erste Analyse an, welcher Ausdrück häufiger vorkommt: "**secre
 #  summarize("Häufigkeit: in love" = sum(grepl("in love", tolower(Horoscope))),
 #            "Häufigkeit: secret secret" = sum(grepl("secret fear",  tolower(Horoscope))))
 ```
+
 ## Aufgabe 1.4
 Jetzt wollen wir wissen, bei welchem Sternzeichen es am mysteriösesten wird: Bei welchem Sternzeichen fällt am häufigsten das Stichwort "**secret**"?
+
 ```{r echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 #Version 1: Mit regulären Ausdrücken
 #horoscope_df %>%
@@ -425,6 +464,7 @@ Jetzt wollen wir wissen, bei welchem Sternzeichen es am mysteriösesten wird: Be
 #  #Absteigend sortieren
 #  arrange(desc(Geheimnis))
 ```
+
 ```{r echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 #Version 2: Mit Quanteda
 
@@ -438,10 +478,12 @@ Jetzt wollen wir wissen, bei welchem Sternzeichen es am mysteriösesten wird: Be
 #  arrange(desc(docfreq))
 ```
 
+
 ## Aufgabe 1.5
 Visualisiert auf Basis eines semantischen Netzwerk, mit welchen Adjektiven die Sternzeichen "**Aquarius**" (Wassermann) vs. "**Gemini**" (Zwilling) häufig in den Horoskopen assoziiert werden.
 
 Das Netzwerk könnte etwa so aussehen:
+
 ```{r echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 horoscope_df_filtered <- horoscope_df %>%
   
@@ -509,3 +551,4 @@ tokens(horoscope_df_filtered$Horoscope,
   #Wir erstellen das semantische Netzwerk
   textplot_network(min_freq = 5)
 ```
+

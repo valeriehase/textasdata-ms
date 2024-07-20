@@ -14,7 +14,6 @@ library("RCurl")
 # data <- read.csv2("data_tvseries.csv")
 
 ##### 1.2 Textdaten von einer URL downloaden #####
-
 url <-  getURL("https://raw.githubusercontent.com/valeriehase/textasdata-ms/main/data/data_tvseries.csv")
 data <- read.csv2(text = url)
 
@@ -24,7 +23,6 @@ head(data)
 #### 2. Preprocessing ####
   
 ##### 2.1 Bereinigung (z. B. Encoding-Probleme) ##### 
-  
 data %>%
   
   #Auswahl der Variable "Description"
@@ -181,7 +179,6 @@ dfm
 ##### 4. Erste Analysen #####
   
 ###### 4.1 Top Features ######
-  
 topfeatures(dfm, 10) %>%
   
   #Umwandlung in einen "schöneren" Dataframe mit der Spalte "Häufigkeit"
