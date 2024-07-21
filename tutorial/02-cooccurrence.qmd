@@ -383,7 +383,7 @@ horoscope_tokens <- horoscope_df$Horoscope %>%
   tokens_remove(stopwords("english")) %>% 
   tokens_wordstem()
 ```
-```{r echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+```{r echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 # Umwandlung in eine DFM
 horoscope_dfm <- horoscope_tokens %>% 
   dfm() %>% 

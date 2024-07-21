@@ -844,7 +844,7 @@
     "href": "tutorial/02-cooccurrence.html#aufgabe-1.2-basis",
     "title": "Sitzung 2: Co-Occurrence Analysen",
     "section": "Aufgabe 1.2 (Basis)",
-    "text": "Aufgabe 1.2 (Basis)\nBereitet den Datensatz durch Preprocessing und das Umwandeln in eine DFM für die Analyse vor. Hinterfragt kritisch, welche Bereinigung- und Normalisierungsschritte ihr tatsächlich braucht.\n\n# Umwandlung in eine DFM\nhoroscope_dfm &lt;- horoscope_tokens %&gt;% \n  dfm() %&gt;% \n  dfm_trim( min_docfreq = 0.005, \n            max_docfreq = 0.99, \n            docfreq_type = \"prop\", \n            verbose = TRUE) \n\n# head(horoscope_dfm)"
+    "text": "Aufgabe 1.2 (Basis)\nBereitet den Datensatz durch Preprocessing und das Umwandeln in eine DFM für die Analyse vor. Hinterfragt kritisch, welche Bereinigung- und Normalisierungsschritte ihr tatsächlich braucht."
   },
   {
     "objectID": "tutorial/02-cooccurrence.html#aufgabe-1.3-fortgeschritten",
