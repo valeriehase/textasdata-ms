@@ -8,7 +8,7 @@
 
 <meta name="author" content="Valerie Hase &amp; Luisa Kutlar">
 
-<title>Sitzung 2: Co-Occurrence Analysen</title>
+<title>Sitzung 3: Diktionäre</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -131,7 +131,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#pakete-laden-und-daten-einlesen" id="toc-pakete-laden-und-daten-einlesen" class="nav-link active" data-scroll-target="#pakete-laden-und-daten-einlesen">1. Pakete laden und Daten einlesen</a>
   <ul class="collapse">
   <li><a href="#off-the-shelf-diktionäre" id="toc-off-the-shelf-diktionäre" class="nav-link" data-scroll-target="#off-the-shelf-diktionäre">1.1 Off-the-Shelf Diktionäre</a></li>
-  <li><a href="#eigene-diktionäre" id="toc-eigene-diktionäre" class="nav-link" data-scroll-target="#eigene-diktionäre">1.2 Eigene Diktionäre</a></li>
+  <li><a href="#organische-diktionäre" id="toc-organische-diktionäre" class="nav-link" data-scroll-target="#organische-diktionäre">1.2 Organische Diktionäre</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -141,7 +141,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Sitzung 2: Co-Occurrence Analysen</h1>
+<h1 class="title">Sitzung 3: Diktionäre</h1>
 </div>
 
 
@@ -199,7 +199,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Jetzt sind wir bereit für die ersten Analysen mit Diktionären!</p>
 <section id="off-the-shelf-diktionäre" class="level2">
 <h2 class="anchored" data-anchor-id="off-the-shelf-diktionäre">1.1 Off-the-Shelf Diktionäre</h2>
-<p>Es gibt viele off-the-shelf Diktionäre. Der Einfachkeit halber nutzen wir hier zur Demonstation das <code>data_dictionary_LSD2015</code>-Diktionär aus dem <code>quanteda</code>- Paket (Young &amp; Soroka, 2012).</p>
+<p>Es gibt viele off-the-Shelf Diktionäre. Der Einfachkeit halber nutzen wir hier zur Demonsrtation das <code>data_dictionary_LSD2015</code>-Diktionär aus dem <code>quanteda</code>- Paket (Young &amp; Soroka, 2012).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Wir schauen uns das Diktionär an</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>data_dictionary_LSD2015 <span class="sc">%&gt;%</span> </span>
@@ -216,8 +216,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   - not a lie, not abandon*, not abas*, not abattoir*, not abdicat*, not aberra*, not abhor*, not abject*, not abnormal*, not abolish*, not abominab*, not abominat*, not abrasiv*, not absent*, not abstrus*, not absurd*, not abus*, not accident*, not accost*, not accursed* [ ... and 2,840 more ]</code></pre>
 </div>
 </div>
-<p>Mit der Funktion <code>dfm_lookup()</code> aus dem quanteda Packet wird für jeden Text, also in diesem Fall für jede TV Show, geschaut, wie viele Wörter aus den ersten zwei Spalten des Diktionärs (pos. bzw. negative Wörter) vorkommen.</p>
-<p>Die Funktion <code>dfm_weight(scheme = "prop")</code> setzt die Anzahl der Features, die gematched werden, ins Verhältnis mit der Länge des Textes. Dadurch erhalten längere Texte nicht fälschlicherweise einen “höheren” Match mit Features aus dem Diktionär, nur weil sie generell mehr Wörter enthalten (und damit ggf. “zufällig” ein positives oder negatives Wort enthalten).</p>
+<p>Mit der Funktion <code>dfm_lookup()</code> aus dem quanteda Packet wird für jeden Text, also in diesem Fall für jede TV-Show, geschaut, wie viele Wörter aus den ersten zwei Spalten des Diktionärs (positive bzw. negative Wörter) vorkommen.</p>
+<p>Die Funktion <code>dfm_weight(scheme = "prop")</code> setzt die Anzahl der Features, die gematched werden, ins Verhältnis mit der Länge des Textes, d.h. normalisiert für diese.</p>
+<p>Dadurch erhalten längere Texte nicht fälschlicherweise einen “höheren” Match mit Features aus dem Diktionär, nur weil sie generell mehr Wörter enthalten (und damit ggf. “zufällig” ein positives oder negatives Wort enthalten).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>sentiment_tvshows <span class="ot">&lt;-</span> dfm <span class="sc">%&gt;%</span> </span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  </span>
@@ -422,8 +423,8 @@ docs      negative   positive
 </div>
 </div>
 </section>
-<section id="eigene-diktionäre" class="level2">
-<h2 class="anchored" data-anchor-id="eigene-diktionäre">1.2 Eigene Diktionäre</h2>
+<section id="organische-diktionäre" class="level2">
+<h2 class="anchored" data-anchor-id="organische-diktionäre">1.2 Organische Diktionäre</h2>
 <p>Oftmals kann es sinnvoller sein, ein eigenes, sogenanntes “organisches” Diktionär zu entwickeln.</p>
 <p>Dafür erstellen wir zunächst eine eigene Wortliste. Hier wollen wir auf Basis eines organischen Diktionärs Serien identifizieren, die sich mit “<em>Crime</em>” beschäftigen (ähnlich wie in Sitzung 1!).</p>
 <div class="cell">

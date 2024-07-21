@@ -1,5 +1,5 @@
 ---
-title: "Sitzung 2: Co-Occurrence Analysen"
+title: "Sitzung 3: Diktionäre"
 author: "Valerie Hase & Luisa Kutlar"
 format:
   html:
@@ -45,15 +45,17 @@ dfm <- tokens %>%
 Jetzt sind wir bereit für die ersten Analysen mit Diktionären!
 
 ## 1.1 Off-the-Shelf Diktionäre
-Es gibt viele off-the-shelf Diktionäre. Der Einfachkeit halber nutzen wir hier zur Demonstation das `data_dictionary_LSD2015`-Diktionär aus dem `quanteda`- Paket (Young & Soroka, 2012).
+Es gibt viele off-the-Shelf Diktionäre. Der Einfachkeit halber nutzen wir hier zur Demonsrtation das `data_dictionary_LSD2015`-Diktionär aus dem `quanteda`- Paket (Young & Soroka, 2012).
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 # Wir schauen uns das Diktionär an
 data_dictionary_LSD2015 %>% 
   head()
 ```
-Mit der Funktion `dfm_lookup()` aus dem quanteda Packet wird für jeden Text, also in diesem Fall für jede TV Show, geschaut, wie viele Wörter aus den ersten zwei Spalten des Diktionärs (pos. bzw. negative Wörter) vorkommen. 
+Mit der Funktion `dfm_lookup()` aus dem quanteda Packet wird für jeden Text, also in diesem Fall für jede TV-Show, geschaut, wie viele Wörter aus den ersten zwei Spalten des Diktionärs (positive bzw. negative Wörter) vorkommen. 
 
-Die Funktion `dfm_weight(scheme = "prop")` setzt die Anzahl der Features, die gematched werden, ins Verhältnis mit der Länge des Textes. Dadurch erhalten längere Texte nicht fälschlicherweise einen "höheren" Match mit Features aus dem Diktionär, nur weil sie generell mehr Wörter enthalten (und damit ggf. "zufällig" ein positives oder negatives Wort enthalten).
+Die Funktion `dfm_weight(scheme = "prop")` setzt die Anzahl der Features, die gematched werden, ins Verhältnis mit der Länge des Textes, d.h. normalisiert für diese. 
+
+Dadurch erhalten längere Texte nicht fälschlicherweise einen "höheren" Match mit Features aus dem Diktionär, nur weil sie generell mehr Wörter enthalten (und damit ggf. "zufällig" ein positives oder negatives Wort enthalten).
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 sentiment_tvshows <- dfm %>% 
   
@@ -192,7 +194,7 @@ ggplot(plot, aes(fill = Rating.Adults, y = perc, x = sentiment)) +
   # Wir entfernen die Legende, die wenig hilfreich ist
   theme(legend.position = "none")
 ```
-## 1.2 Eigene Diktionäre 
+## 1.2 Organische Diktionäre 
 Oftmals kann es sinnvoller sein, ein eigenes, sogenanntes "organisches" Diktionär zu entwickeln. 
 
 Dafür erstellen wir zunächst eine eigene Wortliste. Hier wollen wir auf Basis eines organischen Diktionärs Serien identifizieren, die sich mit "*Crime*" beschäftigen (ähnlich wie in Sitzung 1!).
