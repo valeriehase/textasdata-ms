@@ -84,10 +84,12 @@ data$Description[1]
 Welche Analysen könnten wir jetzt vornehmen?
 
 Wir könnten z. B. Texte als neutral, positiv oder negativ einstufen (je nachdem, ob sie gleich viele oder mehr/weniger positive bzw. negative Feature enthalten).
+
+Dazu müssen wir das Ergebnis mit `convert()` zu einem Dataframe unwandeln.
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
-# Ergebnis für die weitere Analyse in einen Data Frame umwandeln
+# Ergebnis für die weitere Analyse in einen Dataframe umwandeln
 sentiment_tvshows <- convert(sentiment_tvshows, 
-                                      to = "data.frame") %>%
+                             to = "data.frame") %>%
   
   # Umwandlung in tibble-Format
   as_tibble %>%
@@ -119,7 +121,7 @@ select(Title, Parental.Rating, positive, negative, sentiment)
 sentiment_tvshows %>%
   head()
 ```
-Dann könnten wir analysieren, wie viele Texte positiv vs. negativ sind:
+Dann könnten wir mit `count()` aus dem `tidverse`-Paket analysieren, wie viele Texte positiv vs. negativ sind:
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 # Anzahl neutral, negativer und positiver Texte?
 sentiment_tvshows %>%
@@ -133,6 +135,8 @@ sentiment_tvshows %>%
 
 ```
 Insgesamt scheinen die beliebtesten Serien also recht düster zu sein. Welche sind denn die negativsten Serien laut unserer Sentiment-Analyse?
+
+Hierfür nutzen die wir `arrange()`-Funktion aus dem `tidyverse`-Paket.
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 # Negativste Serien
 sentiment_tvshows %>% 
@@ -165,6 +169,7 @@ head(sentiment_tvshows)
 ```
 Für die Visualisierung nutzen wir hier die `ggplot()`-Funktion aus dem `tidyverse`-Paket. Wenn ihr noch nie mit ggplot gearbeitet habt, braucht ihr den nachfolgenden Code nicht im Detail verstehen (s. ein längere Tutorial [hier](https://bookdown.org/valerie_hase/DataDonations-TextasData/tutorial-8-visualizing-results.html)).
 
+Zunächst erstellen wir das Objekt `plot`, das durch `group_by()` aus dem `tidyverse`-Paket die nach Rating gruppierten Werte enthält.
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 plot <- sentiment_tvshows %>%
   
@@ -203,7 +208,7 @@ ggplot(plot, aes(fill = Rating.Adults, y = perc, x = sentiment)) +
 Oftmals kann es sinnvoller sein, ein eigenes, sogenanntes "organisches" Diktionär zu entwickeln. 
 
 ## 3.1 Diktionär erstellen
-Dafür erstellen wir zunächst eine eigene Wortliste. Hier wollen wir auf Basis eines organischen Diktionärs Serien identifizieren, die sich mit "*Crime*" beschäftigen (ähnlich wie in Sitzung 1!).
+Dafür erstellen wir zunächst mit `dictionary()` aus dem `quanteda`-Paket eine eigene Wortliste. Hier wollen wir auf Basis eines organischen Diktionärs Serien identifizieren, die sich mit "*Crime*" beschäftigen (ähnlich wie in Sitzung 1!).
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 diktionär_crime <- dictionary(list(crime = c("crim*", "police*", "gun*", 
                                              "shot*", "dead*", "murder*", 
@@ -261,4 +266,75 @@ Und welche Serie wird am "klarsten" als Krimi eingestuft?
 crime_tvshows %>% 
   arrange(desc(crime)) %>% 
   slice(1:5)
+```
+# Aufgabe 1 📌
+
+Die folgende Übung testet eure Kenntnisse im Hinblick auf Diktionäre!
+
+## Aufgabe 1.1 (Basis)
+
+Könnt ihr analysieren, wie viel Prozent der Serien Science-Fiction Serien sind?
+```{r echo = FALSE, eval = FALSE, message = FALSE, warning = FALSE, error = FALSE}
+#Diktionär erstellen
+diktionär_scifi <- dictionary(list(scifi = c("fantas*", "science fict*", "sci-fi*", 
+                                             "sci fi*", "galax*", "space*",
+                                             "magic*", "wizzard*", "witch*",
+                                             "monster")))
+
+#Diktionär anwenden
+scifi_tvshows <- dfm %>% 
+  dfm_weight(scheme = "prop") %>% 
+  dfm_lookup(dictionary = diktionär_scifi)
+
+# Ergebnis für die weitere Analyse in einen Data Frame umwandeln
+scifi_tvshows <- convert(scifi_tvshows, 
+                         to = "data.frame") %>%
+  
+  # Umwandlung in tibble-Format
+  as_tibble %>%
+  
+  # Wir ergänzen zunächst wieder die Serientitel
+  mutate(Title = data$Title,
+         Number.of.Votes = data$Number.of.Votes) %>%
+  
+  # Wir erstellen eine Variable, die Texte als
+  # "scifi" oder "non-scifi" identifiziert
+  mutate(scifi_binary = "scifi",
+         scifi_binary = replace(scifi_binary,
+                         scifi == 0,
+                         "non-scifi")) %>%
+
+# Sortierung der Variablen
+select(Title, Number.of.Votes, scifi, scifi_binary)
+
+# Wie viel Prozent sind Sci-Fi Serien?
+scifi_tvshows %>%
+  
+  # absolute Anzahl jeder Sentiment-Art (n)
+  count(scifi_binary) %>%
+  
+  # Ausgabe in Prozent (perc)
+  mutate(perc = prop.table(n)*100,
+         perc = round(perc, 2))
+
+```
+## Aufgabe 1.2 (Fortgeschritten)
+Könnt ihr analysieren,welche fünf Science-Fiction Serien die (nach Publikums-Votum laut `Number.of.Votes`) beliebtesten Serien sind?
+```{r echo = FALSE, eval = FALSE, message = FALSE, warning = FALSE, error = FALSE}
+#Diktionär erstellen
+scifi_tvshows %>%
+  
+  #Auswahl der Sci-Fi-Serien
+  filter(scifi_binary == "scifi") %>%
+  
+  #Umwandlung der Number.of.Votes Variable
+  mutate(Number.of.Votes = gsub("K", "000000", Number.of.Votes),
+         Number.of.Votes = gsub("M", "000000000", Number.of.Votes),
+         Number.of.Votes = as.numeric(Number.of.Votes)) %>%
+  
+  #Sortierung nach Rating
+  arrange(desc(Number.of.Votes)) %>%
+  
+  #Ausgabe der ersten fünf Serien
+  head(5)
 ```

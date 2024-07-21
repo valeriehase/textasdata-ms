@@ -142,6 +142,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#features-aus-diktionär-identifizieren-1" id="toc-features-aus-diktionär-identifizieren-1" class="nav-link" data-scroll-target="#features-aus-diktionär-identifizieren-1">3.2 Features aus Diktionär identifizieren</a></li>
   <li><a href="#texte-klassifizieren-1" id="toc-texte-klassifizieren-1" class="nav-link" data-scroll-target="#texte-klassifizieren-1">3.3 Texte klassifizieren</a></li>
   </ul></li>
+  <li><a href="#aufgabe-1" id="toc-aufgabe-1" class="nav-link" data-scroll-target="#aufgabe-1">Aufgabe 1 📌</a>
+  <ul class="collapse">
+  <li><a href="#aufgabe-1.1-basis" id="toc-aufgabe-1.1-basis" class="nav-link" data-scroll-target="#aufgabe-1.1-basis">Aufgabe 1.1 (Basis)</a></li>
+  <li><a href="#aufgabe-1.2-fortgeschritten" id="toc-aufgabe-1.2-fortgeschritten" class="nav-link" data-scroll-target="#aufgabe-1.2-fortgeschritten">Aufgabe 1.2 (Fortgeschritten)</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -273,10 +278,11 @@ docs      negative   positive
 <h2 class="anchored" data-anchor-id="texte-klassifizieren">2.3 Texte klassifizieren</h2>
 <p>Welche Analysen könnten wir jetzt vornehmen?</p>
 <p>Wir könnten z. B. Texte als neutral, positiv oder negativ einstufen (je nachdem, ob sie gleich viele oder mehr/weniger positive bzw. negative Feature enthalten).</p>
+<p>Dazu müssen wir das Ergebnis mit <code>convert()</code> zu einem Dataframe unwandeln.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ergebnis für die weitere Analyse in einen Data Frame umwandeln</span></span>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ergebnis für die weitere Analyse in einen Dataframe umwandeln</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>sentiment_tvshows <span class="ot">&lt;-</span> <span class="fu">convert</span>(sentiment_tvshows, </span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">to =</span> <span class="st">"data.frame"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">to =</span> <span class="st">"data.frame"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Umwandlung in tibble-Format</span></span>
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  as_tibble <span class="sc">%&gt;%</span></span>
@@ -319,7 +325,7 @@ docs      negative   positive
 6 6. Sherlock         TV-14             0.0571   0.0286 positiv  </code></pre>
 </div>
 </div>
-<p>Dann könnten wir analysieren, wie viele Texte positiv vs.&nbsp;negativ sind:</p>
+<p>Dann könnten wir mit <code>count()</code> aus dem <code>tidverse</code>-Paket analysieren, wie viele Texte positiv vs.&nbsp;negativ sind:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Anzahl neutral, negativer und positiver Texte?</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>sentiment_tvshows <span class="sc">%&gt;%</span></span>
@@ -340,6 +346,7 @@ docs      negative   positive
 </div>
 </div>
 <p>Insgesamt scheinen die beliebtesten Serien also recht düster zu sein. Welche sind denn die negativsten Serien laut unserer Sentiment-Analyse?</p>
+<p>Hierfür nutzen die wir <code>arrange()</code>-Funktion aus dem <code>tidyverse</code>-Paket.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Negativste Serien</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>sentiment_tvshows <span class="sc">%&gt;%</span> </span>
@@ -402,6 +409,7 @@ docs      negative   positive
 </div>
 </div>
 <p>Für die Visualisierung nutzen wir hier die <code>ggplot()</code>-Funktion aus dem <code>tidyverse</code>-Paket. Wenn ihr noch nie mit ggplot gearbeitet habt, braucht ihr den nachfolgenden Code nicht im Detail verstehen (s. ein längere Tutorial <a href="https://bookdown.org/valerie_hase/DataDonations-TextasData/tutorial-8-visualizing-results.html">hier</a>).</p>
+<p>Zunächst erstellen wir das Objekt <code>plot</code>, das durch <code>group_by()</code> aus dem <code>tidyverse</code>-Paket die nach Rating gruppierten Werte enthält.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>plot <span class="ot">&lt;-</span> sentiment_tvshows <span class="sc">%&gt;%</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  </span>
@@ -450,7 +458,7 @@ docs      negative   positive
 <p>Oftmals kann es sinnvoller sein, ein eigenes, sogenanntes “organisches” Diktionär zu entwickeln.</p>
 <section id="diktionär-erstellen" class="level2">
 <h2 class="anchored" data-anchor-id="diktionär-erstellen">3.1 Diktionär erstellen</h2>
-<p>Dafür erstellen wir zunächst eine eigene Wortliste. Hier wollen wir auf Basis eines organischen Diktionärs Serien identifizieren, die sich mit “<em>Crime</em>” beschäftigen (ähnlich wie in Sitzung 1!).</p>
+<p>Dafür erstellen wir zunächst mit <code>dictionary()</code> aus dem <code>quanteda</code>-Paket eine eigene Wortliste. Hier wollen wir auf Basis eines organischen Diktionärs Serien identifizieren, die sich mit “<em>Crime</em>” beschäftigen (ähnlich wie in Sitzung 1!).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>diktionär_crime <span class="ot">&lt;-</span> <span class="fu">dictionary</span>(<span class="fu">list</span>(<span class="at">crime =</span> <span class="fu">c</span>(<span class="st">"crim*"</span>, <span class="st">"police*"</span>, <span class="st">"gun*"</span>, </span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>                                             <span class="st">"shot*"</span>, <span class="st">"dead*"</span>, <span class="st">"murder*"</span>, </span>
@@ -540,6 +548,18 @@ docs      negative   positive
 5 314. Bosch                               0.154 crime       </code></pre>
 </div>
 </div>
+</section>
+</section>
+<section id="aufgabe-1" class="level1">
+<h1>Aufgabe 1 📌</h1>
+<p>Die folgende Übung testet eure Kenntnisse im Hinblick auf Diktionäre!</p>
+<section id="aufgabe-1.1-basis" class="level2">
+<h2 class="anchored" data-anchor-id="aufgabe-1.1-basis">Aufgabe 1.1 (Basis)</h2>
+<p>Könnt ihr analysieren, wie viel Prozent der Serien Science-Fiction Serien sind?</p>
+</section>
+<section id="aufgabe-1.2-fortgeschritten" class="level2">
+<h2 class="anchored" data-anchor-id="aufgabe-1.2-fortgeschritten">Aufgabe 1.2 (Fortgeschritten)</h2>
+<p>Könnt ihr analysieren,welche fünf Science-Fiction Serien die (nach Publikums-Votum laut <code>Number.of.Votes</code>) beliebtesten Serien sind?</p>
 
 
 </section>
