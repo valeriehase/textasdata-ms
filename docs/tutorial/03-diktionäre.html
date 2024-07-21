@@ -7,9 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Valerie Hase &amp; Luisa Kutlar">
-<meta name="dcterms.date" content="2024-05-04">
 
-<title>Sitzung 3: Diktionäre</title>
+<title>Sitzung 2: Co-Occurrence Analysen</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -129,10 +128,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#diktionäre" id="toc-diktionäre" class="nav-link active" data-scroll-target="#diktionäre">7 Diktionäre</a>
+  <li><a href="#pakete-laden-und-daten-einlesen" id="toc-pakete-laden-und-daten-einlesen" class="nav-link active" data-scroll-target="#pakete-laden-und-daten-einlesen">1. Pakete laden und Daten einlesen</a>
   <ul class="collapse">
-  <li><a href="#off-the-shelf-diktionäre" id="toc-off-the-shelf-diktionäre" class="nav-link" data-scroll-target="#off-the-shelf-diktionäre">7.1 Off-the-shelf Diktionäre</a></li>
-  <li><a href="#eigene-diktionäre" id="toc-eigene-diktionäre" class="nav-link" data-scroll-target="#eigene-diktionäre">7.2 Eigene Diktionäre</a></li>
+  <li><a href="#off-the-shelf-diktionäre" id="toc-off-the-shelf-diktionäre" class="nav-link" data-scroll-target="#off-the-shelf-diktionäre">1.1 Off-the-Shelf Diktionäre</a></li>
+  <li><a href="#eigene-diktionäre" id="toc-eigene-diktionäre" class="nav-link" data-scroll-target="#eigene-diktionäre">1.2 Eigene Diktionäre</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -142,7 +141,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Sitzung 3: Diktionäre</h1>
+<h1 class="title">Sitzung 2: Co-Occurrence Analysen</h1>
 </div>
 
 
@@ -156,12 +155,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           </div>
   </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">May 4, 2024</p>
-    </div>
-  </div>
   
     
   </div>
@@ -171,96 +164,46 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>#Packages laden und Objekte erstellen</p>
+<section id="pakete-laden-und-daten-einlesen" class="level1">
+<h1>1. Pakete laden und Daten einlesen</h1>
+<p>Zunächst installieren alle Pakete, die wir für diese Sitzung brauchten (z.B. <code>tidyverse</code>). Ihr braucht <code>install.packages()</code> nur, wenn ihr die Pakete im Methodencafe noch nicht installiert hattet.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("RCurl")</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("quanteda")</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("tidyverse)</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("dplyr")</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("quanteda.textplots")</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("quanteda.textstats")</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("udpipe")</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"RCurl"</span>)</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"quanteda"</span>)</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"tidyverse"</span>)</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"dplyr"</span>)</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"quanteda.textplots"</span>)</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"quanteda.textstats"</span>)</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"udpipe"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("tidyverse)</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("RCurl")</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("quanteda")</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"tidyverse"</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"RCurl"</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"quanteda"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>Nun lesen wir die Daten wieder ein und führen die bereits erlernten Preprocessing-Schritte, inkl. der Transformation in eine Document-Feature-Matrix, aus.</p>
+<p>Wir lassen einige Preprocessing-Schritte (u.a. die Entfernung von Stoppwörtern, Stemming, Relative Pruning) diesmal weg, u. a. weil das von uns genutzte Diktionär bereits gestemmte Features enthält und weil wir z. B. seltene negative/positive Wörter hier nicht entfernen wollen:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Daten laden</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span>  <span class="fu">getURL</span>(<span class="st">"https://raw.githubusercontent.com/valeriehase/Salamanca-CSS-SummerSchool/main/Processing%20text%20and%20text%20as%20data/data_tvseries.csv"</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>daten_df <span class="ot">&lt;-</span>  <span class="fu">read.csv2</span>(<span class="at">text =</span> url)</span>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Daten laden</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span>  <span class="fu">getURL</span>(<span class="st">"https://raw.githubusercontent.com/valeriehase/textasdata-ms/main/data/data_tvseries.csv"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.csv2</span>(<span class="at">text =</span> url)</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Tokens</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">stopwords</span>(<span class="st">"english"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  [1] "i"          "me"         "my"         "myself"     "we"        
-  [6] "our"        "ours"       "ourselves"  "you"        "your"      
- [11] "yours"      "yourself"   "yourselves" "he"         "him"       
- [16] "his"        "himself"    "she"        "her"        "hers"      
- [21] "herself"    "it"         "its"        "itself"     "they"      
- [26] "them"       "their"      "theirs"     "themselves" "what"      
- [31] "which"      "who"        "whom"       "this"       "that"      
- [36] "these"      "those"      "am"         "is"         "are"       
- [41] "was"        "were"       "be"         "been"       "being"     
- [46] "have"       "has"        "had"        "having"     "do"        
- [51] "does"       "did"        "doing"      "would"      "should"    
- [56] "could"      "ought"      "i'm"        "you're"     "he's"      
- [61] "she's"      "it's"       "we're"      "they're"    "i've"      
- [66] "you've"     "we've"      "they've"    "i'd"        "you'd"     
- [71] "he'd"       "she'd"      "we'd"       "they'd"     "i'll"      
- [76] "you'll"     "he'll"      "she'll"     "we'll"      "they'll"   
- [81] "isn't"      "aren't"     "wasn't"     "weren't"    "hasn't"    
- [86] "haven't"    "hadn't"     "doesn't"    "don't"      "didn't"    
- [91] "won't"      "wouldn't"   "shan't"     "shouldn't"  "can't"     
- [96] "cannot"     "couldn't"   "mustn't"    "let's"      "that's"    
-[101] "who's"      "what's"     "here's"     "there's"    "when's"    
-[106] "where's"    "why's"      "how's"      "a"          "an"        
-[111] "the"        "and"        "but"        "if"         "or"        
-[116] "because"    "as"         "until"      "while"      "of"        
-[121] "at"         "by"         "for"        "with"       "about"     
-[126] "against"    "between"    "into"       "through"    "during"    
-[131] "before"     "after"      "above"      "below"      "to"        
-[136] "from"       "up"         "down"       "in"         "out"       
-[141] "on"         "off"        "over"       "under"      "again"     
-[146] "further"    "then"       "once"       "here"       "there"     
-[151] "when"       "where"      "why"        "how"        "all"       
-[156] "any"        "both"       "each"       "few"        "more"      
-[161] "most"       "other"      "some"       "such"       "no"        
-[166] "nor"        "not"        "only"       "own"        "same"      
-[171] "so"         "than"       "too"        "very"       "will"      </code></pre>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Preprocessing</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>tokens <span class="ot">&lt;-</span> <span class="fu">tokens</span>(data<span class="sc">$</span>Description,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>                 <span class="at">what =</span> <span class="st">"word"</span>, <span class="co">#Tokenisierung, hier zu Wörtern als Analyseeinheit</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>                 <span class="at">remove_punct =</span> <span class="cn">TRUE</span>, <span class="co">#Entfernung von Satzzeichen</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>                 <span class="at">remove_numbers =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> <span class="co">#Entfernung von Zahlen</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Kleinschreibung</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tokens_tolower</span>()</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Text-as-Data Repräsentation als Document-Feature-Matrix</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>dfm <span class="ot">&lt;-</span> tokens <span class="sc">%&gt;%</span> </span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dfm</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>daten_tokens <span class="ot">&lt;-</span> daten_df<span class="sc">$</span>Description <span class="sc">%&gt;%</span> </span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tokens</span>(<span class="at">what =</span> <span class="st">"word"</span>,</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">remove_punct =</span> <span class="cn">TRUE</span>, </span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">remove_numbers =</span> <span class="cn">TRUE</span>, </span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">remove_url =</span> <span class="cn">TRUE</span>, </span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">remove_symbols =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tokens_tolower</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tokens_remove</span>(<span class="fu">stopwords</span>(<span class="st">"english"</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tokens_wordstem</span>()</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co">#dfm</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>daten_dfm <span class="ot">&lt;-</span> daten_tokens <span class="sc">%&gt;%</span> </span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dfm</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dfm_trim</span>( <span class="at">min_docfreq =</span> <span class="fl">0.005</span>, </span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>            <span class="at">max_docfreq =</span> <span class="fl">0.99</span>, </span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>            <span class="at">docfreq_type =</span> <span class="st">"prop"</span>, </span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>            <span class="at">verbose =</span> <span class="cn">TRUE</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<section id="diktionäre" class="level1">
-<h1>7 Diktionäre</h1>
+<p>Jetzt sind wir bereit für die ersten Analysen mit Diktionären!</p>
 <section id="off-the-shelf-diktionäre" class="level2">
-<h2 class="anchored" data-anchor-id="off-the-shelf-diktionäre">7.1 Off-the-shelf Diktionäre</h2>
-<p>Es gibt viele off-the-shelf Diktionäre. Der Einfachkeit halber nutzen wir hier zur Demonstation den <code>data_dictionary_LSD2015</code>aus dem quanteda Packet (Young &amp; Soroka, 2012).</p>
+<h2 class="anchored" data-anchor-id="off-the-shelf-diktionäre">1.1 Off-the-Shelf Diktionäre</h2>
+<p>Es gibt viele off-the-shelf Diktionäre. Der Einfachkeit halber nutzen wir hier zur Demonstation das <code>data_dictionary_LSD2015</code>-Diktionär aus dem <code>quanteda</code>- Paket (Young &amp; Soroka, 2012).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>diktionär <span class="ot">&lt;-</span> data_dictionary_LSD2015</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>diktionär <span class="sc">%&gt;%</span> </span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Wir schauen uns das Diktionär an</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>data_dictionary_LSD2015 <span class="sc">%&gt;%</span> </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Dictionary object with 4 key entries.
 - [negative]:
@@ -272,116 +215,298 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 - [neg_negative]:
   - not a lie, not abandon*, not abas*, not abattoir*, not abdicat*, not aberra*, not abhor*, not abject*, not abnormal*, not abolish*, not abominab*, not abominat*, not abrasiv*, not absent*, not abstrus*, not absurd*, not abus*, not accident*, not accost*, not accursed* [ ... and 2,840 more ]</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>?data_dictionary_LSD2015</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Nun wollen wir den Diktionär auf unsere Daten anwenden. Diese müssen dafür im dfm-Format sein. Mit der Funktion <code>dfm_lookup()</code> aus dem quanteda Packet wird für jeden Text, also in diesem Fall für jede TV Show, geschaut, wie viele Wörter aus den ersten zwei Spalten des Diktionärs vorkommen. Die Funktion <code>dfm_weight(scheme = "prop")</code>setzt die Anzahl der dictionary Wörter ins Verhältnis mit der Länge des Textes.</p>
+<p>Mit der Funktion <code>dfm_lookup()</code> aus dem quanteda Packet wird für jeden Text, also in diesem Fall für jede TV Show, geschaut, wie viele Wörter aus den ersten zwei Spalten des Diktionärs (pos. bzw. negative Wörter) vorkommen.</p>
+<p>Die Funktion <code>dfm_weight(scheme = "prop")</code> setzt die Anzahl der Features, die gematched werden, ins Verhältnis mit der Länge des Textes. Dadurch erhalten längere Texte nicht fälschlicherweise einen “höheren” Match mit Features aus dem Diktionär, nur weil sie generell mehr Wörter enthalten (und damit ggf. “zufällig” ein positives oder negatives Wort enthalten).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>sentiment_tvshows <span class="ot">&lt;-</span>  daten_dfm <span class="sc">%&gt;%</span> </span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dfm_weight</span>(<span class="at">scheme =</span> <span class="st">"prop"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dfm_lookup</span>(<span class="at">dictionary =</span> data_dictionary_LSD2015[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>])</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>sentiment_tvshows <span class="sc">%&gt;%</span> </span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>sentiment_tvshows <span class="ot">&lt;-</span> dfm <span class="sc">%&gt;%</span> </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Suche nach Features aus Diktionär</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Gewichtung relativ zur Anzahl aller Wörter</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dfm_weight</span>(<span class="at">scheme =</span> <span class="st">"prop"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dfm_lookup</span>(<span class="at">dictionary =</span> data_dictionary_LSD2015[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>])</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Ausgabe der Ergebnisse</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>sentiment_tvshows <span class="sc">%&gt;%</span> </span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Document-feature matrix of: 6 documents, 2 features (50.00% sparse) and 0 docvars.
+<pre><code>Document-feature matrix of: 6 documents, 2 features (8.33% sparse) and 0 docvars.
        features
 docs      negative   positive
-  text1 0.28571429 0         
-  text2 0          0         
-  text3 0.06666667 0         
-  text4 0          0.09090909
-  text5 0          0.22222222
-  text6 0.16666667 0.16666667</code></pre>
+  text1 0.09523810 0.04761905
+  text2 0.04000000 0.04000000
+  text3 0.13636364 0.04545455
+  text4 0          0.04545455
+  text5 0.11538462 0.11538462
+  text6 0.02857143 0.05714286</code></pre>
 </div>
 </div>
-<p>Eine erste Auswertung kann dann beispielsweise so aussehen:</p>
+<p>Wir sehen z. B. für die allerste Beobachtung, die Beschreibung von <em>Game of Thrones</em>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#S4 Objekt in einen data frame umwandeln</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>sentiment_tvshows <span class="ot">&lt;-</span> <span class="fu">convert</span>(sentiment_tvshows, <span class="at">to =</span> <span class="st">"data.frame"</span>)</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Anzahl Texte, die mindestens ein negatives Wort haben</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>sentiment_tvshows <span class="sc">%&gt;%</span> </span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(negative <span class="sc">!=</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>Description[<span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>    n
-1 436</code></pre>
+<pre><code>[1] "Nine noble families fight for control over the lands of Westeros, while an ancient enemy returns after being dormant for millennia."</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Negativität in Summe</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>sentiment_tvshows<span class="sc">$</span>negative <span class="sc">%&gt;%</span> </span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 73.11752</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Durschnittlicher negativ-Wert bei negativen Texten</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>(sentiment_tvshows<span class="sc">$</span>negative <span class="sc">%&gt;%</span> </span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum</span>())<span class="sc">/</span>(sentiment_tvshows <span class="sc">%&gt;%</span> </span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(negative <span class="sc">!=</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>Der erste Text enthält <strong>ein</strong> Feature, das mit positivem Sentiment assoziiert wird (“<em>noble</em>”). Bei insgesamt 21 Features im Satz sind das 4.76% positives Sentiment für diese Serienbeschreibung.</li>
+<li>Der erste Text enthält <strong>zwei</strong> Features, die mit negativem Sentiment assoziiert werden (“<em>fight</em>”, “<em>enemy</em>”). Bei insgesamt 21 Features im Satz sind das 9.52% positives Sentiment für diese Serienbeschreibung.</li>
+</ul>
+<p>Welche Analysen könnten wir jetzt vornehmen?</p>
+<p>Wir könnten z. B. Texte als neutral, positiv oder negativ einstufen (je nachdem, ob sie gleich viele oder mehr/weniger positive bzw. negative Feature enthalten).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ergebnis für die weitere Analyse in einen Data Frame umwandeln</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>sentiment_tvshows <span class="ot">&lt;-</span> <span class="fu">convert</span>(sentiment_tvshows, </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">to =</span> <span class="st">"data.frame"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Umwandlung in tibble-Format</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  as_tibble <span class="sc">%&gt;%</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Wir ergänzen zunächst wieder die Serientitel &amp; das "Parental-Rating"</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Title =</span> data<span class="sc">$</span>Title,</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>         <span class="at">Parental.Rating =</span> data<span class="sc">$</span>Parental.Rating) <span class="sc">%&gt;%</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Wir erstellen eine Variable, die Texte als</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># "neutral", "positiv" oder "negativ" identifiziert</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Zunächst gelten alle Texte als "neutral"</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sentiment =</span> <span class="st">"neutral"</span>,</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>         </span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>         <span class="co"># Falls mehr pos. als neg: "positiv"</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>         <span class="at">sentiment =</span> <span class="fu">replace</span>(sentiment,</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>                             positive <span class="sc">&gt;</span> negative,</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"positiv"</span>),</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>         <span class="co"># Falls mehr neg. als pos.: "negativ"</span></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>         <span class="at">sentiment =</span> <span class="fu">replace</span>(sentiment,</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>                             positive <span class="sc">&lt;</span> negative,</span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"negativ"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Sortierung der Variablen</span></span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(Title, Parental.Rating, positive, negative, sentiment)</span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Ausgabe des Ergebnis</span></span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>sentiment_tvshows <span class="sc">%&gt;%</span></span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>          n
-1 0.1677007</code></pre>
+<pre><code># A tibble: 6 × 5
+  Title               Parental.Rating positive negative sentiment
+  &lt;chr&gt;               &lt;chr&gt;              &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;    
+1 1. Game of Thrones  TV-MA             0.0476   0.0952 negativ  
+2 2. Breaking Bad     TV-MA             0.04     0.04   neutral  
+3 3. Stranger Things  TV-14             0.0455   0.136  negativ  
+4 4. Friends          TV-14             0.0455   0      positiv  
+5 5. The Walking Dead TV-MA             0.115    0.115  neutral  
+6 6. Sherlock         TV-14             0.0571   0.0286 positiv  </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Negativster Text</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>sentiment_tvshows <span class="sc">%&gt;%</span> </span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(negative <span class="sc">!=</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(negative)) <span class="sc">%&gt;%</span> </span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>   doc_id  negative  positive
-1 text329 0.6000000 0.1000000
-2 text687 0.5000000 0.0000000
-3 text888 0.5000000 0.2500000
-4 text253 0.4444444 0.2222222
-5 text444 0.4285714 0.1428571
-6 text723 0.4285714 0.0000000</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>daten_df[<span class="dv">329</span>,] <span class="sc">%&gt;%</span> </span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Description) <span class="sc">%&gt;%</span> </span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Dann könnten wir analysieren, wie viele Texte positiv vs.&nbsp;negativ sind:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Anzahl neutral, negativer und positiver Texte?</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>sentiment_tvshows <span class="sc">%&gt;%</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># absolute Anzahl jeder Sentiment-Art (n)</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(sentiment) <span class="sc">%&gt;%</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Ausgabe in Prozent (perc)</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">perc =</span> <span class="fu">prop.table</span>(n)<span class="sc">*</span><span class="dv">100</span>,</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">perc =</span> <span class="fu">round</span>(perc, <span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                                                                                                                                                                                                Description
-329 Ash has spent the last thirty years avoiding responsibility, maturity, and the terrors of the Evil Dead until a Deadite plague threatens to destroy all of mankind and Ash becomes mankind's only hope.</code></pre>
+<pre><code># A tibble: 3 × 3
+  sentiment     n  perc
+  &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt;
+1 negativ     406  45.1
+2 neutral     234  26  
+3 positiv     260  28.9</code></pre>
+</div>
+</div>
+<p>Insgesamt scheinen die beliebtesten Serien also recht düster zu sein. Welche sind denn die negativsten Serien laut unserer Sentiment-Analyse?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Negativste Serien</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>sentiment_tvshows <span class="sc">%&gt;%</span> </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(negative)) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 5
+  Title              Parental.Rating positive negative sentiment
+  &lt;chr&gt;              &lt;chr&gt;              &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;    
+1 480. Leverage      TV-PG             0.0714    0.286 negativ  
+2 824. The Glory     TV-MA             0         0.286 negativ  
+3 115. 24            TV-14             0         0.25  negativ  
+4 205. Revenge       TV-14             0         0.235 negativ  
+5 284. Falling Skies TV-14             0.0588    0.235 negativ  </code></pre>
+</div>
+</div>
+<p>Und welche die positivsten?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Positivste Serien</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>sentiment_tvshows <span class="sc">%&gt;%</span> </span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(positive)) <span class="sc">%&gt;%</span> </span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 5
+  Title                    Parental.Rating positive negative sentiment
+  &lt;chr&gt;                    &lt;chr&gt;              &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;    
+1 262. Dead to Me          TV-MA              0.238   0.0952 positiv  
+2 510. Ghost Whisperer     TV-PG              0.226   0.0323 positiv  
+3 704. The Bugs Bunny Show TV-G               0.222   0      positiv  
+4 531. Ugly Betty          TV-PG              0.211   0.0526 positiv  
+5 532. Coupling            TV-14              0.211   0      positiv  </code></pre>
+</div>
+</div>
+<p>Jetzt können wir noch visualisieren, ob Serien mit “höherem” Parental-Rating auch negativer sind.</p>
+<p>Dafür erstellen wir zunächst eine Variable <code>Rating.Adults</code>, die kennzeichnet, ob Serien als <em>TV-MA</em>, d.h. als ungeeignet für Jugendliche und Kinder bis inkl. 17 Jahren eingestuft wurden, oder nicht bzw. die Serie nicht gerated wurde:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>sentiment_tvshows <span class="ot">&lt;-</span> sentiment_tvshows <span class="sc">%&gt;%</span> </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Erstellen eines "Rating.Adults"-Klassifizierungs-Variable</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Rating.Adults =</span> <span class="dv">0</span>,</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">Rating.Adults =</span> <span class="fu">replace</span>(Rating.Adults,</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>                                 Parental.Rating <span class="sc">==</span> <span class="st">"TV-MA"</span>,</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>                                 <span class="dv">1</span>))</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="co">#Wir schauen uns die Ergebnisse an</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sentiment_tvshows)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 6
+  Title               Parental.Rating positive negative sentiment Rating.Adults
+  &lt;chr&gt;               &lt;chr&gt;              &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;             &lt;dbl&gt;
+1 1. Game of Thrones  TV-MA             0.0476   0.0952 negativ               1
+2 2. Breaking Bad     TV-MA             0.04     0.04   neutral               1
+3 3. Stranger Things  TV-14             0.0455   0.136  negativ               0
+4 4. Friends          TV-14             0.0455   0      positiv               0
+5 5. The Walking Dead TV-MA             0.115    0.115  neutral               1
+6 6. Sherlock         TV-14             0.0571   0.0286 positiv               0</code></pre>
+</div>
+</div>
+<p>Für die Visualisierung nutzen wir hier die <code>ggplot()</code>-Funktion aus dem <code>tidyverse</code>-Paket. Wenn ihr noch nie mit ggplot gearbeitet habt, braucht ihr den nachfolgenden Code nicht im Detail verstehen (s. ein längere Tutorial <a href="https://bookdown.org/valerie_hase/DataDonations-TextasData/tutorial-8-visualizing-results.html">hier</a>).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>plot <span class="ot">&lt;-</span> sentiment_tvshows <span class="sc">%&gt;%</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Wir berechnen die gruppierten Häufigkeiten</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Rating.Adults) <span class="sc">%&gt;%</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># absolute Anzahl jeder Sentiment-Art (n)</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(sentiment) <span class="sc">%&gt;%</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Ausgabe in Prozent (perc)</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">perc =</span> <span class="fu">prop.table</span>(n)<span class="sc">*</span><span class="dv">100</span>,</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>         <span class="at">perc =</span> <span class="fu">round</span>(perc, <span class="dv">2</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Wir heben die Gruppierung auf</span></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualisierung</span></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(plot, <span class="fu">aes</span>(<span class="at">fill =</span> Rating.Adults, <span class="at">y =</span> perc, <span class="at">x =</span> sentiment)) <span class="sc">+</span> </span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Wir kreiern den entsprechenden Graphen</span></span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span><span class="st">"identity"</span>) <span class="sc">+</span></span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Wir fügen Achsenbeschriftungen hinzu</span></span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">"% negatives, neutrales und positives Sentiment"</span>, </span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Sentiment"</span>,</span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Sentiment in TV-Serien"</span>,</span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>       <span class="at">colour =</span> <span class="st">"Sentiment"</span>) <span class="sc">+</span></span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Wir ändern das Background-Design</span></span>
+<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_light</span>() <span class="sc">+</span> </span>
+<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Wir entfernen die Legende, die wenig hilfreich ist</span></span>
+<span id="cb19-32"><a href="#cb19-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="03-diktionäre_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
 <section id="eigene-diktionäre" class="level2">
-<h2 class="anchored" data-anchor-id="eigene-diktionäre">7.2 Eigene Diktionäre</h2>
-<p>Zum Teil kann es sinnvoller sein einen eigenen Diktionär zu nutzen. So eine Wortliste zu erstellen geht sehr einfach:</p>
+<h2 class="anchored" data-anchor-id="eigene-diktionäre">1.2 Eigene Diktionäre</h2>
+<p>Oftmals kann es sinnvoller sein, ein eigenes, sogenanntes “organisches” Diktionär zu entwickeln.</p>
+<p>Dafür erstellen wir zunächst eine eigene Wortliste. Hier wollen wir auf Basis eines organischen Diktionärs Serien identifizieren, die sich mit “<em>Crime</em>” beschäftigen (ähnlich wie in Sitzung 1!).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>diktionär_crime <span class="ot">&lt;-</span> <span class="fu">dictionary</span>(<span class="fu">list</span>(<span class="at">crime =</span> <span class="fu">c</span>(<span class="st">"crime"</span>, <span class="st">"police"</span>, <span class="st">"gun"</span>, <span class="st">"shot"</span>, <span class="st">"dead"</span>, <span class="st">"murder"</span>, <span class="st">"kill"</span>, <span class="st">"court"</span>, <span class="st">"suspect"</span>, <span class="st">"witness"</span>, <span class="st">"arrest"</span>, <span class="st">"officer"</span>, <span class="st">"verdict"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>diktionär_crime <span class="ot">&lt;-</span> <span class="fu">dictionary</span>(<span class="fu">list</span>(<span class="at">crime =</span> <span class="fu">c</span>(<span class="st">"crim*"</span>, <span class="st">"police*"</span>, <span class="st">"gun*"</span>, </span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>                                             <span class="st">"shot*"</span>, <span class="st">"dead*"</span>, <span class="st">"murder*"</span>, </span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>                                             <span class="st">"kill*"</span>, <span class="st">"court*"</span>, <span class="st">"suspect*"</span>, </span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>                                             <span class="st">"witness*"</span>, <span class="st">"arrest*"</span>, <span class="st">"officer*"</span>, </span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>                                             <span class="st">"verdict*"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Die Anwendung und Auswertung bleibt gleich:</p>
+<p>Dann werten wir die Ergebnisse gleichermassen aus:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Diktionär anwenden</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>crime_tvshows <span class="ot">&lt;-</span>  daten_dfm <span class="sc">%&gt;%</span> </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>crime_tvshows <span class="ot">&lt;-</span> dfm <span class="sc">%&gt;%</span> </span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dfm_weight</span>(<span class="at">scheme =</span> <span class="st">"prop"</span>) <span class="sc">%&gt;%</span> </span>
 <span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dfm_lookup</span>(<span class="at">dictionary =</span> diktionär_crime)</span>
 <span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="co">#S4 Objekt in einen data frame umwandeln </span></span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>crime_tvshows <span class="ot">&lt;-</span> <span class="fu">convert</span>(crime_tvshows, <span class="at">to =</span> <span class="st">"data.frame"</span>)</span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="co">#Text, der am meisten dem Genre crime entspricht</span></span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>crime_tvshows <span class="sc">%&gt;%</span> </span>
-<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(crime)) <span class="sc">%&gt;%</span> </span>
-<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Ergebnis für die weitere Analyse in einen Data Frame umwandeln</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>crime_tvshows <span class="ot">&lt;-</span> <span class="fu">convert</span>(crime_tvshows, </span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>                         <span class="at">to =</span> <span class="st">"data.frame"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Umwandlung in tibble-Format</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>  as_tibble <span class="sc">%&gt;%</span></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Wir ergänzen zunächst wieder die Serientitel</span></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Title =</span> data<span class="sc">$</span>Title) <span class="sc">%&gt;%</span></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Wir erstellen eine Variable, die Texte als</span></span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># "crime" oder "non-Crime" identifiziert</span></span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">crime_binary =</span> <span class="st">"crime"</span>,</span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>         <span class="at">crime_binary =</span> <span class="fu">replace</span>(crime_binary,</span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>                         crime <span class="sc">==</span> <span class="dv">0</span>,</span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"non-crime"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Sortierung der Variablen</span></span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(Title, crime, crime_binary)</span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a><span class="co">#Ausgabe der Ergebnisse</span></span>
+<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(crime_tvshows)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>   doc_id     crime
-1 text723 0.2857143
-2 text259 0.2500000
-3 text314 0.2500000
-4 text352 0.2500000
-5 text494 0.2222222
-6 text656 0.2222222</code></pre>
+<pre><code># A tibble: 6 × 3
+  Title               crime crime_binary
+  &lt;chr&gt;               &lt;dbl&gt; &lt;chr&gt;       
+1 1. Game of Thrones      0 non-crime   
+2 2. Breaking Bad         0 non-crime   
+3 3. Stranger Things      0 non-crime   
+4 4. Friends              0 non-crime   
+5 5. The Walking Dead     0 non-crime   
+6 6. Sherlock             0 non-crime   </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="do">## FRAGE: wenn ich es in RStudio ausführe, dann hat text314 mit einem Wert von 0.333 am meisten crime Wörter. Bei der html Seite ist text314 aber nur auf Platz 3 und hat dort einen Wert von 0.250...</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>daten_df[<span class="dv">314</span>,] <span class="sc">%&gt;%</span> </span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Description) <span class="sc">%&gt;%</span> </span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Dann könnten wir analysieren, wie viele Serien Krimi-Serien sind (oder eben nicht):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Ausgabe der Crime vs. Non-Crime Serien</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>crime_tvshows <span class="sc">%&gt;%</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># absolute Anzahl jeder Sentiment-Art (n)</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(crime_binary) <span class="sc">%&gt;%</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Ausgabe in Prozent (perc)</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">perc =</span> <span class="fu">prop.table</span>(n)<span class="sc">*</span><span class="dv">100</span>,</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">perc =</span> <span class="fu">round</span>(perc, <span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                                                                                                                                               Description
-314 An L.A.P.D. homicide detective works to solve the murder of a 13-year-old boy while standing trial in federal court for the murder of a serial killer.</code></pre>
+<pre><code># A tibble: 2 × 3
+  crime_binary     n  perc
+  &lt;chr&gt;        &lt;int&gt; &lt;dbl&gt;
+1 crime          170  18.9
+2 non-crime      730  81.1</code></pre>
+</div>
+</div>
+<p>Und welche Serie wird am “klarsten” als Krimi eingestuft?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>crime_tvshows <span class="sc">%&gt;%</span> </span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(crime)) <span class="sc">%&gt;%</span> </span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 3
+  Title                                    crime crime_binary
+  &lt;chr&gt;                                    &lt;dbl&gt; &lt;chr&gt;       
+1 742. Behzat Ç: An Ankara Detective Story 0.267 crime       
+2 815. Southland                           0.25  crime       
+3 264. American Crime Story                0.182 crime       
+4 162. Bodyguard                           0.176 crime       
+5 314. Bosch                               0.154 crime       </code></pre>
 </div>
 </div>
 

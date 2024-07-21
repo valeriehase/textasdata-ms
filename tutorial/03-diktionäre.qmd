@@ -1,138 +1,254 @@
 ---
-title: "Sitzung 3: Diktionäre"
+title: "Sitzung 2: Co-Occurrence Analysen"
 author: "Valerie Hase & Luisa Kutlar"
-date: "05.04.2024"
 format:
   html:
     toc: true
     html-math-method: katex
     css: styles.css
 ---
-#Packages laden und Objekte erstellen
+
+# 1. Pakete laden und Daten einlesen
+
+Zunächst installieren alle Pakete, die wir für diese Sitzung brauchten (z.B. `tidyverse`). Ihr braucht `install.packages()` nur, wenn ihr die Pakete im Methodencafe noch nicht installiert hattet.
+
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+#install.packages("tidyverse)
 #install.packages("RCurl")
 #install.packages("quanteda")
-#install.packages("tidyverse)
-#install.packages("dplyr")
-#install.packages("quanteda.textplots")
-#install.packages("quanteda.textstats")
-#install.packages("udpipe")
 
+library("tidyverse")
 library("RCurl")
 library("quanteda")
-library("tidyverse")
-library("dplyr")
-library("quanteda.textplots")
-library("quanteda.textstats")
-library("udpipe")
-
-
 ```
+Nun lesen wir die Daten wieder ein und führen die bereits erlernten Preprocessing-Schritte, inkl. der Transformation in eine Document-Feature-Matrix, aus.
 
+Wir lassen einige Preprocessing-Schritte (u.a. die Entfernung von Stoppwörtern, Stemming, Relative Pruning) diesmal weg, u. a. weil das von uns genutzte Diktionär bereits gestemmte Features enthält und weil wir z. B. seltene negative/positive Wörter hier nicht entfernen wollen:
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
-#Daten laden
-url <-  getURL("https://raw.githubusercontent.com/valeriehase/Salamanca-CSS-SummerSchool/main/Processing%20text%20and%20text%20as%20data/data_tvseries.csv")
-daten_df <-  read.csv2(text = url)
+# Daten laden
+url <-  getURL("https://raw.githubusercontent.com/valeriehase/textasdata-ms/main/data/data_tvseries.csv")
+data <- read.csv2(text = url)
 
-#Tokens
-stopwords("english")
-daten_tokens <- daten_df$Description %>% 
-  tokens(what = "word",
-         remove_punct = TRUE, 
-         remove_numbers = TRUE, 
-         remove_url = TRUE, 
-         remove_symbols = TRUE) %>% 
-  tokens_tolower() %>% 
-  tokens_remove(stopwords("english")) %>% 
-  tokens_wordstem()
+# Preprocessing
+tokens <- tokens(data$Description,
+                 what = "word", #Tokenisierung, hier zu Wörtern als Analyseeinheit
+                 remove_punct = TRUE, #Entfernung von Satzzeichen
+                 remove_numbers = TRUE) %>% #Entfernung von Zahlen
+  
+  # Kleinschreibung
+  tokens_tolower()
 
-#dfm
-daten_dfm <- daten_tokens %>% 
-  dfm() %>% 
-  dfm_trim( min_docfreq = 0.005, 
-            max_docfreq = 0.99, 
-            docfreq_type = "prop", 
-            verbose = TRUE) 
+# Text-as-Data Repräsentation als Document-Feature-Matrix
+dfm <- tokens %>% 
+  dfm() 
 ```
+Jetzt sind wir bereit für die ersten Analysen mit Diktionären!
 
-# 7 Diktionäre
-## 7.1 Off-the-shelf Diktionäre
-Es gibt viele off-the-shelf Diktionäre. Der Einfachkeit halber nutzen wir hier zur Demonstation den `data_dictionary_LSD2015`aus dem quanteda Packet (Young & Soroka, 2012).
+## 1.1 Off-the-Shelf Diktionäre
+Es gibt viele off-the-shelf Diktionäre. Der Einfachkeit halber nutzen wir hier zur Demonstation das `data_dictionary_LSD2015`-Diktionär aus dem `quanteda`- Paket (Young & Soroka, 2012).
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
-diktionär <- data_dictionary_LSD2015
-
-diktionär %>% 
+# Wir schauen uns das Diktionär an
+data_dictionary_LSD2015 %>% 
   head()
-
-?data_dictionary_LSD2015
 ```
+Mit der Funktion `dfm_lookup()` aus dem quanteda Packet wird für jeden Text, also in diesem Fall für jede TV Show, geschaut, wie viele Wörter aus den ersten zwei Spalten des Diktionärs (pos. bzw. negative Wörter) vorkommen. 
 
-Nun wollen wir den Diktionär auf unsere Daten anwenden. Diese müssen dafür im dfm-Format sein. Mit der Funktion `dfm_lookup()` aus dem quanteda Packet wird für jeden Text, also in diesem Fall für jede TV Show, geschaut, wie viele Wörter aus den ersten zwei Spalten des Diktionärs vorkommen. Die Funktion `dfm_weight(scheme = "prop")`setzt die Anzahl der dictionary Wörter ins Verhältnis mit der Länge des Textes.  
+Die Funktion `dfm_weight(scheme = "prop")` setzt die Anzahl der Features, die gematched werden, ins Verhältnis mit der Länge des Textes. Dadurch erhalten längere Texte nicht fälschlicherweise einen "höheren" Match mit Features aus dem Diktionär, nur weil sie generell mehr Wörter enthalten (und damit ggf. "zufällig" ein positives oder negatives Wort enthalten).
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
-sentiment_tvshows <-  daten_dfm %>% 
+sentiment_tvshows <- dfm %>% 
+  
+  # Suche nach Features aus Diktionär
+  # Gewichtung relativ zur Anzahl aller Wörter
   dfm_weight(scheme = "prop") %>% 
   dfm_lookup(dictionary = data_dictionary_LSD2015[1:2])
 
+# Ausgabe der Ergebnisse
 sentiment_tvshows %>% 
   head()
 ```
+Wir sehen z. B. für die allerste Beobachtung, die Beschreibung von *Game of Thrones*:
 
-Eine erste Auswertung kann dann beispielsweise so aussehen:
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
-#S4 Objekt in einen data frame umwandeln
-sentiment_tvshows <- convert(sentiment_tvshows, to = "data.frame")
+data$Description[1]
+```
 
-#Anzahl Texte, die mindestens ein negatives Wort haben
+- Der erste Text enthält **ein** Feature, das mit positivem Sentiment assoziiert wird ("*noble*"). Bei insgesamt 21 Features im Satz sind das 4.76% positives Sentiment für diese Serienbeschreibung.
+- Der erste Text enthält **zwei** Features, die mit negativem Sentiment assoziiert werden ("*fight*", "*enemy*"). Bei insgesamt 21 Features im Satz sind das 9.52% positives Sentiment für diese Serienbeschreibung.
+
+Welche Analysen könnten wir jetzt vornehmen?
+
+Wir könnten z. B. Texte als neutral, positiv oder negativ einstufen (je nachdem, ob sie gleich viele oder mehr/weniger positive bzw. negative Feature enthalten).
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+# Ergebnis für die weitere Analyse in einen Data Frame umwandeln
+sentiment_tvshows <- convert(sentiment_tvshows, 
+                                      to = "data.frame") %>%
+  
+  # Umwandlung in tibble-Format
+  as_tibble %>%
+  
+  # Wir ergänzen zunächst wieder die Serientitel & das "Parental-Rating"
+  mutate(Title = data$Title,
+         Parental.Rating = data$Parental.Rating) %>%
+  
+  # Wir erstellen eine Variable, die Texte als
+  # "neutral", "positiv" oder "negativ" identifiziert
+  
+  # Zunächst gelten alle Texte als "neutral"
+  mutate(sentiment = "neutral",
+         
+         # Falls mehr pos. als neg: "positiv"
+         sentiment = replace(sentiment,
+                             positive > negative,
+                             "positiv"),
+
+         # Falls mehr neg. als pos.: "negativ"
+         sentiment = replace(sentiment,
+                             positive < negative,
+                             "negativ")) %>%
+
+# Sortierung der Variablen
+select(Title, Parental.Rating, positive, negative, sentiment)
+
+# Ausgabe des Ergebnis
+sentiment_tvshows %>%
+  head()
+```
+Dann könnten wir analysieren, wie viele Texte positiv vs. negativ sind:
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+# Anzahl neutral, negativer und positiver Texte?
+sentiment_tvshows %>%
+  
+  # absolute Anzahl jeder Sentiment-Art (n)
+  count(sentiment) %>%
+  
+  # Ausgabe in Prozent (perc)
+  mutate(perc = prop.table(n)*100,
+         perc = round(perc, 2))
+
+```
+Insgesamt scheinen die beliebtesten Serien also recht düster zu sein. Welche sind denn die negativsten Serien laut unserer Sentiment-Analyse?
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+# Negativste Serien
 sentiment_tvshows %>% 
-  filter(negative != 0) %>% 
-  count()
-
-#Negativität in Summe
-sentiment_tvshows$negative %>% 
-  sum()
-
-#Durschnittlicher negativ-Wert bei negativen Texten
-(sentiment_tvshows$negative %>% 
-  sum())/(sentiment_tvshows %>% 
-  filter(negative != 0) %>% 
-  count())
-
-#Negativster Text
-sentiment_tvshows %>% 
-  filter(negative != 0) %>% 
   arrange(desc(negative)) %>% 
-  head()
-
-daten_df[329,] %>% 
-  select(Description) %>% 
-  print()
+  slice(1:5)
 ```
-
-## 7.2 Eigene Diktionäre 
-Zum Teil kann es sinnvoller sein einen eigenen Diktionär zu nutzen. So eine Wortliste zu erstellen geht sehr einfach:
+Und welche die positivsten?
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
-diktionär_crime <- dictionary(list(crime = c("crime", "police", "gun", "shot", "dead", "murder", "kill", "court", "suspect", "witness", "arrest", "officer", "verdict")))
+# Positivste Serien
+sentiment_tvshows %>% 
+  arrange(desc(positive)) %>% 
+  slice(1:5)
+```
+Jetzt können wir noch visualisieren, ob Serien mit "höherem" Parental-Rating auch negativer sind.
+
+Dafür erstellen wir zunächst eine Variable `Rating.Adults`, die kennzeichnet, ob Serien als *TV-MA*, d.h. als ungeeignet für Jugendliche und Kinder bis inkl. 17 Jahren eingestuft wurden, oder nicht bzw. die Serie nicht gerated wurde:
+
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+sentiment_tvshows <- sentiment_tvshows %>% 
+  
+  #Erstellen eines "Rating.Adults"-Klassifizierungs-Variable
+  mutate(Rating.Adults = 0,
+         Rating.Adults = replace(Rating.Adults,
+                                 Parental.Rating == "TV-MA",
+                                 1))
+
+#Wir schauen uns die Ergebnisse an
+head(sentiment_tvshows)
+```
+Für die Visualisierung nutzen wir hier die `ggplot()`-Funktion aus dem `tidyverse`-Paket. Wenn ihr noch nie mit ggplot gearbeitet habt, braucht ihr den nachfolgenden Code nicht im Detail verstehen (s. ein längere Tutorial [hier](https://bookdown.org/valerie_hase/DataDonations-TextasData/tutorial-8-visualizing-results.html)).
+
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+plot <- sentiment_tvshows %>%
+  
+  # Wir berechnen die gruppierten Häufigkeiten
+  group_by(Rating.Adults) %>%
+  
+  # absolute Anzahl jeder Sentiment-Art (n)
+  count(sentiment) %>%
+  
+  # Ausgabe in Prozent (perc)
+  mutate(perc = prop.table(n)*100,
+         perc = round(perc, 2)) %>%
+  
+  # Wir heben die Gruppierung auf
+  ungroup()
+
+# Visualisierung
+ggplot(plot, aes(fill = Rating.Adults, y = perc, x = sentiment)) + 
+  
+  # Wir kreiern den entsprechenden Graphen
+  geom_bar(stat ="identity") +
+  
+  # Wir fügen Achsenbeschriftungen hinzu
+  labs(y = "% negatives, neutrales und positives Sentiment", 
+       x = "Sentiment",
+       title = "Sentiment in TV-Serien",
+       colour = "Sentiment") +
+ 
+  # Wir ändern das Background-Design
+  theme_light() + 
+  
+  # Wir entfernen die Legende, die wenig hilfreich ist
+  theme(legend.position = "none")
+```
+## 1.2 Eigene Diktionäre 
+Oftmals kann es sinnvoller sein, ein eigenes, sogenanntes "organisches" Diktionär zu entwickeln. 
+
+Dafür erstellen wir zunächst eine eigene Wortliste. Hier wollen wir auf Basis eines organischen Diktionärs Serien identifizieren, die sich mit "*Crime*" beschäftigen (ähnlich wie in Sitzung 1!).
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+diktionär_crime <- dictionary(list(crime = c("crim*", "police*", "gun*", 
+                                             "shot*", "dead*", "murder*", 
+                                             "kill*", "court*", "suspect*", 
+                                             "witness*", "arrest*", "officer*", 
+                                             "verdict*")))
 ```
 
-Die Anwendung und Auswertung bleibt gleich:
+Dann werten wir die Ergebnisse gleichermassen aus:
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 #Diktionär anwenden
-crime_tvshows <-  daten_dfm %>% 
+crime_tvshows <- dfm %>% 
   dfm_weight(scheme = "prop") %>% 
   dfm_lookup(dictionary = diktionär_crime)
 
-#S4 Objekt in einen data frame umwandeln 
-crime_tvshows <- convert(crime_tvshows, to = "data.frame")
+# Ergebnis für die weitere Analyse in einen Data Frame umwandeln
+crime_tvshows <- convert(crime_tvshows, 
+                         to = "data.frame") %>%
+  
+  # Umwandlung in tibble-Format
+  as_tibble %>%
+  
+  # Wir ergänzen zunächst wieder die Serientitel
+  mutate(Title = data$Title) %>%
+  
+  # Wir erstellen eine Variable, die Texte als
+  # "crime" oder "non-Crime" identifiziert
+  mutate(crime_binary = "crime",
+         crime_binary = replace(crime_binary,
+                         crime == 0,
+                         "non-crime")) %>%
 
-#Text, der am meisten dem Genre crime entspricht
+# Sortierung der Variablen
+select(Title, crime, crime_binary)
+
+#Ausgabe der Ergebnisse
+head(crime_tvshows)
+```
+Dann könnten wir analysieren, wie viele Serien Krimi-Serien sind (oder eben nicht):
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+#Ausgabe der Crime vs. Non-Crime Serien
+crime_tvshows %>%
+  
+  # absolute Anzahl jeder Sentiment-Art (n)
+  count(crime_binary) %>%
+  
+  # Ausgabe in Prozent (perc)
+  mutate(perc = prop.table(n)*100,
+         perc = round(perc, 2))
+```
+Und welche Serie wird am "klarsten" als Krimi eingestuft?
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 crime_tvshows %>% 
   arrange(desc(crime)) %>% 
-  head()
-
-## FRAGE: wenn ich es in RStudio ausführe, dann hat text314 mit einem Wert von 0.333 am meisten crime Wörter. Bei der html Seite ist text314 aber nur auf Platz 3 und hat dort einen Wert von 0.250...
-
-daten_df[314,] %>% 
-  select(Description) %>% 
-  print()
-
+  slice(1:5)
 ```
