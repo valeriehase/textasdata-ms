@@ -358,7 +358,7 @@ Die folgende Übung fasst alles zusammen, was wir bisher gelernt haben: Preproce
 
 Bitte arbeitet für die Übung mit dem Horoskop-Datensatz (Download der CSV-Datei entweder via der Webseite oder Einlesen via [dieser](https://raw.githubusercontent.com/valeriehase/textasdata-ms/main/data/data_horoscope.csv) URL)
 
-## Aufgabe 1.1
+## Aufgabe 1.1 (Basis)
 Lest den Datensatz ein und verschafft euch einen Überblick über die Daten. Welche Variablen sind dort vorhanden?
 ```{r echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 #Daten einlesen
@@ -369,7 +369,7 @@ horoscope_df <- read.csv2(text = url)
 #str(horoscope_df)
 ```
 
-## Aufgabe 1.2
+## Aufgabe 1.2 (Basis)
 Bereitet den Datensatz durch Preprocessing und das Umwandeln in eine DFM für die Analyse vor. Hinterfragt kritisch, welche Bereinigung- und Normalisierungsschritte ihr tatsächlich braucht.
 ```{r echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 
@@ -382,11 +382,8 @@ horoscope_tokens <- horoscope_df$Horoscope %>%
   tokens_tolower() %>% 
   tokens_remove(stopwords("english")) %>% 
   tokens_wordstem()
-
-# Wie sehen die Features aus?
-# horoscope_tokens[1]
 ```
-```{r echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+```{r echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 # Umwandlung in eine DFM
 horoscope_dfm <- horoscope_tokens %>% 
   dfm() %>% 
@@ -397,45 +394,47 @@ horoscope_dfm <- horoscope_tokens %>%
 
 # head(horoscope_dfm)
 ```
-## Aufgabe 1.3
+## Aufgabe 1.3 (Fortgeschritten)
 Schaut euch als erste Analyse an, welcher Ausdrück häufiger vorkommt: "**secret fear**" oder "**in love**"?
-```{r echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+```{r echo = FALSE, eval = FALSE, message = FALSE, warning = FALSE, error = FALSE}
 # Lösung mit regulären Ausdrücken
-# horoscope_df %>%
-#  
-#  # Auszählen
-#  summarize("Häufigkeit: in love" = sum(grepl("in love", tolower(Horoscope))),
-#            "Häufigkeit: secret secret" = sum(grepl("secret fear",  tolower(Horoscope))))
+ horoscope_df %>%
+  
+  # Auszählen
+  summarize("Häufigkeit: in love" = sum(grepl("in love", tolower(Horoscope))),
+            "Häufigkeit: secret secret" = sum(grepl("secret fear",  tolower(Horoscope))))
 ```
-## Aufgabe 1.4
+## Aufgabe 1.4 (Fortgeschritten)
 Jetzt wollen wir wissen, bei welchem Sternzeichen es am mysteriösesten wird: Bei welchem Sternzeichen fällt am häufigsten das Stichwort "**secret**"?
-```{r echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+
+```{r echo = FALSE, eval = FALSE, message = FALSE, warning = FALSE, error = FALSE}
 #Version 1: Mit regulären Ausdrücken
-#horoscope_df %>%
-#  
-#  #Gruppierung nach Sternzeichen
-#  group_by(Signs) %>%
-#  
-#  #Auszählen
-#  summarize(Geheimnis = sum(grepl("secret", Horoscope))) %>%
-#  
-#  #Absteigend sortieren
-#  arrange(desc(Geheimnis))
+horoscope_df %>%
+  
+  #Gruppierung nach Sternzeichen
+  group_by(Signs) %>%
+  
+  #Auszählen
+  summarize(Geheimnis = sum(grepl("secret", Horoscope))) %>%
+  
+  #Absteigend sortieren
+  arrange(desc(Geheimnis))
 ```
-```{r echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+
+```{r echo = FALSE, eval = FALSE, message = FALSE, warning = FALSE, error = FALSE}
 #Version 2: Mit Quanteda
 
 #Wir analysieren die Häufigkeit des Features gruppiert nach Sternzeichen
-#textstat_frequency(horoscope_dfm, groups = horoscope_df$Signs) %>%
-#  
-#  #Wir filtern nur für das Feature "secret"
-#  filter(feature == "secret") %>%
-#  
-#  #Absteigend sortieren
-#  arrange(desc(docfreq))
+textstat_frequency(horoscope_dfm, groups = horoscope_df$Signs) %>%
+  
+  #Wir filtern nur für das Feature "secret"
+  filter(feature == "secret") %>%
+  
+  #Absteigend sortieren
+  arrange(desc(docfreq))
 ```
 
-## Aufgabe 1.5
+## Aufgabe 1.5 (Expert:in)
 Visualisiert auf Basis eines semantischen Netzwerk, mit welchen Adjektiven die Sternzeichen "**Aquarius**" (Wassermann) vs. "**Gemini**" (Zwilling) häufig in den Horoskopen assoziiert werden.
 
 Das Netzwerk könnte etwa so aussehen:

@@ -18,7 +18,7 @@
     "href": "index.html#materialien",
     "title": "Automatisierte Inhaltsanalyse",
     "section": "Materialien",
-    "text": "Materialien\n\nDaten\n\nDatensatz 1: IMDb Top-Rated TV Series Dataset. Verfügbar unter MIT Lizenz via Kaggle.\n\n\n\n Hier geht es zum Download des TV-Datasets\n\n\n\nDatensatz 2: Dataset of Indian Newspaper Horoscopes. Verfügbar unter CC BY-NC-SA 4.0 Lizenz via Kaggle, Autor: Aman Bhargava. Edited by reducing the data set to the first 1,000 observations only.\n\n\n\n Hier geht es zum Download des Horoskop-Datasets\n\n\n\n\nFolien & R-Code\nSitzung 1️⃣: Einführung in die automatisierte Inhaltsanalyse & Preprocessing\n\n Folien\n Tutorial\n R-Code\n\n\nSitzung 2️⃣: Co-Occurrence-Analysen\n\n Folien\n Tutorial\n R-Code\n\n\nSitzung 3️⃣: Diktionäre\n\nFolien\nTutorial\n\nSitzung 4️⃣: Topic Modeling\n\nFolien\nTutorial\n\nSitzung 5️⃣: Qualitätskriterien\n\nFolien\nTutorial\n\nSitzung 6️⃣: Ausblick\n\nFolien\nTutorial"
+    "text": "Materialien\n\nDaten\n\nDatensatz 1: IMDb Top-Rated TV Series Dataset. Verfügbar unter MIT Lizenz via Kaggle.\n\n\n\n Hier geht es zum Download des TV-Datasets\n\n\n\nDatensatz 2: Dataset of Indian Newspaper Horoscopes. Verfügbar unter CC BY-NC-SA 4.0 Lizenz via Kaggle, Autor: Aman Bhargava. Edited by reducing the data set to the first 1,000 observations only.\n\n\n\n Hier geht es zum Download des Horoskop-Datasets\n\n\n\n\nFolien & R-Code\nSitzung 1️⃣: Einführung in die automatisierte Inhaltsanalyse & Preprocessing\n\n Folien\n Tutorial\n R-Code\n\n\nSitzung 2️⃣: Co-Occurrence-Analysen\n\n Folien\n Tutorial\n R-Code\n\n\nSitzung 3️⃣: Diktionäre\n\n Folien\n Tutorial\n R-Code\n\n\nSitzung 4️⃣: Topic Modeling\n\n Folien\n Tutorial\n R-Code\n\n\nSitzung 5️⃣: Qualitätskriterien\n\n Folien\n Tutorial\n R-Code\n\n\nSitzung 6️⃣: Ausblick\n\n Folien"
   },
   {
     "objectID": "index.html#weiterführende-tutorials",
@@ -831,5 +831,40 @@
     "title": "Sitzung 2: Co-Occurrence Analysen",
     "section": "2.4 Semantische Netzwerke",
     "text": "2.4 Semantische Netzwerke\nAls stärker quantifizierende Analyse bietet sich die Visualisierung von Co-Occurrenzen mittels semantischer Netzwerke an. Diese visualisieren, welche Features häufig in einem gemeinsamen Kontext (z.B. in direkter Abfolge, innerhalb eines Textes) vorkommen.\nHierfür müssen wir zunächst die DFM in eine Feature-Co-Occurrence Matrix (FCM) umwandeln. Das machen wir mit der Funktion fcm() aus dem quanteda-Paket.\nUns interessiert zunächst, wie häufig Features innerhalb eines Textes vorkommen, weshalb wir das context-Argument nutzen und auf document setzen.\n\ntokens %&gt;%\n  \n  # Umwandlung in eine Feature-Co-Occurrence-Matrix\n  fcm(context = \"document\") %&gt;%\n  \n  # Ausgabe der ersten Zeilen\n  head()\n\nFeature co-occurrence matrix of: 6 by 4,246 features.\n         features\nfeatures  nine nobl famili fight control land westero ancient enemi return\n  nine       0    1      1     1       1    1       1       1     1      1\n  nobl       0    0      1     1       1    1       1       1     1      1\n  famili     0    0      8     6       2    3       1       1     4      6\n  fight      0    0      0     1       2    2       1       2     2      2\n  control    0    0      0     0       0    1       1       1     1      1\n  land       0    0      0     0       0    0       1       1     1      1\n[ reached max_nfeat ... 4,236 more features ]\n\n\nWir sehen:\n\nDie FCM besteht aus 4,246 Features (da wir nur wenig Preprocessing genutzt haben, sind dies noch recht viele Features).\nDie Zellen der FCM illustrieren, wie häufig welche Wörter in der Beschreibung einer Serie mittels Description gemeinsam vorkommen.\n\nWir können jetzt spezifische Features auswählen, die uns interessieren. Das machen wir mit der Funktion fcm_select() aus dem quanteda-Paket.\nZudem könnten wir über das window-Argument noch spezifizieren, dass uns die Co-Occurrence von Features nur innerhalb eines Windows von z. B. acht Features interessiert. Ein Argument hierfür wäre, dass Feature, die nah aufeinander folgen, auch stärker eine inhaltlich geteilte Bedeutung haben als solche, die “nur” gleichzeitig in einem Dokument vorkommen. Zudem setzen wir das selection-Argument auf keep, um die FCM nur auf die angegebenen Features zu reduzieren.\nBeispielsweise wollen wir uns anschauen, ob Männer (man) und Frauen (woman) in Serienbeschreibungen stereotypisiert, z. B. im Hinblick auf Geschlechterrollen, dargestellt werden.\nDafür schauen wir, welche Wörter (z.B. fight vs. romance) häufiger in Verbindung mit Männern bzw. Frauen genannt werden\n\nfcm &lt;- tokens %&gt;%\n  \n  # Erstellung einer FCM mit einem Window von 8\n  fcm(window = 8) %&gt;%\n  \n  # Reduktion auf ausgewähler Features\n  fcm_select(pattern = c(\"fight\", \"man\", \n                         \"love\", \"young\", \"woman\"), \n             selection = \"keep\")\n\nWir visualisieren die Ergebnisse als semantisches Netzwerk mit der textplot_network()Funktion aus dem quanteda.textplots()-Paket.\nWenn Features im selben Kontext (hier 8 Wörter) vorkommen, werden sie mit einer Linie verbunden. Umso dicker die Linie, desto öfter kommen Features gemeinsam vor.\nDabei können wir sehen, dass Männer wie Frauen häufig als “jung” beschrieben werden - Männer aber häufiger mit “Kämpfen” und Frauen mit “Liebe” assoziiert werden:\n\n# Plot des semantischen Netzwerks\ntextplot_network(fcm)"
+  },
+  {
+    "objectID": "tutorial/02-cooccurrence.html#aufgabe-1.1-basis",
+    "href": "tutorial/02-cooccurrence.html#aufgabe-1.1-basis",
+    "title": "Sitzung 2: Co-Occurrence Analysen",
+    "section": "Aufgabe 1.1 (Basis)",
+    "text": "Aufgabe 1.1 (Basis)\nLest den Datensatz ein und verschafft euch einen Überblick über die Daten. Welche Variablen sind dort vorhanden?"
+  },
+  {
+    "objectID": "tutorial/02-cooccurrence.html#aufgabe-1.2-basis",
+    "href": "tutorial/02-cooccurrence.html#aufgabe-1.2-basis",
+    "title": "Sitzung 2: Co-Occurrence Analysen",
+    "section": "Aufgabe 1.2 (Basis)",
+    "text": "Aufgabe 1.2 (Basis)\nBereitet den Datensatz durch Preprocessing und das Umwandeln in eine DFM für die Analyse vor. Hinterfragt kritisch, welche Bereinigung- und Normalisierungsschritte ihr tatsächlich braucht.\n\n# Umwandlung in eine DFM\nhoroscope_dfm &lt;- horoscope_tokens %&gt;% \n  dfm() %&gt;% \n  dfm_trim( min_docfreq = 0.005, \n            max_docfreq = 0.99, \n            docfreq_type = \"prop\", \n            verbose = TRUE) \n\n# head(horoscope_dfm)"
+  },
+  {
+    "objectID": "tutorial/02-cooccurrence.html#aufgabe-1.3-fortgeschritten",
+    "href": "tutorial/02-cooccurrence.html#aufgabe-1.3-fortgeschritten",
+    "title": "Sitzung 2: Co-Occurrence Analysen",
+    "section": "Aufgabe 1.3 (Fortgeschritten)",
+    "text": "Aufgabe 1.3 (Fortgeschritten)\nSchaut euch als erste Analyse an, welcher Ausdrück häufiger vorkommt: “secret fear” oder “in love”?"
+  },
+  {
+    "objectID": "tutorial/02-cooccurrence.html#aufgabe-1.4-fortgeschritten",
+    "href": "tutorial/02-cooccurrence.html#aufgabe-1.4-fortgeschritten",
+    "title": "Sitzung 2: Co-Occurrence Analysen",
+    "section": "Aufgabe 1.4 (Fortgeschritten)",
+    "text": "Aufgabe 1.4 (Fortgeschritten)\nJetzt wollen wir wissen, bei welchem Sternzeichen es am mysteriösesten wird: Bei welchem Sternzeichen fällt am häufigsten das Stichwort “secret”?"
+  },
+  {
+    "objectID": "tutorial/02-cooccurrence.html#aufgabe-1.5-expertin",
+    "href": "tutorial/02-cooccurrence.html#aufgabe-1.5-expertin",
+    "title": "Sitzung 2: Co-Occurrence Analysen",
+    "section": "Aufgabe 1.5 (Expert:in)",
+    "text": "Aufgabe 1.5 (Expert:in)\nVisualisiert auf Basis eines semantischen Netzwerk, mit welchen Adjektiven die Sternzeichen “Aquarius” (Wassermann) vs. “Gemini” (Zwilling) häufig in den Horoskopen assoziiert werden.\nDas Netzwerk könnte etwa so aussehen:"
   }
 ]

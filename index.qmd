@@ -101,23 +101,45 @@ Sitzung 2️⃣: *Co-Occurrence-Analysen*
 ```
 Sitzung 3️⃣: *Diktionäre*
 
--   Folien
--   Tutorial
+```{=html}
+<ul>
+<li><a href="slides/Sitzung3.pdf"> Folien</a></li>
+<li><a href="tutorial/03-diktionaer.html"> Tutorial</a></li>
+<li><a href="code/03-diktionaer.R" download="03-diktionaer.R"> R-Code</a></li>
+</ul>
+<p></p>
+```
 
 Sitzung 4️⃣: *Topic Modeling*
 
--   Folien
--   Tutorial
+```{=html}
+<ul>
+<li><a href="slides/Sitzung4.pdf"> Folien</a></li>
+<li><a href="tutorial/04-topic-modeling.html"> Tutorial</a></li>
+<li><a href="code/04-topic-modeling.R" download="04-topic-modeling.R"> R-Code</a></li>
+</ul>
+<p></p>
+```
 
 Sitzung 5️⃣: *Qualitätskriterien*
 
--   Folien
--   Tutorial
+```{=html}
+<ul>
+<li><a href="slides/Sitzung5.pdf"> Folien</a></li>
+<li><a href="tutorial/05-qualitaet.html"> Tutorial</a></li>
+<li><a href="code/05-qualitaet.R" download="05-qualitaet.R"> R-Code</a></li>
+</ul>
+<p></p>
+```
 
 Sitzung 6️⃣: *Ausblick*
 
--   Folien
--   Tutorial
+```{=html}
+<ul>
+<li><a href="slides/Sitzung6.pdf"> Folien</a></li>
+</ul>
+<p></p>
+```
 
 ## Weiterführende Tutorials
 
