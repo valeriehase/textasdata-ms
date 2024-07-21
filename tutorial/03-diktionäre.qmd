@@ -272,7 +272,6 @@ crime_tvshows %>%
 Die folgende Übung testet eure Kenntnisse im Hinblick auf Diktionäre!
 
 ## Aufgabe 1.1 (Basis)
-
 Könnt ihr analysieren, wie viel Prozent der Serien Science-Fiction Serien sind?
 ```{r echo = FALSE, eval = FALSE, message = FALSE, warning = FALSE, error = FALSE}
 #Diktionär erstellen
@@ -319,7 +318,7 @@ scifi_tvshows %>%
 
 ```
 ## Aufgabe 1.2 (Fortgeschritten)
-Könnt ihr analysieren,welche fünf Science-Fiction Serien die (nach Publikums-Votum laut `Number.of.Votes`) beliebtesten Serien sind?
+Könnt ihr analysieren, welche fünf Science-Fiction Serien die (nach Publikums-Votum laut `Number.of.Votes`) beliebtesten Serien sind?
 ```{r echo = FALSE, eval = FALSE, message = FALSE, warning = FALSE, error = FALSE}
 #Diktionär erstellen
 scifi_tvshows %>%
