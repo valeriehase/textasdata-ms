@@ -44,13 +44,16 @@ dfm <- tokens %>%
 ```
 Jetzt sind wir bereit für die ersten Analysen mit Diktionären!
 
-## 1.1 Off-the-Shelf Diktionäre
+# 2. Off-the-Shelf Diktionäre
+
+## 2.1 Diktionär auswählen
 Es gibt viele off-the-Shelf Diktionäre. Der Einfachkeit halber nutzen wir hier zur Demonsrtation das `data_dictionary_LSD2015`-Diktionär aus dem `quanteda`- Paket (Young & Soroka, 2012).
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 # Wir schauen uns das Diktionär an
 data_dictionary_LSD2015 %>% 
   head()
 ```
+## 2.2 Features aus Diktionär identifizieren
 Mit der Funktion `dfm_lookup()` aus dem quanteda Packet wird für jeden Text, also in diesem Fall für jede TV-Show, geschaut, wie viele Wörter aus den ersten zwei Spalten des Diktionärs (positive bzw. negative Wörter) vorkommen. 
 
 Die Funktion `dfm_weight(scheme = "prop")` setzt die Anzahl der Features, die gematched werden, ins Verhältnis mit der Länge des Textes, d.h. normalisiert für diese. 
@@ -77,6 +80,7 @@ data$Description[1]
 - Der erste Text enthält **ein** Feature, das mit positivem Sentiment assoziiert wird ("*noble*"). Bei insgesamt 21 Features im Satz sind das 4.76% positives Sentiment für diese Serienbeschreibung.
 - Der erste Text enthält **zwei** Features, die mit negativem Sentiment assoziiert werden ("*fight*", "*enemy*"). Bei insgesamt 21 Features im Satz sind das 9.52% positives Sentiment für diese Serienbeschreibung.
 
+## 2.3 Texte klassifizieren
 Welche Analysen könnten wir jetzt vornehmen?
 
 Wir könnten z. B. Texte als neutral, positiv oder negativ einstufen (je nachdem, ob sie gleich viele oder mehr/weniger positive bzw. negative Feature enthalten).
@@ -142,6 +146,7 @@ sentiment_tvshows %>%
   arrange(desc(positive)) %>% 
   slice(1:5)
 ```
+## 2.4 Gruppenvergleich
 Jetzt können wir noch visualisieren, ob Serien mit "höherem" Parental-Rating auch negativer sind.
 
 Dafür erstellen wir zunächst eine Variable `Rating.Adults`, die kennzeichnet, ob Serien als *TV-MA*, d.h. als ungeeignet für Jugendliche und Kinder bis inkl. 17 Jahren eingestuft wurden, oder nicht bzw. die Serie nicht gerated wurde:
@@ -194,9 +199,10 @@ ggplot(plot, aes(fill = Rating.Adults, y = perc, x = sentiment)) +
   # Wir entfernen die Legende, die wenig hilfreich ist
   theme(legend.position = "none")
 ```
-## 1.2 Organische Diktionäre 
+# 3. Organische Diktionäre 
 Oftmals kann es sinnvoller sein, ein eigenes, sogenanntes "organisches" Diktionär zu entwickeln. 
 
+## 3.1 Diktionär erstellen
 Dafür erstellen wir zunächst eine eigene Wortliste. Hier wollen wir auf Basis eines organischen Diktionärs Serien identifizieren, die sich mit "*Crime*" beschäftigen (ähnlich wie in Sitzung 1!).
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 diktionär_crime <- dictionary(list(crime = c("crim*", "police*", "gun*", 
@@ -206,6 +212,7 @@ diktionär_crime <- dictionary(list(crime = c("crim*", "police*", "gun*",
                                              "verdict*")))
 ```
 
+## 3.2 Features aus Diktionär identifizieren
 Dann werten wir die Ergebnisse gleichermassen aus:
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 #Diktionär anwenden
@@ -236,6 +243,7 @@ select(Title, crime, crime_binary)
 #Ausgabe der Ergebnisse
 head(crime_tvshows)
 ```
+## 3.3 Texte klassifizieren
 Dann könnten wir analysieren, wie viele Serien Krimi-Serien sind (oder eben nicht):
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 #Ausgabe der Crime vs. Non-Crime Serien

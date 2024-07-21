@@ -128,10 +128,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#pakete-laden-und-daten-einlesen" id="toc-pakete-laden-und-daten-einlesen" class="nav-link active" data-scroll-target="#pakete-laden-und-daten-einlesen">1. Pakete laden und Daten einlesen</a>
+  <li><a href="#pakete-laden-und-daten-einlesen" id="toc-pakete-laden-und-daten-einlesen" class="nav-link active" data-scroll-target="#pakete-laden-und-daten-einlesen">1. Pakete laden und Daten einlesen</a></li>
+  <li><a href="#off-the-shelf-diktionäre" id="toc-off-the-shelf-diktionäre" class="nav-link" data-scroll-target="#off-the-shelf-diktionäre">2. Off-the-Shelf Diktionäre</a>
   <ul class="collapse">
-  <li><a href="#off-the-shelf-diktionäre" id="toc-off-the-shelf-diktionäre" class="nav-link" data-scroll-target="#off-the-shelf-diktionäre">1.1 Off-the-Shelf Diktionäre</a></li>
-  <li><a href="#organische-diktionäre" id="toc-organische-diktionäre" class="nav-link" data-scroll-target="#organische-diktionäre">1.2 Organische Diktionäre</a></li>
+  <li><a href="#diktionär-auswählen" id="toc-diktionär-auswählen" class="nav-link" data-scroll-target="#diktionär-auswählen">2.1 Diktionär auswählen</a></li>
+  <li><a href="#features-aus-diktionär-identifizieren" id="toc-features-aus-diktionär-identifizieren" class="nav-link" data-scroll-target="#features-aus-diktionär-identifizieren">2.2 Features aus Diktionär identifizieren</a></li>
+  <li><a href="#texte-klassifizieren" id="toc-texte-klassifizieren" class="nav-link" data-scroll-target="#texte-klassifizieren">2.3 Texte klassifizieren</a></li>
+  <li><a href="#gruppenvergleich" id="toc-gruppenvergleich" class="nav-link" data-scroll-target="#gruppenvergleich">2.4 Gruppenvergleich</a></li>
+  </ul></li>
+  <li><a href="#organische-diktionäre" id="toc-organische-diktionäre" class="nav-link" data-scroll-target="#organische-diktionäre">3. Organische Diktionäre</a>
+  <ul class="collapse">
+  <li><a href="#diktionär-erstellen" id="toc-diktionär-erstellen" class="nav-link" data-scroll-target="#diktionär-erstellen">3.1 Diktionär erstellen</a></li>
+  <li><a href="#features-aus-diktionär-identifizieren-1" id="toc-features-aus-diktionär-identifizieren-1" class="nav-link" data-scroll-target="#features-aus-diktionär-identifizieren-1">3.2 Features aus Diktionär identifizieren</a></li>
+  <li><a href="#texte-klassifizieren-1" id="toc-texte-klassifizieren-1" class="nav-link" data-scroll-target="#texte-klassifizieren-1">3.3 Texte klassifizieren</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -197,8 +206,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dfm</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Jetzt sind wir bereit für die ersten Analysen mit Diktionären!</p>
-<section id="off-the-shelf-diktionäre" class="level2">
-<h2 class="anchored" data-anchor-id="off-the-shelf-diktionäre">1.1 Off-the-Shelf Diktionäre</h2>
+</section>
+<section id="off-the-shelf-diktionäre" class="level1">
+<h1>2. Off-the-Shelf Diktionäre</h1>
+<section id="diktionär-auswählen" class="level2">
+<h2 class="anchored" data-anchor-id="diktionär-auswählen">2.1 Diktionär auswählen</h2>
 <p>Es gibt viele off-the-Shelf Diktionäre. Der Einfachkeit halber nutzen wir hier zur Demonsrtation das <code>data_dictionary_LSD2015</code>-Diktionär aus dem <code>quanteda</code>- Paket (Young &amp; Soroka, 2012).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Wir schauen uns das Diktionär an</span></span>
@@ -216,6 +228,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   - not a lie, not abandon*, not abas*, not abattoir*, not abdicat*, not aberra*, not abhor*, not abject*, not abnormal*, not abolish*, not abominab*, not abominat*, not abrasiv*, not absent*, not abstrus*, not absurd*, not abus*, not accident*, not accost*, not accursed* [ ... and 2,840 more ]</code></pre>
 </div>
 </div>
+</section>
+<section id="features-aus-diktionär-identifizieren" class="level2">
+<h2 class="anchored" data-anchor-id="features-aus-diktionär-identifizieren">2.2 Features aus Diktionär identifizieren</h2>
 <p>Mit der Funktion <code>dfm_lookup()</code> aus dem quanteda Packet wird für jeden Text, also in diesem Fall für jede TV-Show, geschaut, wie viele Wörter aus den ersten zwei Spalten des Diktionärs (positive bzw. negative Wörter) vorkommen.</p>
 <p>Die Funktion <code>dfm_weight(scheme = "prop")</code> setzt die Anzahl der Features, die gematched werden, ins Verhältnis mit der Länge des Textes, d.h. normalisiert für diese.</p>
 <p>Dadurch erhalten längere Texte nicht fälschlicherweise einen “höheren” Match mit Features aus dem Diktionär, nur weil sie generell mehr Wörter enthalten (und damit ggf. “zufällig” ein positives oder negatives Wort enthalten).</p>
@@ -253,6 +268,9 @@ docs      negative   positive
 <li>Der erste Text enthält <strong>ein</strong> Feature, das mit positivem Sentiment assoziiert wird (“<em>noble</em>”). Bei insgesamt 21 Features im Satz sind das 4.76% positives Sentiment für diese Serienbeschreibung.</li>
 <li>Der erste Text enthält <strong>zwei</strong> Features, die mit negativem Sentiment assoziiert werden (“<em>fight</em>”, “<em>enemy</em>”). Bei insgesamt 21 Features im Satz sind das 9.52% positives Sentiment für diese Serienbeschreibung.</li>
 </ul>
+</section>
+<section id="texte-klassifizieren" class="level2">
+<h2 class="anchored" data-anchor-id="texte-klassifizieren">2.3 Texte klassifizieren</h2>
 <p>Welche Analysen könnten wir jetzt vornehmen?</p>
 <p>Wir könnten z. B. Texte als neutral, positiv oder negativ einstufen (je nachdem, ob sie gleich viele oder mehr/weniger positive bzw. negative Feature enthalten).</p>
 <div class="cell">
@@ -355,6 +373,9 @@ docs      negative   positive
 5 532. Coupling            TV-14              0.211   0      positiv  </code></pre>
 </div>
 </div>
+</section>
+<section id="gruppenvergleich" class="level2">
+<h2 class="anchored" data-anchor-id="gruppenvergleich">2.4 Gruppenvergleich</h2>
 <p>Jetzt können wir noch visualisieren, ob Serien mit “höherem” Parental-Rating auch negativer sind.</p>
 <p>Dafür erstellen wir zunächst eine Variable <code>Rating.Adults</code>, die kennzeichnet, ob Serien als <em>TV-MA</em>, d.h. als ungeeignet für Jugendliche und Kinder bis inkl. 17 Jahren eingestuft wurden, oder nicht bzw. die Serie nicht gerated wurde:</p>
 <div class="cell">
@@ -423,9 +444,12 @@ docs      negative   positive
 </div>
 </div>
 </section>
-<section id="organische-diktionäre" class="level2">
-<h2 class="anchored" data-anchor-id="organische-diktionäre">1.2 Organische Diktionäre</h2>
+</section>
+<section id="organische-diktionäre" class="level1">
+<h1>3. Organische Diktionäre</h1>
 <p>Oftmals kann es sinnvoller sein, ein eigenes, sogenanntes “organisches” Diktionär zu entwickeln.</p>
+<section id="diktionär-erstellen" class="level2">
+<h2 class="anchored" data-anchor-id="diktionär-erstellen">3.1 Diktionär erstellen</h2>
 <p>Dafür erstellen wir zunächst eine eigene Wortliste. Hier wollen wir auf Basis eines organischen Diktionärs Serien identifizieren, die sich mit “<em>Crime</em>” beschäftigen (ähnlich wie in Sitzung 1!).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>diktionär_crime <span class="ot">&lt;-</span> <span class="fu">dictionary</span>(<span class="fu">list</span>(<span class="at">crime =</span> <span class="fu">c</span>(<span class="st">"crim*"</span>, <span class="st">"police*"</span>, <span class="st">"gun*"</span>, </span>
@@ -434,6 +458,9 @@ docs      negative   positive
 <span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>                                             <span class="st">"witness*"</span>, <span class="st">"arrest*"</span>, <span class="st">"officer*"</span>, </span>
 <span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>                                             <span class="st">"verdict*"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</section>
+<section id="features-aus-diktionär-identifizieren-1" class="level2">
+<h2 class="anchored" data-anchor-id="features-aus-diktionär-identifizieren-1">3.2 Features aus Diktionär identifizieren</h2>
 <p>Dann werten wir die Ergebnisse gleichermassen aus:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Diktionär anwenden</span></span>
@@ -475,6 +502,9 @@ docs      negative   positive
 6 6. Sherlock             0 non-crime   </code></pre>
 </div>
 </div>
+</section>
+<section id="texte-klassifizieren-1" class="level2">
+<h2 class="anchored" data-anchor-id="texte-klassifizieren-1">3.3 Texte klassifizieren</h2>
 <p>Dann könnten wir analysieren, wie viele Serien Krimi-Serien sind (oder eben nicht):</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Ausgabe der Crime vs. Non-Crime Serien</span></span>
