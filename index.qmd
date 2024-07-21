@@ -61,7 +61,7 @@ read.csv2("data/data_tvseries.csv") %>%
   )
 ```
 
--   Datensatz 2: Dataset of Indian Newspaper Horoscopes. Verfügbar unter CC BY-NC-SA 4.0 Lizenz via [Kaggle](https://www.kaggle.com/datasets/thedivtagguy/times-of-india-horoscopes-dec-2019-to-june-2021), Autor: Aman Bhargava. Edited by reducing the data set to the first 1,000 observations only.
+-   Datensatz 2: Dataset of Indian Newspaper Horoscopes. Verfügbar unter CC BY-NC-SA 4.0 Lizenz via [Kaggle](https://www.kaggle.com/datasets/thedivtagguy/times-of-india-horoscopes-dec-2019-to-june-2021), Autor: Aman Bhargava. Bearbeitet, indem der Datensatz auf die ersten 1,000 Beobachtungen reduziert wurden.
 
 ```{r echo = FALSE, message = FALSE, warning = FALSE, error = FALSE}
 library("here")
