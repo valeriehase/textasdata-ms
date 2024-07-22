@@ -1,6 +1,5 @@
 *.Rhistory
 *.Rapp.history
-*.RData
 *.Rproj
 *.Rproj.user
 *.Ruserdata
