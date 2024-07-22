@@ -8,7 +8,9 @@ format:
     html-math-method: katex
     css: styles.css
 ---
+
 #Packages laden und Objekte erstellen
+
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 #install.packages("RCurl")
 #install.packages("quanteda")
@@ -18,7 +20,7 @@ format:
 #install.packages("quanteda.textstats")
 #install.packages("udpipe")
 #install.packages("stm") #überall ergänzen
-#install.packages("reshape2")
+#install.packages("reshape2") #überall ergänzen
 
 library("RCurl")
 library("quanteda")
@@ -60,34 +62,166 @@ daten_dfm <- daten_tokens %>%
 ```
 
 # 8 Topic Modeling
-Zunächst müssen wir unsere dfm in eine stm umwandeln, damit das stm Packet das Datenformat versteht. Das stm Packet brauchen wir um danach das topic model zu berechnen. 
+
+## 8.1 Topic Model berechnen
+
+Zunächst müssen wir unsere dfm in eine stm umwandeln, damit das stm Packet, das wir für die Berechnung des Topic Models brauchen, das Datenformat versteht.
+
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 #dfm in stm umwandeln
 daten_stm <- convert(daten_dfm, to = "stm")
 ```
 
-Bevor das richtige model gerechnet wird, berechnen wir den statistical fit für unterschiedliche Ks. Beispielhaft einmal für K = 4 und für K = 6. Hierfür brauchen wir nun das stm Packet, dass wir davor laden. 
-```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
-library(stm)
+Das Model berechnen wir hier zunächst für 4 Themen mit der `stm()`Funktion aus dem stm Packet. Mit dem Argument documents geben wir der Funktion die Artikel mit. Das Argument vocab definiert, welche features für die Berechnung herangezogen werden sollen. K ist die Anzahl an Topics, die ausgegeben werden sollen und wenn wir verbose auf TRUE setzen, gibt uns die Funktion ihre Rechenschritte in der Konsole aus.
+
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE, results='hide'}
+#Model mit K = 4 berechnen
+model_4K <- stm(documents = daten_stm$documents,
+         vocab = daten_stm$vocab, 
+         K = 4,
+         verbose = TRUE)
+```
+
+In diesem Beispiel haben wir uns willkürlich für ein K entschieden. Wie die Entscheidung für die Anzahl der Themen begründet werden kann, zeigt der folgende Abschnitt.
+
+## 8.2 K entscheiden
+### 8.2.1 Statistical fit
+
+Ein Kriterium, das helfen kann sich für ein K zu entscheiden, ist der statisticla fit. Mit der Funktion `searchK()`aus dem stm Packet berechnen wir den statistical fit für topic models beispielhaft mit 4 und 6 Themen.
+
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE, results='hide'}
 statistical_fit_46 <- searchK(daten_stm$documents, daten_stm$vocab, K = c(4,6), verbose = TRUE)
 ```
 
-Um das Ergebnis von der Berechnung zu interpretieren ploten wir die Daten. 
+Um das Ergebnis von der Berechnung zu interpretieren ploten wir die Daten. Hierfür nutzen wir das Packet ggplot2. @Valerie: haben sie ggplot2 installiert? steht nämlich nicht oben dabei
+
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
-#K = c(4,6)
+K = c(4,6)
 # Graph
-#plot <- data.frame("K" = c(4,6),
-                   #"Coherence" = unlist(statistical_fit_46$results$semcoh),
-                   #"Perplexity" = unlist(statistical_fit_46$results$heldout))
+plot <- data.frame("K" = K,
+                   "Coherence" = unlist(statistical_fit_46$results$semcoh),
+                   "Perplexity" = unlist(statistical_fit_46$results$heldout))
 
 # Daten in das long-Format umwandeln
-#plot <- melt(plot, id = c())
+plot <- melt(plot, id = "K")
 
 #Plot erstellen
-#ggplot(plot, aes(K, value, color = variable)) +
- # geom_line(linewidth = 1.5, show.legend = FALSE) +
-  #scale_x_continuous(breaks = c(4, 6)) +
-  #facet_wrap(~ variable, scales = "free_y") +
-  #labs(x = "Number of topics K",
-   #    title = "Statistical fit of models with different K")
+ggplot(plot, aes(K, value, color = variable)) +
+  geom_line(linewidth = 1.5, show.legend = FALSE) +
+  scale_x_continuous(breaks = c(4, 6)) +
+  facet_wrap(~ variable, scales = "free_y") +
+  labs(x = "Number of topics K",
+       title = "Statistical fit of models with different K")
 ```
+
+Die Visualisierung zeigt, dass sowohl die Coherence, als auch die Perplexity bei K = 6 besser ist. @Valerie: stimmt das?
+
+### 8.2.1 Interpretation und Relevanz der Topics
+
+Eine weitere Grundlage, um sich für die Anzahl der Themen zu entscheiden, ist, sich manuell die top features, top documents und die Rank1-metric der Modelle anzuschauen.
+
+Dafür müssen zunächst die einzelnen Modelle berechnet werden. Für K = 4 haben wir bereits das Modell unter Abschnitt 8.1 berechnet, daher muss jetzt nurnoch das Modell für K = 6 berechnet werden.
+
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE, results='hide'}
+#Model mit K = 6 berechnen
+model_6K <- stm(documents = daten_stm$documents,
+         vocab = daten_stm$vocab, 
+         K = 6,
+         verbose = TRUE)
+```
+
+**1: Top Features**
+Um die 10 top features pro K zu berechnen nutzen wir die `labelTopics()`Funktion aus dem stm Packet. Als Argumente können wir jeweils ein Model reingeben und festlegen, wie viele top features ausgegeben werden sollen - in diesem Fall die top 10. Wir speichern die top features im Objekt topics_4 bzw. topics_6.
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+#für K = 4
+topics_4K <- labelTopics(model_4K, n = 10)
+topics_4K <- data.frame("features" = t(topics_4K$frex))
+colnames(topics_4K) <- paste("Topics", c(1:4))
+topics_4K
+```
+
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+#für K = 6
+topics_6K <- labelTopics(model_6K, n = 10)
+topics_6 <- data.frame("features" = t(topics_6K$frex))
+colnames(topics_6) <- paste("Topics", c(1:6))
+topics_6
+```
+
+Die top features geben bereits einen guten Eindruck, worum es sich inhaltlich bei den Topics handelt. Bei Topic 1 mit K = 4 und K = 6 geht es vermutlich um Krimis während andere Themen bei den Modellen unterschiedlich sind. Zum Beispiel das Topic 4 bei K = 6, das es so bei K = 4 nicht gibt. Zudem fällt auf, dass die Themen 2 bis 4 bei K = 4 auf den ersten Blick nicht sehr trennscharf erscheinen. Im Gegensatz dazu fällt es leichter Leitthemen für die Themen bei dem Modell mit K = 6 er erkennen.  
+
+**2: Top Documents**
+Zusätzlich zu den Top Features helfen die Top Documents eines Themas zusätzlich dieses zu interpretieren. Hierfür nutzen wir die `findThoughts()`Funktion des stm Packets. Als Argumente werden das Modell, die Serienbeschreibungen aus unserem Data Frame, das Topic, dass uns interessiert, und die Anzahl an Documents die zurückgegeben werden sollen angegeben. 
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+findThoughts(model_4K, daten_df$Description, topics=1, n=3)
+```
+Diese Ergebnisse bestätigen, dass Topic 1 Krimi-Serien zusammenfasst. Für eine Evaluierung der Themen müssen dann für beide Modelle und alle jeweiligen Themen die Top Documents ausgegeben werden und die Ergebnisse verglichen werden.
+
+**3: Rank1-metric**
+Mit Hilfe der Rank1-metric lässt sich zeigen, wie oft ein Thema ungefähr vorkommt. Hierbei wird jedes Dokument dem Thema zugeordnet, zu dem es am besten passt. 
+
+Im ersten Schritt berechnen wir eine document-topic-matrix, in der für jeden Dokument zusammengefasst wird, welches Thema wie gut zum Dokument passt. Das machen wir mit der `make.dt()`Funktion aus dem stm Packet für beide Modelle. 
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+theta_4K <- make.dt(model_4K)
+theta_6K <- make.dt(model_6K)
+```
+
+Jetzt nehmen wir diese Matrix und ordnen nun jedem Dokument das Thema mit der höchsten Prävalenz zu. Dafür gehen wir jedes Dokument einzeln durch und ordnen ihm sein Hauptthema zu. 
+Das machen wir einmal für K = 4.
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+# Zuerst erstellen wir eine leere Spalte in unserem Dataframe daten_df
+daten_df$Rank1_K4 <- NA # K = 4 (Anzahl der Themen)
+
+# Berechnung von Rank-1 für K = 4
+for (i in 1:nrow(daten_df)){ # Schleife durch jede Zeile des Datenrahmens
+  column <- theta_4K[i,-1] # Auswahl der i-ten Zeile ohne die erste Spalte
+  maintopic <- colnames(column)[which(column==max(column))] # Bestimmung des Hauptthemas (Spalte mit dem höchsten Wert)
+  daten_df$Rank1_K4[i] <- maintopic # Zuweisung des Hauptthemas zur entsprechenden Zeile im Datenrahmen
+}
+# Erzeugung einer Häufigkeitstabelle für Rank-1 Themen bei K = 4
+table(daten_df$Rank1_K4)
+```
+
+Und dann für K = 6.
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+# Zuerst erstellen wir eine leere Spalte in unserem Dataframe daten_df
+daten_df$Rank1_K6 <- NA # K = 6 (Anzahl der Themen)
+
+# Berechnung von Rank-1 für K = 6
+for (i in 1:nrow(daten_df)){ # Schleife durch jede Zeile des Datenrahmens
+  column <- theta_6K[i,-1] # Auswahl der i-ten Zeile ohne die erste Spalte
+  maintopic <- colnames(column)[which(column==max(column))] # Bestimmung des Hauptthemas (Spalte mit dem höchsten Wert)
+  daten_df$Rank1_K6[i] <- maintopic # Zuweisung des Hauptthemas zur entsprechenden Zeile im Datenrahmen
+}
+# Erzeugung einer Häufigkeitstabelle für Rank-1 Themen bei K = 6
+table(daten_df$Rank1_K6)
+
+```
+
+Die Ergebnisse zeigen, dass bei K = 6 die Verteilung der Dokumente wesentlich gleichmäßiger ausfällt. 
+
+Für eine entgültige Entscheidung von K sollten alle Metriken genau analysiert werden und auch für mehr als zwei Ks augegeben werden lassen. In diesem Fall deuten die ersten Ergebnisse darauf hin, dass ein Modell mit 6 Themen den TV-Seriendatensatz besser abbildet als ein Modell mit 4 Themen. @Valerie: kann ich das so sagen?
+
+## 8.3 Unabhängige Variablen miteinbeziehen
+Bei der Modellberechnung können wir nun auch eine abhängige Variable miteinbeziehen. Hier rechnen wir als Beispiel mit dem model_6K weiter. 
+
+Nehmen wir an, dass wir davon ausgehen, dass das rating der Serie einen Einfluss auf die Themen hat. Um herauszufinden, inwiefern das rating einen Einfluss auf die Prävelenz der Tehmen hat, nehmen wir die Variable rating in unser Modell als unabhängige Variabel auf. 
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE, results='hide'}
+model_6K_rating <- stm(documents = daten_stm$documents, 
+                       vocab = daten_stm$vocab, 
+                       K = 6,
+                       prevalence = ~Rating,
+                       data = daten_df,
+                       verbose = TRUE)
+```
+
+Jetzt können wir mit der Funktion `estimateEffect()`berechnen, inwiefern die unabhängige Variable das Modell verändert hat. 
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+effect <- estimateEffect(formula=~Rating, stmobj=model_6K_rating, metadata=daten_df)
+```
+
+Das können wir nun auch grafisch darstellen.
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+plot(effect, "Rating", method = "continuous", topics = c(1:6), model = model_6K_rating)
+```
+@Valerie: wie lässt sich das interpretieren? :D dass umso höher das Rating, desto mehr kommen alle Topics gleich oft vor?
