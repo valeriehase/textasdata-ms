@@ -402,7 +402,7 @@ Schaut euch als erste Analyse an, welcher Ausdrück häufiger vorkommt: "**secre
   
   # Auszählen
   summarize("Häufigkeit: in love" = sum(grepl("in love", tolower(Horoscope))),
-            "Häufigkeit: secret secret" = sum(grepl("secret fear",  tolower(Horoscope))))
+            "Häufigkeit: secret fear" = sum(grepl("secret fear",  tolower(Horoscope))))
 ```
 ## Aufgabe 1.4 (Fortgeschritten)
 Jetzt wollen wir wissen, bei welchem Sternzeichen es am mysteriösesten wird: Bei welchem Sternzeichen fällt am häufigsten das Stichwort "**secret**"?

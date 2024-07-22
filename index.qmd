@@ -115,8 +115,9 @@ Sitzung 4️⃣: *Topic Modeling*
 ```{=html}
 <ul>
 <li><a href="slides/Sitzung4.pdf"> Folien</a></li>
-<li><a href="tutorial/04-topic-modeling.html"> Tutorial</a></li>
-<li><a href="code/04-topic-modeling.R" download="04-topic-modeling.R"> R-Code</a></li>
+<li><a href="tutorial/04-topicmodeling.html"> Tutorial</a></li>
+<li><a href="code/04-topicmodeling.R" download="04-topicmodeling.R"> R-Code</a></li>
+<li><a href="data/Sitzung4.RDATA" download="Sitzung4.RDATA"> Environment für stminsights-Package</a></li>
 </ul>
 <p></p>
 ```
