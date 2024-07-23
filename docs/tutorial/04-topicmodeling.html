@@ -316,17 +316,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(topics_4K) <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">"Topics"</span>, <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>))</span>
 <span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>topics_4K</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>       Topics 1 Topics 2    Topics 3 Topics 4
-1          solv     find        citi   discov
-2       mission    everi        life   mother
-3         crime     head        york      los
-4          part   embark         job children
-5          live     name      vampir    death
-6          unit    chang         new    world
-7         ident     seri      search      boy
-8       special     boss        just     come
-9  relationship   horror      friend    demon
-10        coupl   includ misadventur    angel</code></pre>
+<pre><code>   Topics 1 Topics 2 Topics 3 Topics 4
+1     crime     find     life  mysteri
+2     human     seri     live   discov
+3    detect  struggl      new      boy
+4  adventur    chang   friend     lead
+5    crimin     name     citi    agent
+6      case    everi   school    angel
+7      solv    polit     york     dark
+8       use     head   togeth   mother
+9     futur     seem     high   surviv
+10    alien   embark   person children</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -341,17 +341,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(topics_6) <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">"Topics"</span>, <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>))</span>
 <span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>topics_6</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>   Topics 1 Topics 2 Topics 3 Topics 4 Topics 5 Topics 6
-1     polic     best    angel    human     show   murder
-2    detect   school      los    earth   comedi   crimin
-3      solv   return     live   surviv   around    agent
-4     crime     home     love      war    demon   serial
-5      team     busi  centuri    order  various     save
-6   special     high     teen    alien     name   colleg
-7      case     york   vampir    space   featur  wealthi
-8    person   famili  compani   danger    event american
-9    depart   troubl     make   embark     meet   killer
-10    princ      new     look      job     seri     girl</code></pre>
+<pre><code>     Topics 1 Topics 2 Topics 3 Topics 4 Topics 5 Topics 6
+1       polic     best   vampir    human   comedi american
+2       crime   school   famili    alien     show      war
+3      detect      new     teen    earth   togeth   serial
+4  profession      boy  brother   planet  various    dream
+5    investig     hero   differ    futur     work   killer
+6       stori     york      son  struggl     anim     plan
+7      person   mother     epic    fight     name      cia
+8        case   return    demon   galaxi   featur     turn
+9     special     high    world    space  everyth     drug
+10      polit   troubl    navig     last     lead    begin</code></pre>
 </div>
 </div>
 <p>Die Top Features geben bereits einen ersten Eindruck, worum es sich inhaltlich bei den Topics handelt.</p>
@@ -366,9 +366,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output cell-output-stdout">
 <pre><code>
  Topic 1: 
-     A drama centered on the personal and professional lives of five surgical interns and their supervisors.
+     Detective Jane Rizzoli and Chief Medical Examiner Dr. Maura Isles team up to solve crimes in Boston.
     An elite unit, led by an ex-homicide cop, which is linked to the Miami-Dade Police Department, uses all possible resources and skills at their disposal to solve complex crimes in cross-cultural Miami.
-    Follows the journey of a time traveler from the post-apocalyptic future who appears in present day on a mission to locate and eradicate the source of a deadly plague that will nearly destroy the human race.</code></pre>
+    The further adventures in time and space of the alien adventurer known as the Doctor and his companions from planet Earth.</code></pre>
 </div>
 </div>
 <p>Die Top Documents zeigen, ähnlich wie die Top Features, dass Topic 1 Krimi-Serien zusammenfasst. Für eine Evaluierung der Themen müssen dann für beide Modelle und alle jeweiligen Themen die Top Documents ausgegeben und die Ergebnisse verglichen werden.</p>
@@ -388,12 +388,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   docnum    Topic1    Topic2    Topic3    Topic4
-1:      1 0.2416641 0.2255669 0.2856377 0.2471312
-2:      2 0.2301722 0.1771304 0.2345128 0.3581846
-3:      3 0.1657307 0.1569436 0.2297371 0.4475887
-4:      4 0.3713389 0.1578832 0.3093944 0.1613836
-5:      5 0.1539901 0.1199690 0.2422572 0.4837837
-6:      6 0.1588818 0.2754584 0.2464439 0.3192159</code></pre>
+    &lt;int&gt;     &lt;num&gt;     &lt;num&gt;     &lt;num&gt;     &lt;num&gt;
+1:      1 0.2663954 0.2620603 0.2840283 0.1875160
+2:      2 0.3234499 0.1736692 0.2082024 0.2946784
+3:      3 0.1401247 0.1727312 0.1448235 0.5423207
+4:      4 0.1237850 0.1137826 0.6349453 0.1274870
+5:      5 0.1694126 0.1476420 0.3017674 0.3811779
+6:      6 0.2748651 0.1791878 0.2271607 0.3187864</code></pre>
 </div>
 </div>
 <p>Jetzt nehmen wir diese Matrix und ordnen jedem Dokument das Thema mit der höchsten Prävalenz zu.</p>
@@ -435,10 +436,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">perc =</span> <span class="fu">round</span>(perc, <span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  Rank1_K4   n  perc
-1   Topic1 106 11.78
-2   Topic2  67  7.44
-3   Topic3 275 30.56
-4   Topic4 452 50.22</code></pre>
+1   Topic1 190 21.11
+2   Topic2  40  4.44
+3   Topic3 311 34.56
+4   Topic4 359 39.89</code></pre>
 </div>
 </div>
 <p>Und jetzt das gleiche für K = 6</p>
@@ -454,12 +455,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">perc =</span> <span class="fu">round</span>(perc, <span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  Rank1_K6   n  perc
-1   Topic1 166 18.44
-2   Topic2 154 17.11
-3   Topic3 135 15.00
-4   Topic4 199 22.11
-5   Topic5 133 14.78
-6   Topic6 113 12.56</code></pre>
+1   Topic1 147 16.33
+2   Topic2 116 12.89
+3   Topic3 189 21.00
+4   Topic4 197 21.89
+5   Topic5 139 15.44
+6   Topic6 112 12.44</code></pre>
 </div>
 </div>
 <p>Die Ergebnisse zeigen, dass bei K = 6 die Verteilung der Dokumente wesentlich gleichmäßiger ausfällt.</p>
@@ -494,46 +495,69 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a><span class="co">#Ausgabe der ersten Zeilen</span></span>
 <span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                Title      Year Parental.Rating Rating Number.of.Votes
+1  1. Game of Thrones 2011–2019           TV-MA    9.2            2.3M
+2     2. Breaking Bad 2008–2013           TV-MA    9.5            2.1M
+3  3. Stranger Things 2016–2025           TV-14    8.7            1.3M
+4          4. Friends 1994–2004           TV-14    8.9            1.1M
+5 5. The Walking Dead 2010–2022           TV-MA    8.1            1.1M
+6         6. Sherlock 2010–2017           TV-14    9.1              1M
+                                                                                                                                                                                                                                    Description
+1                                                                                                           Nine noble families fight for control over the lands of Westeros, while an ancient enemy returns after being dormant for millennia.
+2                                                                    A chemistry teacher diagnosed with inoperable lung cancer turns to manufacturing and selling methamphetamine with a former student in order to secure his family's future.
+3                                                                                          When a young boy vanishes, a small town uncovers a mystery involving secret experiments, terrifying supernatural forces and one strange little girl.
+4                                                                                                        Follows the personal and professional lives of six twenty to thirty year-old friends living in the Manhattan borough of New York City.
+5                                                                                                              Sheriff Deputy Rick Grimes wakes up from a coma to learn the world is in ruins and must lead a group of survivors to stay alive.
+6 The quirky spin on Conan Doyle's iconic sleuth pitches him as a "high-functioning sociopath" in modern-day London. Assisting him in his investigations: Afghanistan War vet John Watson, who's introduced to Holmes by a mutual acquaintance.
+  Rank1_K4 Rank1_K6 Year_Start
+1   Topic3   Topic4       2011
+2   Topic1   Topic4       2008
+3   Topic4   Topic6       2016
+4   Topic3   Topic2       1994
+5   Topic4   Topic3       2010
+6   Topic4   Topic4       2010</code></pre>
+</div>
 </div>
 <p>Dann nehmen wir die Variable <code>Year_Start</code> als unabhängige Variable in unser Modell auf, um die Prävalenz von Themen zu modellieren:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Wir lassen das angepasste Modell laufen</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>model_6K_year <span class="ot">&lt;-</span> <span class="fu">stm</span>(<span class="at">documents =</span> dfm_stm<span class="sc">$</span>documents,</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">vocab =</span> dfm_stm<span class="sc">$</span>vocab, </span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">K =</span> <span class="dv">6</span>,</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">prevalence =</span> <span class="sc">~</span> Year_Start, <span class="co">#neu!</span></span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>                     <span class="at">data =</span> data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Wir lassen das angepasste Modell laufen</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>model_6K_year <span class="ot">&lt;-</span> <span class="fu">stm</span>(<span class="at">documents =</span> dfm_stm<span class="sc">$</span>documents,</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">vocab =</span> dfm_stm<span class="sc">$</span>vocab, </span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">K =</span> <span class="dv">6</span>,</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">prevalence =</span> <span class="sc">~</span> Year_Start, <span class="co">#neu!</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>                     <span class="at">data =</span> data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Jetzt können wir mit der Funktion <code>estimateEffect()</code> aus dem <code>stm</code>-Paket berechnen, inwiefern das Erscheinungsjahr einer Serie einen Einfluss auf das dort behandelte Thema hat:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>effect <span class="ot">&lt;-</span> <span class="fu">estimateEffect</span>(<span class="at">formula =</span> <span class="sc">~</span> Year_Start, </span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>                         <span class="at">stmobj =</span> model_6K_year, </span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>                         <span class="at">metadata =</span> data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>effect <span class="ot">&lt;-</span> <span class="fu">estimateEffect</span>(<span class="at">formula =</span> <span class="sc">~</span> Year_Start, </span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>                         <span class="at">stmobj =</span> model_6K_year, </span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>                         <span class="at">metadata =</span> data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Diesen Effekt können wir nun auch grafisch darstellen. Bsp. wollen wir wissen: Hat das Erscheinungsjahr einen Effekt darauf, wie häufig Serien z.B. Drama (Topic 2) vs.&nbsp;Sci-Fi (Topic 4) darstellen?</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>topics_6 <span class="sc">%&gt;%</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="st">`</span><span class="at">Topics 2</span><span class="st">`</span>, <span class="st">`</span><span class="at">Topics 4</span><span class="st">`</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>topics_6 <span class="sc">%&gt;%</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="st">`</span><span class="at">Topics 2</span><span class="st">`</span>, <span class="st">`</span><span class="at">Topics 4</span><span class="st">`</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   Topics 2 Topics 4
 1      best    human
-2    school    earth
-3    return   surviv
-4      home      war
-5      busi    order
-6      high    alien
-7      york    space
-8    famili   danger
-9    troubl   embark
-10      new      job</code></pre>
+2    school    alien
+3       new    earth
+4       boy   planet
+5      hero    futur
+6      york  struggl
+7    mother    fight
+8    return   galaxi
+9      high    space
+10   troubl     last</code></pre>
 </div>
 </div>
 <p>Wir plotten die Ergebnisse und sehen - es scheint Unterschiede über die Zeit hinweg zu geben!</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(effect, <span class="st">"Year_Start"</span>, </span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">method =</span> <span class="st">"continuous"</span>, </span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">topics =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">4</span>), </span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">model =</span> model_6K_year)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(effect, <span class="st">"Year_Start"</span>, </span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">method =</span> <span class="st">"continuous"</span>, </span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">topics =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">4</span>), </span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">model =</span> model_6K_year)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -553,17 +577,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <p>Dieses findet ihr unter Sitzung 4 zum Download (<a href="https://valeriehase.github.io/textasdata-ms/data/Sitzung4.RDATA">hier</a>), solltest ihr bis hierhin Probleme gehabt haben, den Code auszuführen.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Wir erstellen das Objekt out, in dem alle wichtigen Infos gespeichert sind</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Das stminsights-Paket benötigt dieses Format</span></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">documents =</span> dfm_stm<span class="sc">$</span>documents,</span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">vocab =</span> dfm_stm<span class="sc">$</span>vocab,</span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">meta =</span> dfm_stm<span class="sc">$</span>meta)</span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Wir speichern das Environment ab, um es hochzuladen</span></span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="fu">save.image</span>(<span class="st">"Sitzung4.RDATA"</span>)</span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Wir lassen die Shiny App laufen</span></span>
-<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a><span class="fu">run_stminsights</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Wir erstellen das Objekt out, in dem alle wichtigen Infos gespeichert sind</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Das stminsights-Paket benötigt dieses Format</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">documents =</span> dfm_stm<span class="sc">$</span>documents,</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">vocab =</span> dfm_stm<span class="sc">$</span>vocab,</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">meta =</span> dfm_stm<span class="sc">$</span>meta)</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Wir speichern das Environment ab, um es hochzuladen</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="fu">save.image</span>(<span class="st">"Sitzung4.RDATA"</span>)</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Wir lassen die Shiny App laufen</span></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a><span class="fu">run_stminsights</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>

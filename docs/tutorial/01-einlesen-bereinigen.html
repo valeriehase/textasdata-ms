@@ -484,7 +484,7 @@ text1 :
 <span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="co"># So sieht das Ergebnis aus</span></span>
 <span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>dfm</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Document-feature matrix of: 900 documents, 4,246 features (99.66% sparse) and 0 docvars.
+<pre><code>Document-feature matrix of: 900 documents, 4,235 features (99.65% sparse) and 0 docvars.
        features
 docs    nine nobl famili fight control land westero ancient enemi return
   text1    1    1      1     1       1    1       1       1     1      1
@@ -493,7 +493,7 @@ docs    nine nobl famili fight control land westero ancient enemi return
   text4    0    0      0     0       0    0       0       0     0      0
   text5    0    0      0     0       0    0       0       0     0      0
   text6    0    0      0     0       0    0       0       0     0      0
-[ reached max_ndoc ... 894 more documents, reached max_nfeat ... 4,236 more features ]</code></pre>
+[ reached max_ndoc ... 894 more documents, reached max_nfeat ... 4,225 more features ]</code></pre>
 </div>
 </div>
 <p>Wir sehen:</p>
@@ -511,7 +511,7 @@ docs    nine nobl famili fight control land westero ancient enemi return
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Anzahl Features vor relative pruning</span></span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>dfm</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Document-feature matrix of: 900 documents, 4,246 features (99.66% sparse) and 0 docvars.
+<pre><code>Document-feature matrix of: 900 documents, 4,235 features (99.65% sparse) and 0 docvars.
        features
 docs    nine nobl famili fight control land westero ancient enemi return
   text1    1    1      1     1       1    1       1       1     1      1
@@ -520,7 +520,7 @@ docs    nine nobl famili fight control land westero ancient enemi return
   text4    0    0      0     0       0    0       0       0     0      0
   text5    0    0      0     0       0    0       0       0     0      0
   text6    0    0      0     0       0    0       0       0     0      0
-[ reached max_ndoc ... 894 more documents, reached max_nfeat ... 4,236 more features ]</code></pre>
+[ reached max_ndoc ... 894 more documents, reached max_nfeat ... 4,225 more features ]</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Anwendung des relative pruning</span></span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>dfm  <span class="ot">&lt;-</span> dfm  <span class="sc">%&gt;%</span> </span>
@@ -532,7 +532,7 @@ docs    nine nobl famili fight control land westero ancient enemi return
 <span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Anzahl Features nach relative pruning</span></span>
 <span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>dfm</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Document-feature matrix of: 900 documents, 605 features (98.58% sparse) and 0 docvars.
+<pre><code>Document-feature matrix of: 900 documents, 605 features (98.57% sparse) and 0 docvars.
        features
 docs    famili fight control land ancient enemi return turn former student
   text1      1     1       1    1       1     1      1    0      0       0
@@ -564,9 +564,9 @@ live          108
 life          108
 famili        107
 new           103
+world          75
 young          74
 follow         74
-world          74
 friend         70
 find           69
 seri           65</code></pre>
