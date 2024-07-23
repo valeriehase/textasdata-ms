@@ -58,7 +58,11 @@ stat_fit <- searchK(dfm_stm$documents, dfm_stm$vocab, K = c(4,6), verbose = TRUE
 
 # Wir speichern die Ergebnisse im Objekt "Plot" ab 
 plot <- data.frame("K" = c(4, 6),
+                   
+                   #Kohärenz: Je höher, desto besser
                    "Coherence" = unlist(stat_fit$results$semcoh),
+                   
+                   #Perplexität: Je niedriger, desto besser
                    "Perplexity" = unlist(stat_fit$results$heldout))
 
 # Wir wandeln das Format zu einem "long format" um
@@ -109,7 +113,7 @@ colnames(topics_6) <- paste("Topics", c(1:6))
 topics_6
 
 ###### 2.2.2 Top Documents ######
-findThoughts(model_4K, data$Description, topics=1, n=3)
+findThoughts(model_4K, data$Description, topics = 1, n = 3)
 
 ##### 2.3 Rank-1 Metrik #####
 
@@ -198,11 +202,14 @@ data <- data %>%
                               is.na(Year_Start),
                               2010))
 
-# Ausgabe der ersten Zeilen
+#Ausgabe der ersten Zeilen
 data %>%
   
-  # Reduktion auf weniger Variablen
-  select(Title, Year, Year_Start)
+  #Reduktion auf weniger Variablen
+  select(Title, Year, Year_Start) %>%
+  
+  #Ausgabe der ersten Zeilen
+  head()
 
 # Wir lassen das angepasste Modell laufen
 model_6K_year <- stm(documents = dfm_stm$documents,
