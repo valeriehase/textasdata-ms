@@ -56,15 +56,19 @@ dfm_stm <- convert(dfm, to = "stm")
 # dfm_stm$vocab: Welche Features nutzen wir?
 stat_fit <- searchK(dfm_stm$documents, dfm_stm$vocab, K = c(4,6), verbose = TRUE)
 
-# Wir speichern die Ergebnise im Objekt "Plot" ab 
+# Wir speichern die Ergebnisse im Objekt "Plot" ab 
 plot <- data.frame("K" = c(4, 6),
+                   
+                   #Kohärenz: Je höher, desto besser
                    "Coherence" = unlist(stat_fit$results$semcoh),
+                   
+                   #Perplexität: Je niedriger, desto besser
                    "Perplexity" = unlist(stat_fit$results$heldout))
 
 # Wir wandeln das Format zu einem "long format" um
 plot <- melt(plot, id = c("K"))
 
-#Plot erstellen
+# Plot erstellen
 ggplot(plot, aes(K, value, color = variable)) +
   geom_line(linewidth = 1.5, show.legend = FALSE) +
   scale_x_continuous(breaks = c(4, 6)) +
@@ -74,53 +78,90 @@ ggplot(plot, aes(K, value, color = variable)) +
 
 ##### 2.2 Inhaltliche Interpretierbarkeit #####
 
-#Model mit K = 4 berechnen
+# Model mit K = 4 berechnen
 model_4K <- stm(documents = dfm_stm$documents,
                 vocab = dfm_stm$vocab, 
                 K = 4)
 
-#Model mit K = 6 berechnen
+# Model mit K = 6 berechnen
 model_6K <- stm(documents = dfm_stm$documents,
                 vocab = dfm_stm$vocab, 
                 K = 6)
 
 ###### 2.2.1 Top Features ######
 
-#für K = 4
+# Top Features für K = 4
 topics_4K <- labelTopics(model_4K, n = 10)
+
+# Nur Top-10 Features nach Frex-Gewichtung, welche besser interpretierbar ist
+# Gewichtet Features nach Kohärenz und Exklusivität
 topics_4K <- data.frame("features" = t(topics_4K$frex))
+
+# Benennung & Ausgabe
 colnames(topics_4K) <- paste("Topics", c(1:4))
 topics_4K
 
-#für K = 6
+# Top Features für K = 6
 topics_6K <- labelTopics(model_6K, n = 10)
+
+# Nur Top-10 Features nach Frex-Gewichtung, welche besser interpretierbar ist
+# Gewichtet Features nach Kohärenz und Exklusivität
 topics_6 <- data.frame("features" = t(topics_6K$frex))
+
+#Benennung & Ausgabe
 colnames(topics_6) <- paste("Topics", c(1:6))
 topics_6
 
 ###### 2.2.2 Top Documents ######
-findThoughts(model_4K, data$Description, topics=1, n=3)
+findThoughts(model_4K, data$Description, topics = 1, n = 3)
 
 ##### 2.3 Rank-1 Metrik #####
 
-#Document-Topic Matrix extrahieren
+# Document-Topic Matrix extrahieren
 theta_4K <- make.dt(model_4K)
 theta_6K <- make.dt(model_6K)
 
-#Schauen wir uns kurz beispielhaft die Matrix an:
+# Schauen wir uns kurz beispielhaft die Matrix an:
 theta_4K %>%
   head()
 
-###### 2.3.1 Zuordnung der Hauptthemen für K = 4 ######
-# Zuerst erstellen wir eine leere Spalte in unserem Dataframe data
-data$Rank1_K4 <- NA # K = 4 (Anzahl der Themen, wird später "aufgefüllt")
+###### 2.3.1 Zuordnung der Hauptthemen ######
 
-# Berechnung von Rank-1 Metrik für K = 4
+# Zuerst erstellen wir zwei leere Spalten in unserem Dataframe data
+data <- data %>%
+  
+  # Leere Variable für Hauptthema, wird später "aufgefüllt"
+  mutate(Rank1_K4 = NA,
+         Rank1_K6 = NA)
+
+# Berechnung von Rank-1 Metrik
 for (i in 1:nrow(data)){ # Schleife: Für jede nachfolgende Zeile...
-  column <- theta_4K[i,-1] # Wähle alle Spalten der Document-Topic-Matrix aus (ohne die erste, die nur doc_id enthält)
-  maintopic <- colnames(column)[which(column == max(column))] # Bestimmung des Hauptthemas (Spalte mit dem höchsten Wert)
-  data$Rank1_K4[i] <- maintopic # Zuweisung des Hauptthemas zur entsprechenden Zeile im Datenrahmen
+  
+  # Bestimme Hauptthema für K = 4
+  
+  # Wähle alle Spalten der Document-Topic-Matrix aus (ohne die erste, die nur doc_id enthält)
+  column <- theta_4K[i,-1]
+  
+  # Bestimmung des Hauptthemas (Spalte mit dem höchsten Wert)
+  maintopic <- colnames(column)[which(column == max(column))] 
+  
+  # Zuweisung des Hauptthemas zur entsprechenden Zeile
+  data$Rank1_K4[i] <- maintopic 
+  rm(column, maintopic)
+  
+  # Bestimme Hauptthema für K = 6
+  
+  # Wähle alle Spalten der Document-Topic-Matrix aus (ohne die erste, die nur doc_id enthält)
+  column <- theta_6K[i,-1] 
+  
+  # Bestimmung des Hauptthemas (Spalte mit dem höchsten Wert)
+  maintopic <- colnames(column)[which(column == max(column))]
+  
+  # Zuweisung des Hauptthemas zur entsprechenden Zeile
+  data$Rank1_K6[i] <- maintopic 
+  rm(column, maintopic)
 }
+
 # Erzeugung einer Häufigkeitstabelle für Rank-1 Themen bei K = 4
 data %>%
   
@@ -131,18 +172,6 @@ data %>%
   mutate(perc = prop.table(n)*100,
          perc = round(perc, 2))
 
-
-###### 2.3.2 Zuordnung der Hauptthemen für K = 6 ######
-
-# Zuerst erstellen wir eine leere Spalte in unserem Dataframe data
-data$Rank1_K6 <- NA # K = 6 (Anzahl der Themen, wird später "aufgefüllt")
-
-# Berechnung von Rank-1 Metrik für K = 6
-for (i in 1:nrow(data)){ # Schleife: Für jede nachfolgende Zeile...
-  column <- theta_6K[i,-1] # Wähle alle Spalten der Document-Topic-Matrix aus (ohne die erste, die nur doc_id enthält)
-  maintopic <- colnames(column)[which(column == max(column))] # Bestimmung des Hauptthemas (Spalte mit dem höchsten Wert)
-  data$Rank1_K6[i] <- maintopic # Zuweisung des Hauptthemas zur entsprechenden Zeile im Datenrahmen
-}
 # Erzeugung einer Häufigkeitstabelle für Rank-1 Themen bei K = 6
 data %>%
   
@@ -157,7 +186,6 @@ data %>%
 
 #### 3.1 Einfluss unabhängiger Variablen ####
 
-# Zuerst erstellen wir die Variable Year_Start
 data <- data %>%
   
   # Wir entfernen alle nicht-numerische Zeichen, um "-" zu entfernen
@@ -173,6 +201,15 @@ data <- data %>%
          Year_Start = replace(Year_Start,
                               is.na(Year_Start),
                               2010))
+
+#Ausgabe der ersten Zeilen
+data %>%
+  
+  #Reduktion auf weniger Variablen
+  select(Title, Year, Year_Start) %>%
+  
+  #Ausgabe der ersten Zeilen
+  head()
 
 # Wir lassen das angepasste Modell laufen
 model_6K_year <- stm(documents = dfm_stm$documents,
@@ -191,7 +228,10 @@ topics_6 %>%
   select(`Topics 2`, `Topics 4`)
 
 # Plot
-plot(effect, "Year_Start", method = "continuous", topics = c(2,4), model = model_6K_year)
+plot(effect, "Year_Start", 
+     method = "continuous", 
+     topics = c(2,4), 
+     model = model_6K_year)
 
 #### 3.2 Visualisierung des Topic Models ####
 
