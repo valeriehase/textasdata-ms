@@ -334,7 +334,7 @@ young_boy                  9</code></pre>
 <p>Die <code>kwic()</code>Funktion aus dem <code>quanteda</code>-Paket identifiziert hierzu Schlüsselwörter und Wörter vor bzw. nach diesen. Wir schauen uns also Wörter an, die um ein sogenanntes <em>Window</em> von z.B. einem oder mehr Wörtern vor oder nach dem Schlüsselwort vorkommen.</p>
 <p>Mit folgendem Code können wir beispielsweise herausfinden, in welchem Kontext das Wort <em>hero</em> vorkommt. In der Ausgabe werden jeweils das Wort vor und nach dem Wort <em>hero</em> angezeigt. Um die Bedeutung dieser Wörter besser zu verstehen, nutzen wir dabei die “unbereinigte” <code>Description</code>-Variable aus dem Objekt <code>data</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>Description <span class="sc">%&gt;%</span> </span>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>tokens <span class="sc">%&gt;%</span> </span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Keywords-in-Context mit Window von 1 Wort vor und nach Schlüsselwort</span></span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kwic</span>(<span class="at">pattern =</span> <span class="st">"hero"</span>, </span>
@@ -343,12 +343,13 @@ young_boy                  9</code></pre>
 <span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Ausgabe der ersten Zeilen</span></span>
 <span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Keyword-in-context with 5 matches.                                           
-  [text124, 7]           a | hero | that   
- [text140, 38]       Rebel | hero | .      
-  [text336, 8] prestigious | hero | academy
- [text336, 19]           a | hero | ,      
-  [text756, 8]           a | hero | of     </code></pre>
+<pre><code>Keyword-in-context with 6 matches.                                       
+   [text75, 4]   child | hero | now    
+  [text124, 3] saitama | hero | just   
+ [text140, 18]   rebel | hero |        
+ [text230, 24]    team | hero |        
+  [text241, 9]    team | hero | villain
+ [text292, 15]       v | hero | put    </code></pre>
 </div>
 </div>
 </section>
@@ -370,15 +371,15 @@ young_boy                  9</code></pre>
 <span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>        collocation count count_nested length    lambda         z
-8         los angel    22            0      2 11.992530  7.856166
-9          new york    39            0      2  9.635186  6.744491
-5     serial killer    10            0      2  8.665918 11.849150
-4 person profession    13            0      2  7.817347 12.191558
-7     antholog seri    10            0      2  7.632806  8.612064
-1       high school    22            0      2  7.041380 16.490961
-3       best friend    25            0      2  7.006030 15.088077
-2         york citi    19            0      2  5.810906 16.071342
-6       seri follow    10            0      2  4.323497 11.362725</code></pre>
+8         los angel    22            0      2 11.993326  7.856687
+9          new york    39            0      2  9.635987  6.745052
+5     serial killer    10            0      2  8.666713 11.850238
+4 person profession    13            0      2  7.818143 12.192800
+7     antholog seri    10            0      2  7.633603  8.612964
+1       high school    22            0      2  7.042177 16.492831
+3       best friend    25            0      2  7.006829 15.089799
+2         york citi    19            0      2  5.811705 16.073555
+6       seri follow    10            0      2  4.324297 11.364830</code></pre>
 </div>
 </div>
 <p>Das kennen wir doch schon - nämlich aus Abschnitt 2.1 zu <em>ngrams</em>.</p>
@@ -397,7 +398,7 @@ young_boy                  9</code></pre>
 <span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Ausgabe der ersten Zeilen</span></span>
 <span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Feature co-occurrence matrix of: 6 by 4,246 features.
+<pre><code>Feature co-occurrence matrix of: 6 by 4,235 features.
          features
 features  nine nobl famili fight control land westero ancient enemi return
   nine       0    1      1     1       1    1       1       1     1      1
@@ -406,7 +407,7 @@ features  nine nobl famili fight control land westero ancient enemi return
   fight      0    0      0     1       2    2       1       2     2      2
   control    0    0      0     0       0    1       1       1     1      1
   land       0    0      0     0       0    0       1       1     1      1
-[ reached max_nfeat ... 4,236 more features ]</code></pre>
+[ reached max_nfeat ... 4,225 more features ]</code></pre>
 </div>
 </div>
 <p>Wir sehen:</p>
@@ -494,7 +495,7 @@ features  nine nobl famili fight control land westero ancient enemi return
 <span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Für alle gefundenen Fälle suchen wir die zugehörigen Sätze im "vollen" Datensatz</span></span>
 <span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Das Matching geschieht via doc_id (ID des Dokuments) und sentence_ic (ID des Satzes im Dokument)</span></span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(data_pos_tagged, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"doc_id"</span>, <span class="st">"sentence_id"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(data_pos_tagged, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"doc_id"</span>, <span class="st">"sentence_id"</span>), <span class="at">relationship =</span> <span class="st">"many-to-many"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Wir behalten mit filter nur Adjektive, die sich auf Familie beziehen</span></span>
 <span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Nämlich solche, die bei "head_token" die "token_id" des Features "Family" haben</span></span>

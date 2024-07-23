@@ -104,7 +104,7 @@ dfm %>%
   slice(125:130)
 
 ##### 2.2 Keywords-in-Context (KWIC) #####
-data$Description %>% 
+tokens %>% 
   
   # Keywords-in-Context mit Window von 1 Wort vor und nach Schlüsselwort
   kwic(pattern = "hero", 
@@ -174,7 +174,7 @@ data_pos_tagged %>%
   
   # Für alle gefundenen Fälle suchen wir die zugehörigen Sätze im "vollen" Datensatz
   # Das Matching geschieht via doc_id (ID des Dokuments) und sentence_ic (ID des Satzes im Dokument)
-  inner_join(data_pos_tagged, by = c("doc_id", "sentence_id")) %>%
+  inner_join(data_pos_tagged, by = c("doc_id", "sentence_id"), relationship = "many-to-many") %>%
   
   # Wir behalten mit filter nur Adjektive, die sich auf Familie beziehen
   # Nämlich solche, die bei "head_token" die "token_id" des Features "Family" haben
