@@ -105,11 +105,14 @@ sentiment_tvshows %>%
 ##### 2.4 Gruppenvergleich #####
 sentiment_tvshows <- sentiment_tvshows %>% 
   
-  #Erstellen eines "Rating.Adults"-Klassifizierungs-Variable
-  mutate(Rating.Adults = 0,
+  #Erstellen einer "Rating.Adults"-Klassifizierungs-Variable
+  mutate(Rating.Adults = "für Kinder",
          Rating.Adults = replace(Rating.Adults,
                                  Parental.Rating == "TV-MA",
-                                 1))
+                                 "für Erwachsene"))
+
+#Wir schauen uns die Ergebnisse an
+head(sentiment_tvshows)
 
 #Wir schauen uns die Ergebnisse an
 head(sentiment_tvshows)
@@ -134,19 +137,16 @@ plot <- sentiment_tvshows %>%
 ggplot(plot, aes(fill = Rating.Adults, y = perc, x = sentiment)) + 
   
   # Wir kreiern den entsprechenden Graphen
-  geom_bar(stat ="identity") +
+  geom_bar(stat ="identity", position = "fill") +
   
   # Wir fügen Achsenbeschriftungen hinzu
   labs(y = "% negatives, neutrales und positives Sentiment", 
        x = "Sentiment",
        title = "Sentiment in TV-Serien",
-       colour = "Sentiment") +
+       colour = "Sentiment-Kategorie") +
   
   # Wir ändern das Background-Design
-  theme_light() + 
-  
-  # Wir entfernen die Legende, die wenig hilfreich ist
-  theme(legend.position = "none")
+  theme_light()
 
 #### 3. Organische Diktionäre ####
 

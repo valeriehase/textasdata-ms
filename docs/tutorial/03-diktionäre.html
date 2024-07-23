@@ -216,7 +216,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>2. Off-the-Shelf Diktionäre</h1>
 <section id="diktionär-auswählen" class="level2">
 <h2 class="anchored" data-anchor-id="diktionär-auswählen">2.1 Diktionär auswählen</h2>
-<p>Es gibt viele off-the-Shelf Diktionäre. Der Einfachkeit halber nutzen wir hier zur Demonsrtation das <code>data_dictionary_LSD2015</code>-Diktionär aus dem <code>quanteda</code>- Paket (Young &amp; Soroka, 2012).</p>
+<p>Es gibt viele off-the-Shelf Diktionäre. Der Einfachkeit halber nutzen wir hier zur Demonstration das <code>data_dictionary_LSD2015</code>-Diktionär aus dem <code>quanteda</code>- Paket (Young &amp; Soroka, <a href="https://www.tandfonline.com/doi/abs/10.1080/10584609.2012.671234">2012</a>).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Wir schauen uns das Diktionär an</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>data_dictionary_LSD2015 <span class="sc">%&gt;%</span> </span>
@@ -341,8 +341,8 @@ docs      negative   positive
   sentiment     n  perc
   &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt;
 1 negativ     406  45.1
-2 neutral     234  26  
-3 positiv     260  28.9</code></pre>
+2 neutral     233  25.9
+3 positiv     261  29  </code></pre>
 </div>
 </div>
 <p>Insgesamt scheinen die beliebtesten Serien also recht düster zu sein. Welche sind denn die negativsten Serien laut unserer Sentiment-Analyse?</p>
@@ -388,61 +388,59 @@ docs      negative   positive
 <div class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>sentiment_tvshows <span class="ot">&lt;-</span> sentiment_tvshows <span class="sc">%&gt;%</span> </span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Erstellen eines "Rating.Adults"-Klassifizierungs-Variable</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Rating.Adults =</span> <span class="dv">0</span>,</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Erstellen einer "Rating.Adults"-Klassifizierungs-Variable</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Rating.Adults =</span> <span class="st">"für Kinder"</span>,</span>
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">Rating.Adults =</span> <span class="fu">replace</span>(Rating.Adults,</span>
 <span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>                                 Parental.Rating <span class="sc">==</span> <span class="st">"TV-MA"</span>,</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>                                 <span class="dv">1</span>))</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"für Erwachsene"</span>))</span>
 <span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="co">#Wir schauen uns die Ergebnisse an</span></span>
 <span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sentiment_tvshows)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 6
-  Title               Parental.Rating positive negative sentiment Rating.Adults
-  &lt;chr&gt;               &lt;chr&gt;              &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;             &lt;dbl&gt;
-1 1. Game of Thrones  TV-MA             0.0476   0.0952 negativ               1
-2 2. Breaking Bad     TV-MA             0.04     0.04   neutral               1
-3 3. Stranger Things  TV-14             0.0455   0.136  negativ               0
-4 4. Friends          TV-14             0.0455   0      positiv               0
-5 5. The Walking Dead TV-MA             0.115    0.115  neutral               1
-6 6. Sherlock         TV-14             0.0571   0.0286 positiv               0</code></pre>
+  Title               Parental.Rating positive negative sentiment Rating.Adults 
+  &lt;chr&gt;               &lt;chr&gt;              &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;         
+1 1. Game of Thrones  TV-MA             0.0476   0.0952 negativ   für Erwachsene
+2 2. Breaking Bad     TV-MA             0.04     0.04   neutral   für Erwachsene
+3 3. Stranger Things  TV-14             0.0455   0.136  negativ   für Kinder    
+4 4. Friends          TV-14             0.0455   0      positiv   für Kinder    
+5 5. The Walking Dead TV-MA             0.115    0.115  neutral   für Erwachsene
+6 6. Sherlock         TV-14             0.0571   0.0286 positiv   für Kinder    </code></pre>
 </div>
 </div>
 <p>Für die Visualisierung nutzen wir hier die <code>ggplot()</code>-Funktion aus dem <code>tidyverse</code>-Paket. Wenn ihr noch nie mit ggplot gearbeitet habt, braucht ihr den nachfolgenden Code nicht im Detail verstehen (s. ein längere Tutorial <a href="https://bookdown.org/valerie_hase/DataDonations-TextasData/tutorial-8-visualizing-results.html">hier</a>).</p>
 <p>Zunächst erstellen wir das Objekt <code>plot</code>, das durch <code>group_by()</code> aus dem <code>tidyverse</code>-Paket die nach Rating gruppierten Werte enthält.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>plot <span class="ot">&lt;-</span> sentiment_tvshows <span class="sc">%&gt;%</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Wir berechnen die gruppierten Häufigkeiten</span></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Rating.Adults) <span class="sc">%&gt;%</span></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># absolute Anzahl jeder Sentiment-Art (n)</span></span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(sentiment) <span class="sc">%&gt;%</span></span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Ausgabe in Prozent (perc)</span></span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">perc =</span> <span class="fu">prop.table</span>(n)<span class="sc">*</span><span class="dv">100</span>,</span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>         <span class="at">perc =</span> <span class="fu">round</span>(perc, <span class="dv">2</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Wir heben die Gruppierung auf</span></span>
-<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
-<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualisierung</span></span>
-<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(plot, <span class="fu">aes</span>(<span class="at">fill =</span> Rating.Adults, <span class="at">y =</span> perc, <span class="at">x =</span> sentiment)) <span class="sc">+</span> </span>
-<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Wir kreiern den entsprechenden Graphen</span></span>
-<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span><span class="st">"identity"</span>) <span class="sc">+</span></span>
-<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Wir fügen Achsenbeschriftungen hinzu</span></span>
-<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">"% negatives, neutrales und positives Sentiment"</span>, </span>
-<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Sentiment"</span>,</span>
-<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Sentiment in TV-Serien"</span>,</span>
-<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>       <span class="at">colour =</span> <span class="st">"Sentiment"</span>) <span class="sc">+</span></span>
-<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Wir ändern das Background-Design</span></span>
-<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_light</span>() <span class="sc">+</span> </span>
-<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Wir entfernen die Legende, die wenig hilfreich ist</span></span>
-<span id="cb19-32"><a href="#cb19-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Visualisierung</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>plot <span class="ot">&lt;-</span> sentiment_tvshows <span class="sc">%&gt;%</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Wir berechnen die gruppierten Häufigkeiten</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Rating.Adults) <span class="sc">%&gt;%</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># absolute Anzahl jeder Sentiment-Art (n)</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(sentiment) <span class="sc">%&gt;%</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Ausgabe in Prozent (perc)</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">perc =</span> <span class="fu">prop.table</span>(n)<span class="sc">*</span><span class="dv">100</span>,</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">perc =</span> <span class="fu">round</span>(perc, <span class="dv">2</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Wir heben die Gruppierung auf</span></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualisierung</span></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(plot, <span class="fu">aes</span>(<span class="at">fill =</span> Rating.Adults, <span class="at">y =</span> perc, <span class="at">x =</span> sentiment)) <span class="sc">+</span> </span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Wir kreiern den entsprechenden Graphen</span></span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span><span class="st">"identity"</span>, <span class="at">position =</span> <span class="st">"fill"</span>) <span class="sc">+</span></span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Wir fügen Achsenbeschriftungen hinzu</span></span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">"% negatives, neutrales und positives Sentiment"</span>, </span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Sentiment"</span>,</span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Sentiment in TV-Serien"</span>,</span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>       <span class="at">colour =</span> <span class="st">"Sentiment-Kategorie"</span>) <span class="sc">+</span></span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Wir ändern das Background-Design</span></span>
+<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_light</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">

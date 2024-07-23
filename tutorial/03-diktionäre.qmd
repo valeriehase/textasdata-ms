@@ -47,7 +47,7 @@ Jetzt sind wir bereit für die ersten Analysen mit Diktionären!
 # 2. Off-the-Shelf Diktionäre
 
 ## 2.1 Diktionär auswählen
-Es gibt viele off-the-Shelf Diktionäre. Der Einfachkeit halber nutzen wir hier zur Demonsrtation das `data_dictionary_LSD2015`-Diktionär aus dem `quanteda`- Paket (Young & Soroka, 2012).
+Es gibt viele off-the-Shelf Diktionäre. Der Einfachkeit halber nutzen wir hier zur Demonstration das `data_dictionary_LSD2015`-Diktionär aus dem `quanteda`- Paket (Young & Soroka, [2012](https://www.tandfonline.com/doi/abs/10.1080/10584609.2012.671234)).
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 # Wir schauen uns das Diktionär an
 data_dictionary_LSD2015 %>% 
@@ -158,11 +158,11 @@ Dafür erstellen wir zunächst eine Variable `Rating.Adults`, die kennzeichnet, 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 sentiment_tvshows <- sentiment_tvshows %>% 
   
-  #Erstellen eines "Rating.Adults"-Klassifizierungs-Variable
-  mutate(Rating.Adults = 0,
+  #Erstellen einer "Rating.Adults"-Klassifizierungs-Variable
+  mutate(Rating.Adults = "für Kinder",
          Rating.Adults = replace(Rating.Adults,
                                  Parental.Rating == "TV-MA",
-                                 1))
+                                 "für Erwachsene"))
 
 #Wir schauen uns die Ergebnisse an
 head(sentiment_tvshows)
@@ -171,6 +171,7 @@ Für die Visualisierung nutzen wir hier die `ggplot()`-Funktion aus dem `tidyver
 
 Zunächst erstellen wir das Objekt `plot`, das durch `group_by()` aus dem `tidyverse`-Paket die nach Rating gruppierten Werte enthält.
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+#Visualisierung
 plot <- sentiment_tvshows %>%
   
   # Wir berechnen die gruppierten Häufigkeiten
@@ -190,19 +191,16 @@ plot <- sentiment_tvshows %>%
 ggplot(plot, aes(fill = Rating.Adults, y = perc, x = sentiment)) + 
   
   # Wir kreiern den entsprechenden Graphen
-  geom_bar(stat ="identity") +
+  geom_bar(stat ="identity", position = "fill") +
   
   # Wir fügen Achsenbeschriftungen hinzu
   labs(y = "% negatives, neutrales und positives Sentiment", 
        x = "Sentiment",
        title = "Sentiment in TV-Serien",
-       colour = "Sentiment") +
- 
-  # Wir ändern das Background-Design
-  theme_light() + 
+       colour = "Sentiment-Kategorie") +
   
-  # Wir entfernen die Legende, die wenig hilfreich ist
-  theme(legend.position = "none")
+  # Wir ändern das Background-Design
+  theme_light()
 ```
 # 3. Organische Diktionäre 
 Oftmals kann es sinnvoller sein, ein eigenes, sogenanntes "organisches" Diktionär zu entwickeln. 
@@ -216,7 +214,6 @@ diktionär_crime <- dictionary(list(crime = c("crim*", "police*", "gun*",
                                              "witness*", "arrest*", "officer*", 
                                              "verdict*")))
 ```
-
 ## 3.2 Features aus Diktionär identifizieren
 Dann werten wir die Ergebnisse gleichermassen aus:
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
