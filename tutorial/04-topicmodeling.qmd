@@ -72,7 +72,7 @@ Jetzt sind wir bereit für das Topic Modeling!
 
 # 2. Anzahl Themen K
 
-Relevante Entscheidungen für ein Topic-Modeling umfassen u.a. die Anzahl von Themen `K`, die das Modell identifiziert soll (mit anderen Aspekten, wie der Wahl des Algorithms oder weiterer Hyperparameter, beschäftigen wir uns heute nicht).
+Relevante Entscheidungen für ein Topic-Modeling umfassen u.a. die Anzahl von Themen `K`, die das Modell identifizieren soll (mit anderen Aspekten, wie der Wahl des Algorithmus oder weiterer Hyperparameter, beschäftigen wir uns heute nicht).
 
 Zunächst müssen wir unsere `dfm` in ein `stm`-Objekt umwandeln, damit das `stm`-Paket, das wir für die Berechnung des Topic Models brauchen, das Datenformat versteht.
 
@@ -92,13 +92,14 @@ Das Argument `verbose`, das wir hier auf `TRUE` setzen, führt dazu, dass uns R 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE, results = 'hide'}
 # dfm_stm$documents: Welche Dokumente nutzen wir?
 # dfm_stm$vocab: Welche Features nutzen wir?
-stat_fit <- searchK(dfm_stm$documents, dfm_stm$vocab, K = c(4,6), verbose = TRUE)
+stat_fit <- searchK(dfm_stm$documents, dfm_stm$vocab, 
+                    K = c(4,6), verbose = TRUE)
 ```
 
-Um das Ergebnis zu interpretieren ploten wir die Daten. Hierfür nutzen wir das Packet `ggplot2` aus dem `tidyverse`-Universum.
+Um das Ergebnis zu interpretieren, ploten wir die Daten. Hierfür nutzen wir das Packet `ggplot2` aus dem `tidyverse`-Universum.
 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
-# Wir speichern die Ergebnise im Objekt "Plot" ab 
+# Wir speichern die Ergebnisse im Objekt "Plot" ab 
 plot <- data.frame("K" = c(4, 6),
                    
                    #Kohärenz: Je höher, desto besser
@@ -110,7 +111,7 @@ plot <- data.frame("K" = c(4, 6),
 # Wir wandeln das Format zu einem "long format" um
 plot <- melt(plot, id = c("K"))
 
-#Plot erstellen
+# Plot erstellen
 ggplot(plot, aes(K, value, color = variable)) +
   geom_line(linewidth = 1.5, show.legend = FALSE) +
   scale_x_continuous(breaks = c(4, 6)) +
@@ -128,12 +129,12 @@ Eine weitere Grundlage, um sich für die Anzahl der Themen zu entscheiden, sind 
 Dafür müssen zunächst die einzelnen Modelle mit K = 4 bzw. K = 6 berechnet werden.
 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE, results='hide'}
-#Model mit K = 4 berechnen
+# Model mit K = 4 berechnen
 model_4K <- stm(documents = dfm_stm$documents,
                 vocab = dfm_stm$vocab, 
                 K = 4)
 
-#Model mit K = 6 berechnen
+# Model mit K = 6 berechnen
 model_6K <- stm(documents = dfm_stm$documents,
                 vocab = dfm_stm$vocab, 
                 K = 6)
@@ -151,21 +152,21 @@ Als Argumente bestimmen wir ein Modell sowie über das `n`-Argument, das nur die
 # Top Features für K = 4
 topics_4K <- labelTopics(model_4K, n = 10)
 
-#Nur Top-10 Features nach Frex-Gewichtung, welche besser interpretierbar ist
-#Gewichtet Features nach Kohärenz und Exklusivität
+# Nur Top-10 Features nach Frex-Gewichtung, welche besser interpretierbar ist
+# Gewichtet Features nach Kohärenz und Exklusivität
 topics_4K <- data.frame("features" = t(topics_4K$frex))
 
-#Benennung & Ausgabe
+# Benennung & Ausgabe
 colnames(topics_4K) <- paste("Topics", c(1:4))
 topics_4K
 ```
 
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
-#Top Features für K = 6
+# Top Features für K = 6
 topics_6K <- labelTopics(model_6K, n = 10)
 
-#Nur Top-10 Features nach Frex-Gewichtung, welche besser interpretierbar ist
-#Gewichtet Features nach Kohärenz und Exklusivität
+# Nur Top-10 Features nach Frex-Gewichtung, welche besser interpretierbar ist
+# Gewichtet Features nach Kohärenz und Exklusivität
 topics_6 <- data.frame("features" = t(topics_6K$frex))
 
 #Benennung & Ausgabe
@@ -179,7 +180,7 @@ Die Top Features geben bereits einen ersten Eindruck, worum es sich inhaltlich b
 
 Zusätzlich helfen die Top Documents eines Themas, dieses zu interpretieren. Um diese zu finden, nutzen wir die `findThoughts()`-Funktion des `stm`-Pakets.
 
-Als Argumente werden wieder das jeweilige Modell, die Serienbeschreibungen aus unserem Dataframe via `daten_df$Description`, das zu untersuchende Topic, hier Topic 1, und die Anzahl der zu identifizierenden Top Documents, hier drei, ausgegeben.
+Als Argumente werden wieder das jeweilige Modell, die Serienbeschreibungen aus unserem Dataframe via `daten_df$Description`, das zu untersuchende Topic, hier Topic 1, und die Anzahl der zu identifizierenden Top Documents, hier drei, eingegeben.
 
 Schauen wir Topic 1 an:
 
@@ -193,7 +194,7 @@ Die Top Documents zeigen, ähnlich wie die Top Features, dass Topic 1 Krimi-Seri
 
 Mit Hilfe der Rank-1 Metrik lässt sich zuletzt zeigen, wie oft ein Thema als Hauptthema vorkommt. Hier wird jedem Dokument ein einziges Hauptthema zugeordnet - nämlich das, für welches das Dokument laut der Document-Topic-Matrix die höchste bedingte Wahrscheinlichkeit hat.
 
-So liessen sich zudem Themen identifizieren, die z. B. wenig prävalent und damit ggf. irrelevant sind. Auch lässt sich nachverfolgen, wie sich Themen über Modelle mit z. B. mehr K in mehrere Themen "aufsplitten".
+So liessen sich Themen identifizieren, die z. B. wenig prävalent und damit ggf. irrelevant sind. Auch lässt sich nachverfolgen, wie sich Themen über Modelle mit z. B. mehr K in mehrere Themen "aufsplitten".
 
 Im ersten Schritt berechnen wir die Document-Topic-Matrix, in der für jeden Dokument zusammengefasst wird, welches Thema wie gut zum Dokument passt. Das machen wir mit der `make.dt()`Funktion aus dem `stm`-Paket.
 
@@ -208,13 +209,11 @@ theta_4K %>%
 
 Jetzt nehmen wir diese Matrix und ordnen jedem Dokument das Thema mit der höchsten Prävalenz zu.
 
-Das machen wir einmal für K = 4.
-
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 # Zuerst erstellen wir zwei leere Spalten in unserem Dataframe data
 data <- data %>%
   
-  #Anzahl der Themen, wird später "aufgefüllt"
+  # Leere Variable für Hauptthema, wird später "aufgefüllt"
   mutate(Rank1_K4 = NA,
          Rank1_K6 = NA)
 
@@ -222,15 +221,27 @@ data <- data %>%
 for (i in 1:nrow(data)){ # Schleife: Für jede nachfolgende Zeile...
   
   # Bestimme Hauptthema für K = 4
-  column <- theta_4K[i,-1] # Wähle alle Spalten der Document-Topic-Matrix aus (ohne die erste, die nur doc_id enthält)
-  maintopic <- colnames(column)[which(column == max(column))] # Bestimmung des Hauptthemas (Spalte mit dem höchsten Wert)
-  data$Rank1_K4[i] <- maintopic # Zuweisung des Hauptthemas zur entsprechenden Zeile im Datenrahmen
+  
+  # Wähle alle Spalten der Document-Topic-Matrix aus (ohne die erste, die nur doc_id enthält)
+  column <- theta_4K[i,-1]
+  
+  # Bestimmung des Hauptthemas (Spalte mit dem höchsten Wert)
+  maintopic <- colnames(column)[which(column == max(column))] 
+  
+  # Zuweisung des Hauptthemas zur entsprechenden Zeile
+  data$Rank1_K4[i] <- maintopic 
   rm(column, maintopic)
   
   # Bestimme Hauptthema für K = 6
-  column <- theta_6K[i,-1] # Wähle alle Spalten der Document-Topic-Matrix aus (ohne die erste, die nur doc_id enthält)
-  maintopic <- colnames(column)[which(column == max(column))] # Bestimmung des Hauptthemas (Spalte mit dem höchsten Wert)
-  data$Rank1_K6[i] <- maintopic # Zuweisung des Hauptthemas zur entsprechenden Zeile im Datenrahmen
+  
+  # Wähle alle Spalten der Document-Topic-Matrix aus (ohne die erste, die nur doc_id enthält)
+  column <- theta_6K[i,-1] 
+  
+  # Bestimmung des Hauptthemas (Spalte mit dem höchsten Wert)
+  maintopic <- colnames(column)[which(column == max(column))]
+  
+  # Zuweisung des Hauptthemas zur entsprechenden Zeile
+  data$Rank1_K6[i] <- maintopic 
   rm(column, maintopic)
 }
 ```
@@ -299,7 +310,13 @@ data <- data %>%
                               2010))
 
 #Ausgabe der ersten Zeilen
-head(data)
+data %>%
+  
+  #Reduktion auf weniger Variablen
+  select(Title, Year, Year_Start) %>%
+  
+  #Ausgabe der ersten Zeilen
+  head()
 ```
 
 Dann nehmen wir die Variable `Year_Start` als unabhängige Variable in unser Modell auf, um die Prävalenz von Themen zu modellieren:
@@ -323,6 +340,7 @@ effect <- estimateEffect(formula = ~ Year_Start,
 
 Diesen Effekt können wir nun auch grafisch darstellen. Bsp. wollen wir wissen: Hat das Erscheinungsjahr einen Effekt darauf, wie häufig Serien z.B. Drama (Topic 2) vs. Sci-Fi (Topic 4) darstellen?
 
+Schauen wir uns kurz die Themen an:
 ```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 topics_6 %>%
   select(`Topics 2`, `Topics 4`)
@@ -339,13 +357,13 @@ plot(effect, "Year_Start",
 
 ## 3.2 Visualisierung des Topic Models
 
-Um unser Modell zu verstehen, können wir es zudem mit dem `stminsights`-Paket visualisieren. Dafür...
+Um unser Modell noch zu verstehen, können wir es zudem mit dem `stminsights`-Paket visualisieren. Dafür...
 
--   erstellen wir zunächst das Objekt `out`, indem alle wichtigen Infos gespeichert sind
+-   erstellen wir zunächst das Objekt `out`, indem alle wichtigen Infos gespeichert sind. Dieses benötigt das `stminsights`-Paket.
 -   starten wir dann die zugehörige Shiny-App mit `run_stminsights()`
 -   laden dort anschliessend unser R-Environment hoch.
 
-Dieses findet ihr unter Sitzung 4 zum Download ([hier](https://valeriehase.github.io/textasdata-ms/data/Sitzung4.RDATA)), solltest ihr bis hierhin Probleme gehabt haben, den Code auszuführen.
+Das R-Environment findet ihr unter Sitzung 4 zum Download ([hier](https://valeriehase.github.io/textasdata-ms/data/Sitzung4.RDATA)), solltest ihr bis hierhin Probleme gehabt haben, den Code auszuführen.
 
 ```{r echo = TRUE, eval = FALSE, message = FALSE, warning = FALSE, error = FALSE}
 # Wir erstellen das Objekt out, in dem alle wichtigen Infos gespeichert sind
@@ -367,6 +385,106 @@ run_stminsights()
 
 Könnt ihr testen, wie sich das Modell verändert, wenn wir mit K = 10 Serien arbeiten? Wird es besser oder schlechter interpretierbar?
 
+```{r echo = FALSE, eval = FALSE, message = FALSE, warning = FALSE, error = FALSE}
+# dfm_stm$documents: Welche Dokumente nutzen wir?
+# dfm_stm$vocab: Welche Features nutzen wir?
+stat_fit <- searchK(dfm_stm$documents, dfm_stm$vocab, 
+                    K = c(4, 6, 10))
+
+# Wir speichern die Ergebnisse im Objekt "Plot" ab 
+plot <- data.frame("K" = c(4, 6, 10),
+                   "Coherence" = unlist(stat_fit$results$semcoh),
+                   "Perplexity" = unlist(stat_fit$results$heldout))
+
+# Wir wandeln das Format zu einem "long format" um
+plot <- melt(plot, id = c("K"))
+
+# Plot erstellen
+ggplot(plot, aes(K, value, color = variable)) +
+  geom_line(linewidth = 1.5, show.legend = FALSE) +
+  scale_x_continuous(breaks = c(4, 6, 10)) +
+  facet_wrap(~ variable, scales = "free_y") +
+  labs(x = "Anzahl Themen K",
+       title = "Statistischer Fit für Modelle mit K = 4, K = 6 und K = 10")
+
+# Model mit K = 10 berechnen
+model_10K <- stm(documents = dfm_stm$documents,
+                vocab = dfm_stm$vocab, 
+                K = 10,
+                verbose = F)
+
+# Top Features
+#für K = 10
+topics_10K <- labelTopics(model_10K, n = 10)
+topics_10 <- data.frame("features" = t(topics_10K$frex))
+colnames(topics_10) <- paste("Topics", c(1:10))
+topics_10
+```
+
 ## Aufgabe 1.2 (Fortgeschritten)
 
 Könnt ihr mittels des Datensatzes zu Horoskopen testen, ob Zwillinge und Wassermänner andere Themen in ihren Horoskopen vorhergesagt kriegen?
+
+```{r echo = FALSE, eval = FALSE, message = FALSE, warning = FALSE, error = FALSE}
+# Daten laden
+url <-  getURL("https://raw.githubusercontent.com/valeriehase/textasdata-ms/main/data/data_horoscope.csv")
+data <- read.csv2(text = url)
+
+# Reduktion auf Daten von Zwillingen und Wassermännern
+data <- data %>%
+  filter(Signs %in% c("AQUARIUS", "GEMINI"))
+
+# Preprocessing
+tokens <- tokens(data$Horoscope,
+                 what = "word", #Tokenisierung, hier zu Wörtern als Analyseeinheit
+                 remove_punct = TRUE, #Entfernung von Satzzeichen
+                 remove_numbers = TRUE) %>% #Entfernung von Zahlen
+  
+  # Kleinschreibung
+  tokens_tolower() %>% 
+  
+  # Entfernung von Stoppwörtern
+  tokens_remove(stopwords("english")) %>% 
+  
+  # Stemming
+  tokens_wordstem()
+
+# Text-as-Data Repräsentation als Document-Feature-Matrix
+dfm <- tokens %>% 
+  dfm() %>% 
+  
+  # Relative pruning
+  dfm_trim(min_docfreq = 0.005, 
+           max_docfreq = 0.99,
+           docfreq_type = "prop", 
+           verbose = TRUE) 
+
+# DFM in STM-Objekt umwandeln
+dfm_stm <- quanteda::convert(dfm, to = "stm")
+
+# Berechnung eines Modells, hier probeweise mit K = 5 Themen
+# Wir nutzen das Sternzeichen als unabhängige Variable
+model_horoscope <- stm(documents = dfm_stm$documents,
+                       vocab = dfm_stm$vocab, 
+                       K = 4,
+                       prevalence = ~ Signs, 
+                       data = data,
+                       verbose = F)
+
+# Ein erster Blick in die Top Features
+topics_horoscope <- labelTopics(model_horoscope, n = 10)
+topics_horoscope <- data.frame("features" = t(topics_horoscope$frex))
+colnames(topics_horoscope) <- paste("Topics", c(1:4))
+topics_horoscope
+
+#Schauen wir uns den Effekt an
+effect <- estimateEffect(formula = ~ Signs, 
+                         stmobj = model_horoscope, 
+                         metadata = data)
+
+# Und visualisieren wir den Unterschied
+plot(effect, "Signs", 
+     method = "pointestimate",
+     topics = c(4), 
+     model = model_horoscope)
+```
