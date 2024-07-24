@@ -273,7 +273,7 @@ Könnt ihr analysieren, wie viel Prozent der Serien Science-Fiction Serien sind?
 ```{r echo = FALSE, eval = FALSE, message = FALSE, warning = FALSE, error = FALSE}
 #Diktionär erstellen
 diktionär_scifi <- dictionary(list(scifi = c("fantas*", "science fict*", "sci-fi*", 
-                                             "sci fi*", "galax*", "space*",
+                                             "galax*", "space*",
                                              "magic*", "wizzard*", "witch*",
                                              "monster")))
 

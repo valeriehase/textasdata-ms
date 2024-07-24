@@ -7,6 +7,7 @@
 *.DS_Store
 /.quarto/
 /site_libs
+tutorial/validation_dictionary_coded.csv
 .Rproj.user
 /references
 *.txt

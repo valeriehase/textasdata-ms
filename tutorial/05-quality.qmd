@@ -1,0 +1,263 @@
+---
+title: "Sitzung 5: Qualitätskriterien"
+author: "Valerie Hase & Luisa Kutlar"
+format:
+  html:
+    toc: true
+    html-math-method: katex
+    css: styles.css
+---
+
+# 1. Pakete laden und Daten einlesen
+
+Zunächst installieren wir alle Pakete, die wir für diese Sitzung brauchten (z.B. `tidyverse`). Ihr braucht `install.packages()` nur, wenn ihr die Pakete im Methodencafe noch nicht installiert hattet.
+
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+#install.packages("tidyverse)
+#install.packages("quanteda")
+#install.packages("RCurl")
+#install.packages("caret")
+
+library("tidyverse")
+library("quanteda")
+library("RCurl")
+library("caret")
+```
+Wir nutzen hier wieder eine bestehende Pipeline, nämlich aus Sitzung 1 und 3. 
+
+Als erstes laden wir unseren Serien-Datensatz ein & bereinigen diesen, genau wie wir es in Sitzung 1 gelernt haben:
+
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+# Daten laden
+url <-  getURL("https://raw.githubusercontent.com/valeriehase/textasdata-ms/main/data/data_tvseries.csv")
+data <- read.csv2(text = url)
+
+# Preprocessing
+tokens <- tokens(data$Description,
+                 what = "word", #Tokenisierung, hier zu Wörtern als Analyseeinheit
+                 remove_punct = TRUE, #Entfernung von Satzzeichen
+                 remove_numbers = TRUE) %>% #Entfernung von Zahlen
+  
+  # Kleinschreibung
+  tokens_tolower()
+
+# Text-as-Data Repräsentation als Document-Feature-Matrix
+dfm <- tokens %>% 
+  dfm() 
+```
+Nehmen wir an, dass wir - wie in Sitzung 3- mittels eines organischen Diktionärs analysieren wollen, ob es sich bei Serien um Serien mit Kriminalbezug handelt oder nicht: 
+
+Dafür erstellen wir zunächst mit `dictionary()` aus dem `quanteda`-Paket eine eigene Wortliste, um Serien zu identifizieren, die sich mit "*Crime*" beschäftigen:
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+diktionär_crime <- dictionary(list(crime = c("crim*", "police*", "gun*", 
+                                             "shot*", "dead*", "murder*", 
+                                             "kill*", "court*", "suspect*", 
+                                             "witness*", "arrest*", "officer*", 
+                                             "verdict*")))
+```
+Genau wie in Sitzung 3 klassifizieren wir also Serien als "Krimi" oder "kein Krimi":
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+#Diktionär anwenden
+crime_tvshows <- dfm %>% 
+  dfm_weight(scheme = "prop") %>% 
+  dfm_lookup(dictionary = diktionär_crime)
+
+# Ergebnis für die weitere Analyse in einen Data Frame umwandeln
+crime_tvshows <- convert(crime_tvshows, 
+                         to = "data.frame") %>%
+  
+  # Umwandlung in tibble-Format
+  as_tibble %>%
+  
+  # Wir ergänzen zunächst wieder die Serientitel
+  mutate(Title = data$Title) %>%
+  
+  # Wir erstellen eine Variable, die Texte als
+  # "1" (Krimi) oder "0" (kein Krimi) identifiziert
+  mutate(crime_binary = 1,
+         crime_binary = replace(crime_binary,
+                         crime == 0,
+                         0)) %>%
+
+# Sortierung der Variablen
+select(Title, crime, crime_binary)
+
+#Ausgabe der Ergebnisse
+head(crime_tvshows)
+```
+Schauen wir uns nochmal an, wie viel Prozent aller Serien als Krimis identifiziert wurden:
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+#Ausgabe der Crime vs. Non-Crime Serien
+crime_tvshows %>%
+  
+  # absolute Anzahl jeder Sentiment-Art (n)
+  count(crime_binary) %>%
+  
+  # Ausgabe in Prozent (perc)
+  mutate(perc = prop.table(n)*100,
+         perc = round(perc, 2))
+```
+Können wir diesen Zahlen trauen - z.B., wenn wir diese deskriptiven Ergebnisse berichten oder die Klassifizierung als Variable für eine weitere, inferenzstatistische Analyse nutzen wollten? Das testen wir jetzt - auf Basis unserer Qualitätskriterien.
+
+# 2. Validierung automatisierter Analysen #
+Wir haben im Workshop bereits gelernt, warum die Validierung automatisierter Analysen wichtig ist: Wir sollten den Ergebnissen automatisierter Inhaltsanalysen nicht blind vertrauen, weil oft unklar ist, inwiefern automatisiert gemessen wird/werden kann, was uns theoretisch interessiert.
+
+Daher empfehlen [Grimmer und Stewart](https://www.cambridge.org/core/journals/political-analysis/article/text-as-data-the-promise-and-pitfalls-of-automatic-content-analysis-methods-for-political-texts/F7AAC8B2909441603FEB25C156448F20) (2013, S. 271): 
+"Validate, Validate, Validate. [...] What should be avoided, [...] is the blind use of any method without a validation step."
+
+Wir können uns bei der Auswertung und Interpretation unserer Ergebnisse inbesondere folgende Fragen stellen:
+
+- Inwiefern kann und sollte ich theoretische Konstrukte, die für meine Studie von Interesse sind, überhaupt automatisiert messen?
+- Wie sehr überlappt die automatisierte Analyse mit einer manuellen Codierung der gleichen Variable(n) - und wo finden sich Unterschiede? 
+- Wie lassen sich diese Unterschiede erklären, d.h., inwiefern messen manuelle und automatisierte Codierungen ggf. unterschiedliche Dinge und wieso?
+
+Wir arbeiten hier nur mit einer Variante der Validierung: dem Vergleich mit einem manuellen "Goldstandard". 
+
+Im Prinzip werden bei dieser Form der Validierung die automatisierte und manuelle Codierung der gleichen Variablen für die gleichen Texte verglichen. Oft wird dabei die manuelle Codierung als "Goldstandard" bezeichnet, d.h. es wird impliziert, dass manuelle Analysen in der Lage sind, den "wahren" Wert von Variablen in Texten zu erfassen. 
+
+Inwiefern manuelle Codierungen (oder jegliche Form von Codierungen) dazu in der Lage sind, lässt sich natürlich  hinterfragen, wie [di Maggio](https://journals.sagepub.com/doi/full/10.1177/2053951715602908) (2013, S. 3f.) und [Song et al.](https://www.tandfonline.com/doi/full/10.1080/10584609.2020.1723752) (2020, S. 553ff.) kritisch zusammenfassen. Z.B. unterscheiden sich manuelle Codierer:innen oft in Ihren Codierungen; zudem lässt sich aus erkenntnistheoretischer Perspektive diskutieren, inwiefern der "wahre" Wert von Variablen überhaupt messbar ist.
+
+Was sich anhand der Validierung durch Vergleich zu einer manuellen Codierung _in jedem Fall_ zeigen lässt, ist, inwiefern sich automatisierte und manuelle Codierung unterscheiden - und wieso dies der Fall sein könnte. Entsprechend können wir durch eine Validierung in jedem Fall besser verstehen, welche (theoretischen) Konstrukte wir mit der automatisierten Analyse messen (können).
+
+## 2.1 Manuelle Annotation: Goldstandard erstellen ##
+Zuerst würden wir nun den manuellen Goldstandard erstellen. Wir codieren also: 
+
+- Werden Serien als Krimis beschrieben? (Code: 1) 
+- Werden Serien nicht als Krimis beschrieben? (Code: 0) 
+
+Nun wollen wir als nächstes schauen, inwiefern die automatisierte Messung von "Krimi" mit der manuellen Codierung, d.h. dem "Goldstandard", übereinstimmt.
+
+Dafür ziehen wir als erstes eine zufällige Stichprobe aus Ihrem Korpus, die manuell validiert werden soll. 
+
+[Song et al.](https://www.tandfonline.com/doi/full/10.1080/10584609.2020.1723752?scroll=top&needAccess=true) (2020, S. 564) empfehlen, für die Validierung automatisierter Inhaltsanalysen möglichst mehr als 1.300 Artikel manuell zur Erstellung eines "Goldstandards" zu codieren. Dabei sollte die manuelle Codierung von mehr als eine/r Codierer:in durchgeführt werden und die Intercoderreliabilität mindestens .7 betragen - im Rahmen dieses Workshops ist das natürlich nicht möglich.
+
+Hier beschränken wir uns aus praktischen Gründen auf eine kleinere Stichprobe, hier als Beispiel 30 Artikel, und die Codierung durch eine Codierer:in. 
+
+Zunächst ziehen wir eine zufällige Stichprobe für die manuelle Validierung. Mit der Funktion `slice_sample()` können wir dabei z.B. aus allen Texten des Korpus, hier den Zeilen des Dataframes `data`, 30 Texte zufällig auswählen.
+
+Dann fügen wir folgende Informationen hinzu, um ein "Codesheet" zu erstellen:
+
+- Die Variable "ID" enthält die ID der manuell zu codierenden Texte.
+- Die Variable "Description" enthält die zu manuell codierenden Texte.
+- Die Variable "Manual.Coding" enthält leere Zellen, in die wir unsere Codierung eintragen können.
+```{r,14004a, eval = FALSE, echo = TRUE}
+sample <- data %>%
+  
+  #Erstellung der Variable ID
+  mutate(ID = paste0("ID", 1:nrow(data))) %>%
+  
+  # Stichprobe ziehen
+  slice_sample(n = 30) %>%
+  
+  # Variable Manual Coding hinzufügen
+  mutate(Manual.Coding = NA) %>%
+  
+  # Reduktion auf die drei relevanten Variablen
+  select(ID, Description, Manual.Coding)
+```
+Jetzt schreiben wir diese Datei mit `write.csv()` auf unseren lokalen Speicher.
+```{r,14005, eval = FALSE, echo = TRUE}
+write.csv2(sample, "validation_dictionary.csv")
+```
+Jetzt würden wir ausserhalb von R die Validierung vornehmen. D.h., wir lesen jeden Text und tragen dann in der jeweiligen Zeile der Spalte `Manual.Coding` die manuelle Codierung ein:
+
+- eine 1, wenn die Serienbeschreibung zeigt, dass es sich dabei um einen Krimi handelt (1 = "Krimi")
+- eine 0, wenn die Serienbeschreibung zeigt, dass es sich dabei nicht um einen Krimi handelt  (0 = "kein Krimi")
+
+Dabei sollten Sie sich wie bei jeder manuellen Inhaltsanalyse an ein klares Codebuch mit Codieranweisungen halten. 
+
+Jetzt speichert die Ergebnisse in einem neuen Excel-Sheet mit Titel *validation_dictionary_coded* und lest den Goldstandard mit `read.csv2()` wieder ein:
+```{r, eval = TRUE, echo = TRUE}
+sample_coded <- read.csv2("validation_dictionary_coded.csv")
+```
+Nun fügen wir die automatisierte und die manuelle Analyse der gleichen Texte über die ID der jeweiligen Texte in einem Dataframe mit dem Namen `confusion` zusammen. Dafür nutzen wir den `merge()`-Befehl.
+
+Wieso das Objekt `confusion` heisst, werdet ihr gleich verstehen.
+```{r,14007, eval = TRUE, echo = TRUE, message=FALSE}
+confusion <- crime_tvshows %>%
+  
+  # Erstellung der ID Variable für das Matching
+  mutate(ID = paste0("ID", 1:nrow(data))) %>%
+ 
+  # Match mit den codierten Daten 
+  right_join(sample_coded) %>%
+  
+  # Reduktion auf die relevanten Variablen
+  select(ID, crime_binary, Manual.Coding) %>%
+  mutate(crime_binary = as.factor(crime_binary),
+         Manual.Coding = as.factor(Manual.Coding)) %>%
+  
+  # Anpassung der Variablennamen
+  rename(automated = crime_binary,
+         manual = Manual.Coding) 
+
+#Ausgabe der Ergebnisse
+head(confusion)
+```
+
+## 2.2 Validieren ##
+Ihr seht neben der _ID_ des jeweiligen Textes die Klassifikation des Textes auf Basis der automatisierten Codierung, hier in der Spalte _automated_, und der manuellen Codierung, hier in der Spalte _manual_. 
+
+Wie können wir nun einen Kennwert erhalten, der uns angibt, wie stark die manuelle und die automatisierte Inhaltsanalyse übereinstimmen?
+
+Um dies zu beurteilen, greifen wir auf _Precision_, _Recall_ und den _F1-Wert_ als gängige Kennwerte zurück, die ihr auf den Folien bereits kennengelernt habt und die in vielen Studien - siehe etwa [Nelson et al. (2018)](https://journals.sagepub.com/doi/full/10.1177/0049124118769114) - genutzt werden, um automatisierte und manuelle Codierungen zu vergleichen.
+
+__Precision__:
+
+Der Kennwert _Precision_ gibt an, wie gut die automatisierte Analyse darin ist, _nur_ Artikel als "Krimi" zu klassifizieren, die laut manuellem Goldstandard tatsächlich Krimis sind. 
+
+
+$Precision = \frac{True Positives}{True Positives + False Positives}$
+
+Dieser Kennwert reicht von minimal 0 bis maximal 1 und sagt folgendes aus: Wie gut ist die Methode darin, nicht zu viele Serien fälschlicherweise (im Vgl. zum manuellen Goldstandard) als "Krimi" zu klassifizieren, d.h. "False Positives" zu erzeugen? Je näher der Wert bei 1 liegt, desto _besser_ die Analyse.
+
+__Recall__:
+
+Der Kennwert _Recall_ gibt an, wie gut die automatisierte Analyse darin ist, _alle_ Serien, die laut manuellem Goldstandard tatsächlich Krimis sind, als Krimis zu klassifizieren.
+
+
+$Recall = \frac{True Positives}{True Positives + False Negatives}$
+
+
+Dieser Kennwert reicht ebenfalls von minimal 0 bis maximal 1 und sagt folgendes aus: Wie gut ist die Methode darin, nicht zu viele Serien fälschlicherweise (im Vgl. zum manuellen Goldstandard) als "kein Krimi" zu klassifizieren, d.h. "False Negatives" zu erzeugen? Je näher der Wert bei 1 liegt, desto _besser_ die Analyse.
+
+__F1-Wert__:
+
+Der _F1-Wert_ ist der harmonische Mittelwert aus beiden Kennwerten. Er wird meist angegeben, wenn man eine übergreifende Metrik benötigt, die Precision _und_ Recall zugleich einbezieht.
+
+
+$F_{1} = 2 * \frac{Precision * Recall}{Precision + Recall}$
+
+
+Nachfolgend lassen wir uns Precision, Recall und den F1-Wert ausgeben. 
+
+Dafür benötigen wir das Packet `caret` und nutzen den Befehl `confusionMatrix()`. 
+
+Wichtig ist, dass wir dabei
+
+- alle Klassifikationsvariablen im `Faktor`-Format vorliegen müssen.
+- via `data` R anweisen müssen, in welchem Objekt die automatisierte Codierung zu finden ist.
+- via `reference` R anweisen müssen, in welchem Objekt der Goldstandard zu finden ist.
+- via `mode` R anweisen müssen, dass wir Kennwerte wie Precision, Recall etc. erhalten wollen.
+- via `positive` R anweisen müssen, welcher Wert das Vorkommen der Variable bezeichnet, d.h. hier, dass die Ausprägung "Krimi" im Goldstandard mit einer 1 codiert wurde.
+
+```{r,14008, eval = TRUE, echo = TRUE}
+# Berechnung der Validität
+confusionMatrix(data = confusion$automated,
+                reference = confusion$manual, 
+                mode = "prec_recall", 
+                positive = "1")
+```
+Am einfachsten zu interpretieren ist dabei die _Konfusions-Matrix_, die anzeigt, welche Fälle automatisiert und manuell gleich oder unterschiedlich codiert wurden. 
+
+Die Matrix zeigt, wie viele Texte der automatisierten Codierung ("Prediction"), die mit 0 ("kein Krimi") bzw. 1 ("Krimi") codiert wurden beim manuellen Goldstandard mit 0 ("kein Krimi") bzw. 1 ("Krimi") codiert wurden - und andersherum. 
+
+Je mehr Texte bei __beiden__ Codierungen also gleichermassen eine 0 ausweisen oder gleichermassen eine 1 ausweisen, desto besser die Übereinstimmung zwischen automatisierter und manueller Analyse. 
+
+Je mehr Texte bei __einer__ der Codierungen aber eine 0 und bei __einer anderen__ eine 1 aufweisen (oder andersherum), desto schlechter die Übereinstimmung zwischen automatisierter und manueller Analyse.
+
+Für die Festlegung "guter" Kennwerte, was _Precision_, _Recall_ und den _F1-Wert_ angeht, gibt es in der Kommunikationswissenschaft (noch) keine einheitlichen Vorgaben. Ihr könnt euch grob an den Vorgaben zu "guten" Intercoder-Reliabilitätswerten orientieren - z.B. würde ein Wert von .8 für _Precision_, _Recall_ oder den _F1-Wert_ dafür sprechen, dass die automatisierte Analyse valide Ergebnisse liefert.
+
+Insgesamt würden wir auf Basis dieser Ergebnisse davon ausgehen, dass unser Diktionär nicht so gut funktioniert, wenn es darum geht, möglichst alle negativen Texte zu erkennen, da _Recall_ = .8 aber _Precision_ = .66. 
+
+Das könnte z.B. ein Hinweis darauf sein, dass unser Diktionär zu "breit" ist, d.h. zu viele nicht eindeutige "Krimi"-Wörter und damit unpräzise Suchbegriffe enthält. 

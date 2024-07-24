@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.555">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Valerie Hase &amp; Luisa Kutlar">
+
+<title>Sitzung 5: Qualitätskriterien</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css">
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+        <div class="quarto-navbar-tools tools-end">
+    <a href="https://twitter.com/hase_va" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-twitter"></i></a>
+    <a href="https://github.com/valeriehase/textasdata-ms" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#pakete-laden-und-daten-einlesen" id="toc-pakete-laden-und-daten-einlesen" class="nav-link active" data-scroll-target="#pakete-laden-und-daten-einlesen">1. Pakete laden und Daten einlesen</a></li>
+  <li><a href="#validierung-automatisierter-analysen" id="toc-validierung-automatisierter-analysen" class="nav-link" data-scroll-target="#validierung-automatisierter-analysen">2. Validierung automatisierter Analysen</a>
+  <ul class="collapse">
+  <li><a href="#manuelle-annotation-goldstandard-erstellen" id="toc-manuelle-annotation-goldstandard-erstellen" class="nav-link" data-scroll-target="#manuelle-annotation-goldstandard-erstellen">2.1 Manuelle Annotation: Goldstandard erstellen</a></li>
+  <li><a href="#validieren" id="toc-validieren" class="nav-link" data-scroll-target="#validieren">2.2 Validieren</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Sitzung 5: Qualitätskriterien</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Valerie Hase &amp; Luisa Kutlar </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="pakete-laden-und-daten-einlesen" class="level1">
+<h1>1. Pakete laden und Daten einlesen</h1>
+<p>Zunächst installieren wir alle Pakete, die wir für diese Sitzung brauchten (z.B. <code>tidyverse</code>). Ihr braucht <code>install.packages()</code> nur, wenn ihr die Pakete im Methodencafe noch nicht installiert hattet.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("tidyverse)</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("quanteda")</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("RCurl")</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("caret")</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"tidyverse"</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"quanteda"</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"RCurl"</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"caret"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Wir nutzen hier wieder eine bestehende Pipeline, nämlich aus Sitzung 1 und 3.</p>
+<p>Als erstes laden wir unseren Serien-Datensatz ein &amp; bereinigen diesen, genau wie wir es in Sitzung 1 gelernt haben:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Daten laden</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span>  <span class="fu">getURL</span>(<span class="st">"https://raw.githubusercontent.com/valeriehase/textasdata-ms/main/data/data_tvseries.csv"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.csv2</span>(<span class="at">text =</span> url)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Preprocessing</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>tokens <span class="ot">&lt;-</span> <span class="fu">tokens</span>(data<span class="sc">$</span>Description,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>                 <span class="at">what =</span> <span class="st">"word"</span>, <span class="co">#Tokenisierung, hier zu Wörtern als Analyseeinheit</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>                 <span class="at">remove_punct =</span> <span class="cn">TRUE</span>, <span class="co">#Entfernung von Satzzeichen</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>                 <span class="at">remove_numbers =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> <span class="co">#Entfernung von Zahlen</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Kleinschreibung</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tokens_tolower</span>()</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Text-as-Data Repräsentation als Document-Feature-Matrix</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>dfm <span class="ot">&lt;-</span> tokens <span class="sc">%&gt;%</span> </span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dfm</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Nehmen wir an, dass wir - wie in Sitzung 3- mittels eines organischen Diktionärs analysieren wollen, ob es sich bei Serien um Serien mit Kriminalbezug handelt oder nicht:</p>
+<p>Dafür erstellen wir zunächst mit <code>dictionary()</code> aus dem <code>quanteda</code>-Paket eine eigene Wortliste, um Serien zu identifizieren, die sich mit “<em>Crime</em>” beschäftigen:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>diktionär_crime <span class="ot">&lt;-</span> <span class="fu">dictionary</span>(<span class="fu">list</span>(<span class="at">crime =</span> <span class="fu">c</span>(<span class="st">"crim*"</span>, <span class="st">"police*"</span>, <span class="st">"gun*"</span>, </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>                                             <span class="st">"shot*"</span>, <span class="st">"dead*"</span>, <span class="st">"murder*"</span>, </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>                                             <span class="st">"kill*"</span>, <span class="st">"court*"</span>, <span class="st">"suspect*"</span>, </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>                                             <span class="st">"witness*"</span>, <span class="st">"arrest*"</span>, <span class="st">"officer*"</span>, </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>                                             <span class="st">"verdict*"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Genau wie in Sitzung 3 klassifizieren wir also Serien als “Krimi” oder “kein Krimi”:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Diktionär anwenden</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>crime_tvshows <span class="ot">&lt;-</span> dfm <span class="sc">%&gt;%</span> </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dfm_weight</span>(<span class="at">scheme =</span> <span class="st">"prop"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dfm_lookup</span>(<span class="at">dictionary =</span> diktionär_crime)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Ergebnis für die weitere Analyse in einen Data Frame umwandeln</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>crime_tvshows <span class="ot">&lt;-</span> <span class="fu">convert</span>(crime_tvshows, </span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>                         <span class="at">to =</span> <span class="st">"data.frame"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Umwandlung in tibble-Format</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  as_tibble <span class="sc">%&gt;%</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Wir ergänzen zunächst wieder die Serientitel</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Title =</span> data<span class="sc">$</span>Title) <span class="sc">%&gt;%</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Wir erstellen eine Variable, die Texte als</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># "1" (Krimi) oder "0" (kein Krimi) identifiziert</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">crime_binary =</span> <span class="dv">1</span>,</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>         <span class="at">crime_binary =</span> <span class="fu">replace</span>(crime_binary,</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>                         crime <span class="sc">==</span> <span class="dv">0</span>,</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>                         <span class="dv">0</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Sortierung der Variablen</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(Title, crime, crime_binary)</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="co">#Ausgabe der Ergebnisse</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(crime_tvshows)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 3
+  Title               crime crime_binary
+  &lt;chr&gt;               &lt;dbl&gt;        &lt;dbl&gt;
+1 1. Game of Thrones      0            0
+2 2. Breaking Bad         0            0
+3 3. Stranger Things      0            0
+4 4. Friends              0            0
+5 5. The Walking Dead     0            0
+6 6. Sherlock             0            0</code></pre>
+</div>
+</div>
+<p>Schauen wir uns nochmal an, wie viel Prozent aller Serien als Krimis identifiziert wurden:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Ausgabe der Crime vs. Non-Crime Serien</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>crime_tvshows <span class="sc">%&gt;%</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># absolute Anzahl jeder Sentiment-Art (n)</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(crime_binary) <span class="sc">%&gt;%</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Ausgabe in Prozent (perc)</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">perc =</span> <span class="fu">prop.table</span>(n)<span class="sc">*</span><span class="dv">100</span>,</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">perc =</span> <span class="fu">round</span>(perc, <span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 3
+  crime_binary     n  perc
+         &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt;
+1            0   730  81.1
+2            1   170  18.9</code></pre>
+</div>
+</div>
+<p>Können wir diesen Zahlen trauen - z.B., wenn wir diese deskriptiven Ergebnisse berichten oder die Klassifizierung als Variable für eine weitere, inferenzstatistische Analyse nutzen wollten? Das testen wir jetzt - auf Basis unserer Qualitätskriterien.</p>
+</section>
+<section id="validierung-automatisierter-analysen" class="level1">
+<h1>2. Validierung automatisierter Analysen</h1>
+<p>Wir haben im Workshop bereits gelernt, warum die Validierung automatisierter Analysen wichtig ist: Wir sollten den Ergebnissen automatisierter Inhaltsanalysen nicht blind vertrauen, weil oft unklar ist, inwiefern automatisiert gemessen wird/werden kann, was uns theoretisch interessiert.</p>
+<p>Daher empfehlen <a href="https://www.cambridge.org/core/journals/political-analysis/article/text-as-data-the-promise-and-pitfalls-of-automatic-content-analysis-methods-for-political-texts/F7AAC8B2909441603FEB25C156448F20">Grimmer und Stewart</a> (2013, S. 271): “Validate, Validate, Validate. […] What should be avoided, […] is the blind use of any method without a validation step.”</p>
+<p>Wir können uns bei der Auswertung und Interpretation unserer Ergebnisse inbesondere folgende Fragen stellen:</p>
+<ul>
+<li>Inwiefern kann und sollte ich theoretische Konstrukte, die für meine Studie von Interesse sind, überhaupt automatisiert messen?</li>
+<li>Wie sehr überlappt die automatisierte Analyse mit einer manuellen Codierung der gleichen Variable(n) - und wo finden sich Unterschiede?</li>
+<li>Wie lassen sich diese Unterschiede erklären, d.h., inwiefern messen manuelle und automatisierte Codierungen ggf. unterschiedliche Dinge und wieso?</li>
+</ul>
+<p>Wir arbeiten hier nur mit einer Variante der Validierung: dem Vergleich mit einem manuellen “Goldstandard”.</p>
+<p>Im Prinzip werden bei dieser Form der Validierung die automatisierte und manuelle Codierung der gleichen Variablen für die gleichen Texte verglichen. Oft wird dabei die manuelle Codierung als “Goldstandard” bezeichnet, d.h. es wird impliziert, dass manuelle Analysen in der Lage sind, den “wahren” Wert von Variablen in Texten zu erfassen.</p>
+<p>Inwiefern manuelle Codierungen (oder jegliche Form von Codierungen) dazu in der Lage sind, lässt sich natürlich hinterfragen, wie <a href="https://journals.sagepub.com/doi/full/10.1177/2053951715602908">di Maggio</a> (2013, S. 3f.) und <a href="https://www.tandfonline.com/doi/full/10.1080/10584609.2020.1723752">Song et al.</a> (2020, S. 553ff.) kritisch zusammenfassen. Z.B. unterscheiden sich manuelle Codierer:innen oft in Ihren Codierungen; zudem lässt sich aus erkenntnistheoretischer Perspektive diskutieren, inwiefern der “wahre” Wert von Variablen überhaupt messbar ist.</p>
+<p>Was sich anhand der Validierung durch Vergleich zu einer manuellen Codierung <em>in jedem Fall</em> zeigen lässt, ist, inwiefern sich automatisierte und manuelle Codierung unterscheiden - und wieso dies der Fall sein könnte. Entsprechend können wir durch eine Validierung in jedem Fall besser verstehen, welche (theoretischen) Konstrukte wir mit der automatisierten Analyse messen (können).</p>
+<section id="manuelle-annotation-goldstandard-erstellen" class="level2">
+<h2 class="anchored" data-anchor-id="manuelle-annotation-goldstandard-erstellen">2.1 Manuelle Annotation: Goldstandard erstellen</h2>
+<p>Zuerst würden wir nun den manuellen Goldstandard erstellen. Wir codieren also:</p>
+<ul>
+<li>Werden Serien als Krimis beschrieben? (Code: 1)</li>
+<li>Werden Serien nicht als Krimis beschrieben? (Code: 0)</li>
+</ul>
+<p>Nun wollen wir als nächstes schauen, inwiefern die automatisierte Messung von “Krimi” mit der manuellen Codierung, d.h. dem “Goldstandard”, übereinstimmt.</p>
+<p>Dafür ziehen wir als erstes eine zufällige Stichprobe aus Ihrem Korpus, die manuell validiert werden soll.</p>
+<p><a href="https://www.tandfonline.com/doi/full/10.1080/10584609.2020.1723752?scroll=top&amp;needAccess=true">Song et al.</a> (2020, S. 564) empfehlen, für die Validierung automatisierter Inhaltsanalysen möglichst mehr als 1.300 Artikel manuell zur Erstellung eines “Goldstandards” zu codieren. Dabei sollte die manuelle Codierung von mehr als eine/r Codierer:in durchgeführt werden und die Intercoderreliabilität mindestens .7 betragen - im Rahmen dieses Workshops ist das natürlich nicht möglich.</p>
+<p>Hier beschränken wir uns aus praktischen Gründen auf eine kleinere Stichprobe, hier als Beispiel 30 Artikel, und die Codierung durch eine Codierer:in.</p>
+<p>Zunächst ziehen wir eine zufällige Stichprobe für die manuelle Validierung. Mit der Funktion <code>slice_sample()</code> können wir dabei z.B. aus allen Texten des Korpus, hier den Zeilen des Dataframes <code>data</code>, 30 Texte zufällig auswählen.</p>
+<p>Dann fügen wir folgende Informationen hinzu, um ein “Codesheet” zu erstellen:</p>
+<ul>
+<li>Die Variable “ID” enthält die ID der manuell zu codierenden Texte.</li>
+<li>Die Variable “Description” enthält die zu manuell codierenden Texte.</li>
+<li>Die Variable “Manual.Coding” enthält leere Zellen, in die wir unsere Codierung eintragen können.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>sample <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Erstellung der Variable ID</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ID =</span> <span class="fu">paste0</span>(<span class="st">"ID"</span>, <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(data))) <span class="sc">%&gt;%</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Stichprobe ziehen</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_sample</span>(<span class="at">n =</span> <span class="dv">30</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Variable Manual Coding hinzufügen</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Manual.Coding =</span> <span class="cn">NA</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Reduktion auf die drei relevanten Variablen</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(ID, Description, Manual.Coding)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Jetzt schreiben wir diese Datei mit <code>write.csv()</code> auf unseren lokalen Speicher.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv2</span>(sample, <span class="st">"validation_dictionary.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Jetzt würden wir ausserhalb von R die Validierung vornehmen. D.h., wir lesen jeden Text und tragen dann in der jeweiligen Zeile der Spalte <code>Manual.Coding</code> die manuelle Codierung ein:</p>
+<ul>
+<li>eine 1, wenn die Serienbeschreibung zeigt, dass es sich dabei um einen Krimi handelt (1 = “Krimi”)</li>
+<li>eine 0, wenn die Serienbeschreibung zeigt, dass es sich dabei nicht um einen Krimi handelt (0 = “kein Krimi”)</li>
+</ul>
+<p>Dabei sollten Sie sich wie bei jeder manuellen Inhaltsanalyse an ein klares Codebuch mit Codieranweisungen halten.</p>
+<p>Jetzt speichert die Ergebnisse in einem neuen Excel-Sheet mit Titel <em>validation_dictionary_coded</em> und lest den Goldstandard mit <code>read.csv2()</code> wieder ein:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>sample_coded <span class="ot">&lt;-</span> <span class="fu">read.csv2</span>(<span class="st">"validation_dictionary_coded.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Nun fügen wir die automatisierte und die manuelle Analyse der gleichen Texte über die ID der jeweiligen Texte in einem Dataframe mit dem Namen <code>confusion</code> zusammen. Dafür nutzen wir den <code>merge()</code>-Befehl.</p>
+<p>Wieso das Objekt <code>confusion</code> heisst, werdet ihr gleich verstehen.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>confusion <span class="ot">&lt;-</span> crime_tvshows <span class="sc">%&gt;%</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Erstellung der ID Variable für das Matching</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ID =</span> <span class="fu">paste0</span>(<span class="st">"ID"</span>, <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(data))) <span class="sc">%&gt;%</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Match mit den codierten Daten </span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">right_join</span>(sample_coded) <span class="sc">%&gt;%</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Reduktion auf die relevanten Variablen</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(ID, crime_binary, Manual.Coding) <span class="sc">%&gt;%</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">crime_binary =</span> <span class="fu">as.factor</span>(crime_binary),</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">Manual.Coding =</span> <span class="fu">as.factor</span>(Manual.Coding)) <span class="sc">%&gt;%</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Anpassung der Variablennamen</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">automated =</span> crime_binary,</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>         <span class="at">manual =</span> Manual.Coding) </span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a><span class="co">#Ausgabe der Ergebnisse</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(confusion)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 3
+  ID    automated manual
+  &lt;chr&gt; &lt;fct&gt;     &lt;fct&gt; 
+1 ID7   0         0     
+2 ID26  0         0     
+3 ID55  0         0     
+4 ID81  0         0     
+5 ID142 0         0     
+6 ID153 0         0     </code></pre>
+</div>
+</div>
+</section>
+<section id="validieren" class="level2">
+<h2 class="anchored" data-anchor-id="validieren">2.2 Validieren</h2>
+<p>Ihr seht neben der <em>ID</em> des jeweiligen Textes die Klassifikation des Textes auf Basis der automatisierten Codierung, hier in der Spalte <em>automated</em>, und der manuellen Codierung, hier in der Spalte <em>manual</em>.</p>
+<p>Wie können wir nun einen Kennwert erhalten, der uns angibt, wie stark die manuelle und die automatisierte Inhaltsanalyse übereinstimmen?</p>
+<p>Um dies zu beurteilen, greifen wir auf <em>Precision</em>, <em>Recall</em> und den <em>F1-Wert</em> als gängige Kennwerte zurück, die ihr auf den Folien bereits kennengelernt habt und die in vielen Studien - siehe etwa <a href="https://journals.sagepub.com/doi/full/10.1177/0049124118769114">Nelson et al.&nbsp;(2018)</a> - genutzt werden, um automatisierte und manuelle Codierungen zu vergleichen.</p>
+<p><strong>Precision</strong>:</p>
+<p>Der Kennwert <em>Precision</em> gibt an, wie gut die automatisierte Analyse darin ist, <em>nur</em> Artikel als “Krimi” zu klassifizieren, die laut manuellem Goldstandard tatsächlich Krimis sind.</p>
+<p><span class="math inline">Precision = \frac{True Positives}{True Positives + False Positives}</span></p>
+<p>Dieser Kennwert reicht von minimal 0 bis maximal 1 und sagt folgendes aus: Wie gut ist die Methode darin, nicht zu viele Serien fälschlicherweise (im Vgl. zum manuellen Goldstandard) als “Krimi” zu klassifizieren, d.h. “False Positives” zu erzeugen? Je näher der Wert bei 1 liegt, desto <em>besser</em> die Analyse.</p>
+<p><strong>Recall</strong>:</p>
+<p>Der Kennwert <em>Recall</em> gibt an, wie gut die automatisierte Analyse darin ist, <em>alle</em> Serien, die laut manuellem Goldstandard tatsächlich Krimis sind, als Krimis zu klassifizieren.</p>
+<p><span class="math inline">Recall = \frac{True Positives}{True Positives + False Negatives}</span></p>
+<p>Dieser Kennwert reicht ebenfalls von minimal 0 bis maximal 1 und sagt folgendes aus: Wie gut ist die Methode darin, nicht zu viele Serien fälschlicherweise (im Vgl. zum manuellen Goldstandard) als “kein Krimi” zu klassifizieren, d.h. “False Negatives” zu erzeugen? Je näher der Wert bei 1 liegt, desto <em>besser</em> die Analyse.</p>
+<p><strong>F1-Wert</strong>:</p>
+<p>Der <em>F1-Wert</em> ist der harmonische Mittelwert aus beiden Kennwerten. Er wird meist angegeben, wenn man eine übergreifende Metrik benötigt, die Precision <em>und</em> Recall zugleich einbezieht.</p>
+<p><span class="math inline">F_{1} = 2 * \frac{Precision * Recall}{Precision + Recall}</span></p>
+<p>Nachfolgend lassen wir uns Precision, Recall und den F1-Wert ausgeben.</p>
+<p>Dafür benötigen wir das Packet <code>caret</code> und nutzen den Befehl <code>confusionMatrix()</code>.</p>
+<p>Wichtig ist, dass wir dabei</p>
+<ul>
+<li>alle Klassifikationsvariablen im <code>Faktor</code>-Format vorliegen müssen.</li>
+<li>via <code>data</code> R anweisen müssen, in welchem Objekt die automatisierte Codierung zu finden ist.</li>
+<li>via <code>reference</code> R anweisen müssen, in welchem Objekt der Goldstandard zu finden ist.</li>
+<li>via <code>mode</code> R anweisen müssen, dass wir Kennwerte wie Precision, Recall etc. erhalten wollen.</li>
+<li>via <code>positive</code> R anweisen müssen, welcher Wert das Vorkommen der Variable bezeichnet, d.h. hier, dass die Ausprägung “Krimi” im Goldstandard mit einer 1 codiert wurde.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Berechnung der Validität</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(<span class="at">data =</span> confusion<span class="sc">$</span>automated,</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">reference =</span> confusion<span class="sc">$</span>manual, </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">mode =</span> <span class="st">"prec_recall"</span>, </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">positive =</span> <span class="st">"1"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+          Reference
+Prediction  0  1
+         0 23  1
+         1  2  4
+                                          
+               Accuracy : 0.9             
+                 95% CI : (0.7347, 0.9789)
+    No Information Rate : 0.8333          
+    P-Value [Acc &gt; NIR] : 0.2396          
+                                          
+                  Kappa : 0.6667          
+                                          
+ Mcnemar's Test P-Value : 1.0000          
+                                          
+              Precision : 0.6667          
+                 Recall : 0.8000          
+                     F1 : 0.7273          
+             Prevalence : 0.1667          
+         Detection Rate : 0.1333          
+   Detection Prevalence : 0.2000          
+      Balanced Accuracy : 0.8600          
+                                          
+       'Positive' Class : 1               
+                                          </code></pre>
+</div>
+</div>
+<p>Am einfachsten zu interpretieren ist dabei die <em>Konfusions-Matrix</em>, die anzeigt, welche Fälle automatisiert und manuell gleich oder unterschiedlich codiert wurden.</p>
+<p>Die Matrix zeigt, wie viele Texte der automatisierten Codierung (“Prediction”), die mit 0 (“kein Krimi”) bzw. 1 (“Krimi”) codiert wurden beim manuellen Goldstandard mit 0 (“kein Krimi”) bzw. 1 (“Krimi”) codiert wurden - und andersherum.</p>
+<p>Je mehr Texte bei <strong>beiden</strong> Codierungen also gleichermassen eine 0 ausweisen oder gleichermassen eine 1 ausweisen, desto besser die Übereinstimmung zwischen automatisierter und manueller Analyse.</p>
+<p>Je mehr Texte bei <strong>einer</strong> der Codierungen aber eine 0 und bei <strong>einer anderen</strong> eine 1 aufweisen (oder andersherum), desto schlechter die Übereinstimmung zwischen automatisierter und manueller Analyse.</p>
+<p>Für die Festlegung “guter” Kennwerte, was <em>Precision</em>, <em>Recall</em> und den <em>F1-Wert</em> angeht, gibt es in der Kommunikationswissenschaft (noch) keine einheitlichen Vorgaben. Ihr könnt euch grob an den Vorgaben zu “guten” Intercoder-Reliabilitätswerten orientieren - z.B. würde ein Wert von .8 für <em>Precision</em>, <em>Recall</em> oder den <em>F1-Wert</em> dafür sprechen, dass die automatisierte Analyse valide Ergebnisse liefert.</p>
+<p>Insgesamt würden wir auf Basis dieser Ergebnisse davon ausgehen, dass unser Diktionär nicht so gut funktioniert, wenn es darum geht, möglichst alle negativen Texte zu erkennen, da <em>Recall</em> = .8 aber <em>Precision</em> = .66.</p>
+<p>Das könnte z.B. ein Hinweis darauf sein, dass unser Diktionär zu “breit” ist, d.h. zu viele nicht eindeutige “Krimi”-Wörter und damit unpräzise Suchbegriffe enthält.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
