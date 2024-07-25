@@ -160,11 +160,26 @@ data %>%
 
 ### 2.1.4 Aufgabe 1 📌
 
-Könnt ihr...
+#### Aufgabe 1.1 (Basis)
 
--   **Basis**: Alle Serien identifizieren, die in Deutschland spielen?
+Könnt ihr alle Serien identifizieren, die in Deutschland spielen?
 
--   **Fortgeschritten**: Alle Serien identifizieren, in denen es um Superhelden geht und "*superhero/superheroes*” in der Variable `Description` mit "*fancy R programmers*“ ersetzen?
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+data %>%
+  filter(grepl("German", Description)) %>%
+  head()
+```
+
+#### Aufgabe 1.2 (Fortgeschritten)
+Könnt ihr alle Serien identifizieren, in denen es um Superhelden geht und "*superhero/superheroes*” in der Variable `Description` mit "*fancy R programmers*“ ersetzen?
+
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+data %>%
+  filter(grepl("[S|s]uperhero[es]*", Description)) %>%
+  mutate(Description = gsub("[S|s]uperhero[es]*", "fancy R programmers", Description)) %>%
+  select(Description) %>%
+  head(3)
+```
 
 ## 2.2 Normalisierung
 
@@ -229,11 +244,56 @@ tokens(data$Description,
 
 ### 2.2.2 Aufgabe 2 📌
 
-Könnt ihr...
+#### 2.2.2 Aufgabe 2.1 (Basis)
+Könnt ihr eine Liste mit 3-5 Stopwörtern erstellen und diese als Teil des Preprocessings zusätzlich entfernen?
 
--   **Basis**: Eine Liste mit 3-5 Stopwörtern erstellen und diese als Teil des Preprocessings zusätzlich entfernen?
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+# Eigene Stopwortliste definieren
+unique_stopwords = c("one", "two", "three", "four", "five")
 
--   **Fortgeschritten**: Dafür sorgen, dass Namen von Städten (hier als Beispiel „New York“) als ein einzelnes Feature beibehalten werden?
+# als Teil des Preprocessings aufnehmen
+tokens <- tokens(data$Description,
+                 what = "word", #Tokenisierung, hier zu Wörtern als Analyseeinheit
+                 remove_punct = TRUE, #Entfernung von Satzzeichen
+                 remove_numbers = TRUE) %>% #Entfernung von Zahlen
+  
+  # Kleinschreibung
+  tokens_tolower() %>% 
+  
+  # Entfernung von Stoppwörtern
+  tokens_remove(stopwords("english")) %>% 
+  
+  # Entfernung der eigenen Stopwörter
+  tokens_remove(unique_stopwords) %>%
+  
+  # Stemming
+  tokens_wordstem()
+```
+
+#### 2.2.2 Aufgabe 2.1 (Fortgeschritten)
+Könnt ihr dafür sorgen, dass Namen von Städten (hier als Beispiel „New York“) als ein einzelnes Feature beibehalten werden?
+
+```{r echo = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+tokens <- tokens(data$Description,
+                 what = "word", #Tokenisierung, hier zu Wörtern als Analyseeinheit
+                 remove_punct = TRUE, #Entfernung von Satzzeichen
+                 remove_numbers = TRUE) %>% #Entfernung von Zahlen
+  
+  # Kleinschreibung
+  tokens_tolower() %>% 
+  
+  # Entfernung von Stoppwörtern
+  tokens_remove(stopwords("english")) %>% 
+  
+  # zusätzlicher Schritt, um New York als einen Begriff beizubehalten
+  tokens_compound(pattern = phrase(c("new york*"))) %>%
+  
+  # Stemming
+  tokens_wordstem()
+
+# Beispieltext
+tokens[81]
+```
 
 # 3. Text-as-Data-Repräsentation
 
