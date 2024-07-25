@@ -270,7 +270,7 @@ Die folgende Übung testet eure Kenntnisse im Hinblick auf Diktionäre!
 
 ## Aufgabe 1.1 (Basis)
 Könnt ihr analysieren, wie viel Prozent der Serien Science-Fiction Serien sind?
-```{r echo = FALSE, eval = FALSE, message = FALSE, warning = FALSE, error = FALSE}
+```{r echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 #Diktionär erstellen
 diktionär_scifi <- dictionary(list(scifi = c("fantas*", "science fict*", "sci-fi*", 
                                              "galax*", "space*",
@@ -316,21 +316,21 @@ scifi_tvshows %>%
 ```
 ## Aufgabe 1.2 (Fortgeschritten)
 Könnt ihr analysieren, welche fünf Science-Fiction Serien die (nach Publikums-Votum laut `Number.of.Votes`) beliebtesten Serien sind?
-```{r echo = FALSE, eval = FALSE, message = FALSE, warning = FALSE, error = FALSE}
-#Diktionär erstellen
+```{r echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+# Diktionär erstellen
 scifi_tvshows %>%
   
-  #Auswahl der Sci-Fi-Serien
+  # Auswahl der Sci-Fi-Serien
   filter(scifi_binary == "scifi") %>%
   
-  #Umwandlung der Number.of.Votes Variable
+  # Umwandlung der Number.of.Votes Variable
   mutate(Number.of.Votes = gsub("K", "000000", Number.of.Votes),
          Number.of.Votes = gsub("M", "000000000", Number.of.Votes),
          Number.of.Votes = as.numeric(Number.of.Votes)) %>%
   
-  #Sortierung nach Rating
+  # Sortierung nach Rating
   arrange(desc(Number.of.Votes)) %>%
   
-  #Ausgabe der ersten fünf Serien
+  # Ausgabe der ersten fünf Serien
   head(5)
 ```

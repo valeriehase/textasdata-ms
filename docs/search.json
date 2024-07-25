@@ -837,35 +837,35 @@
     "href": "tutorial/02-cooccurrence.html#aufgabe-1.1-basis",
     "title": "Sitzung 2: Co-Occurrence Analysen",
     "section": "Aufgabe 1.1 (Basis)",
-    "text": "Aufgabe 1.1 (Basis)\nLest den Datensatz ein und verschafft euch einen Überblick über die Daten. Welche Variablen sind dort vorhanden?"
+    "text": "Aufgabe 1.1 (Basis)\nLest den Datensatz ein und verschafft euch einen Überblick über die Daten. Welche Variablen sind dort vorhanden?\n\n#Daten einlesen\nurl &lt;- getURL(\"https://raw.githubusercontent.com/valeriehase/textasdata-ms/main/data/data_horoscope.csv\")\nhoroscope_df &lt;- read.csv2(text = url) \n\n#Überblick über Datensatz verschaffen\n#str(horoscope_df)"
   },
   {
     "objectID": "tutorial/02-cooccurrence.html#aufgabe-1.2-basis",
     "href": "tutorial/02-cooccurrence.html#aufgabe-1.2-basis",
     "title": "Sitzung 2: Co-Occurrence Analysen",
     "section": "Aufgabe 1.2 (Basis)",
-    "text": "Aufgabe 1.2 (Basis)\nBereitet den Datensatz durch Preprocessing und das Umwandeln in eine DFM für die Analyse vor. Hinterfragt kritisch, welche Bereinigung- und Normalisierungsschritte ihr tatsächlich braucht."
+    "text": "Aufgabe 1.2 (Basis)\nBereitet den Datensatz durch Preprocessing und das Umwandeln in eine DFM für die Analyse vor. Hinterfragt kritisch, welche Bereinigung- und Normalisierungsschritte ihr tatsächlich braucht.\n\n# Normalisierung\nhoroscope_tokens &lt;- horoscope_df$Horoscope %&gt;% \n  tokens(what = \"word\",\n         remove_punct = TRUE, \n         remove_numbers = TRUE, \n         remove_symbols = TRUE) %&gt;% \n  tokens_tolower() %&gt;% \n  tokens_remove(stopwords(\"english\")) %&gt;% \n  tokens_wordstem()"
   },
   {
     "objectID": "tutorial/02-cooccurrence.html#aufgabe-1.3-fortgeschritten",
     "href": "tutorial/02-cooccurrence.html#aufgabe-1.3-fortgeschritten",
     "title": "Sitzung 2: Co-Occurrence Analysen",
     "section": "Aufgabe 1.3 (Fortgeschritten)",
-    "text": "Aufgabe 1.3 (Fortgeschritten)\nSchaut euch als erste Analyse an, welcher Ausdrück häufiger vorkommt: “secret fear” oder “in love”?"
+    "text": "Aufgabe 1.3 (Fortgeschritten)\nSchaut euch als erste Analyse an, welcher Ausdrück häufiger vorkommt: “secret fear” oder “in love”?\n\n# Lösung mit regulären Ausdrücken\n horoscope_df %&gt;%\n  \n  # Auszählen\n  summarize(\"Häufigkeit: in love\" = sum(grepl(\"in love\", tolower(Horoscope))),\n            \"Häufigkeit: secret fear\" = sum(grepl(\"secret fear\",  tolower(Horoscope))))\n\n  Häufigkeit: in love Häufigkeit: secret fear\n1                  12                       3"
   },
   {
     "objectID": "tutorial/02-cooccurrence.html#aufgabe-1.4-fortgeschritten",
     "href": "tutorial/02-cooccurrence.html#aufgabe-1.4-fortgeschritten",
     "title": "Sitzung 2: Co-Occurrence Analysen",
     "section": "Aufgabe 1.4 (Fortgeschritten)",
-    "text": "Aufgabe 1.4 (Fortgeschritten)\nJetzt wollen wir wissen, bei welchem Sternzeichen es am mysteriösesten wird: Bei welchem Sternzeichen fällt am häufigsten das Stichwort “secret”?"
+    "text": "Aufgabe 1.4 (Fortgeschritten)\nJetzt wollen wir wissen, bei welchem Sternzeichen es am mysteriösesten wird: Bei welchem Sternzeichen fällt am häufigsten das Stichwort “secret”?\n\n#Version 1: Mit regulären Ausdrücken\nhoroscope_df %&gt;%\n  \n  #Gruppierung nach Sternzeichen\n  group_by(Signs) %&gt;%\n  \n  #Auszählen\n  summarize(Geheimnis = sum(grepl(\"secret\", Horoscope))) %&gt;%\n  \n  #Absteigend sortieren\n  arrange(desc(Geheimnis))\n\n# A tibble: 11 × 2\n   Signs       Geheimnis\n   &lt;chr&gt;           &lt;int&gt;\n 1 CANCER              4\n 2 VIRGO               4\n 3 LIBRA               3\n 4 SCORPIO             3\n 5 AQUARIUS            2\n 6 GEMINI              2\n 7 LEO                 2\n 8 SAGITTARIUS         2\n 9 TAURUS              2\n10 ARIES               1\n11 CAPRICORN           1\n\n\n\n#Version 2: Mit Quanteda\n\n#Wir analysieren die Häufigkeit des Features gruppiert nach Sternzeichen\ntextstat_frequency(horoscope_dfm, groups = horoscope_df$Signs) %&gt;%\n  \n  #Wir filtern nur für das Feature \"secret\"\n  filter(feature == \"secret\") %&gt;%\n  \n  #Absteigend sortieren\n  arrange(desc(docfreq))\n\n     feature frequency rank docfreq       group\n1302  secret         4   85       4      CANCER\n5135  secret         4  117       4     SCORPIO\n6456  secret         4  129       4       VIRGO\n227   secret         3  162       3    AQUARIUS\n3923  secret         3  165       3       LIBRA\n5871  secret         3  176       3      TAURUS\n913   secret         2  144       2       ARIES\n2794  secret         2  304       2      GEMINI\n3425  secret         2  254       2         LEO\n4732  secret         2  246       2 SAGITTARIUS\n2333  secret         1  387       1   CAPRICORN"
   },
   {
     "objectID": "tutorial/02-cooccurrence.html#aufgabe-1.5-expertin",
     "href": "tutorial/02-cooccurrence.html#aufgabe-1.5-expertin",
     "title": "Sitzung 2: Co-Occurrence Analysen",
     "section": "Aufgabe 1.5 (Expert:in)",
-    "text": "Aufgabe 1.5 (Expert:in)\nVisualisiert auf Basis eines semantischen Netzwerk, mit welchen Adjektiven die Sternzeichen “Aquarius” (Wassermann) vs. “Gemini” (Zwilling) häufig in den Horoskopen assoziiert werden.\nDas Netzwerk könnte etwa so aussehen:"
+    "text": "Aufgabe 1.5 (Expert:in)\nVisualisiert auf Basis eines semantischen Netzwerk, mit welchen Adjektiven die Sternzeichen “Aquarius” (Wassermann) vs. “Gemini” (Zwilling) häufig in den Horoskopen assoziiert werden.\nDas Netzwerk könnte etwa so aussehen:\n\nhoroscope_df_filtered &lt;- horoscope_df %&gt;%\n  \n  #Reduktion des Datensatzes auf ausgewählte Sternzeichen\n  filter(Signs %in% c(\"AQUARIUS\", \"GEMINI\"))\n\nhoroscope_df_adj &lt;- horoscope_df_filtered %&gt;%\n  \n  #Reduktion auf Textvariable \"Horoscope\"\n  select(Horoscope) %&gt;%\n\n  #Format für das udpipe Paket anpassen\n  as_tibble() %&gt;%\n  mutate(doc_id = paste0(\"text\", 1:n())) %&gt;% \n  rename(text = Horoscope) %&gt;%\n\n #Part-of-speech tagging, um Adjektive zu identifizieren\n  udpipe(\"english\") %&gt;%\n    \n  #Wir behalten mit filter nur Adjektive \n  as_tibble() %&gt;%\n  filter(upos == \"ADJ\") %&gt;%\n  \n  #Wir reduzieren die Ausgabe auf relevante Variablen (Text-ID, Feature - in diesem Fall Adjektive)\n  select(doc_id, token) %&gt;%\n  \n  #Wir erstellen einen auf Adjektive reduzierten Text je Horoskop\n  group_by(doc_id) %&gt;%\n  summarize(Horoscope_adj = paste0(token, collapse = \" \")) %&gt;%\n  distinct(doc_id, .keep_all = T) \n\n#Wir bringen den auf Adjektive reduzierten Datensatz &\n#die Informationen zu den einzelnen Horoskopen zusammen\nhoroscope_df_filtered &lt;- horoscope_df_filtered %&gt;%\n  \n  #Wir erstellen einen ID, um die Informationen zu matchen\n  mutate(doc_id = paste0(\"text\", 1:n())) %&gt;%\n  \n  #Wir fügen die beiden Datensätze zusammen\n  left_join(horoscope_df_adj) %&gt;%\n  \n  #Wir fügen das Sternzeichen zum jeweiligen Text hinzu, quasi als \"Titel\"\n  mutate(Horoscope = paste0(Horoscope_adj, \" \", Signs))\n\n#Semantisches Netzwerk\n\n#Preprocessing des Textes\ntokens(horoscope_df_filtered$Horoscope,\n       what = \"word\", #Tokenisierung, hier zu Wörtern als Analyseeinheit\n       remove_punct = TRUE, #Entfernung von Satzzeichen\n       remove_numbers = TRUE) %&gt;% #Entfernung von Zahlen\n  \n  #Kleinschreibung\n  tokens_tolower() %&gt;% \n  \n  #Entfernung von Stoppwörtern\n  tokens_remove(stopwords(\"english\")) %&gt;% \n  \n  #Stemming\n  tokens_wordstem() %&gt;%\n  \n  #Wir erstellen die Feature Co-Occurrence-Matrix\n  fcm(context = \"document\") %&gt;%\n  \n  #Wir erstellen das semantische Netzwerk\n  textplot_network(min_freq = 5)"
   },
   {
     "objectID": "tutorial/03-diktionäre.html#organische-diktionäre",
@@ -928,14 +928,14 @@
     "href": "tutorial/03-diktionäre.html#aufgabe-1.1-basis",
     "title": "Sitzung 3: Diktionäre",
     "section": "Aufgabe 1.1 (Basis)",
-    "text": "Aufgabe 1.1 (Basis)\nKönnt ihr analysieren, wie viel Prozent der Serien Science-Fiction Serien sind?"
+    "text": "Aufgabe 1.1 (Basis)\nKönnt ihr analysieren, wie viel Prozent der Serien Science-Fiction Serien sind?\n\n#Diktionär erstellen\ndiktionär_scifi &lt;- dictionary(list(scifi = c(\"fantas*\", \"science fict*\", \"sci-fi*\", \n                                             \"galax*\", \"space*\",\n                                             \"magic*\", \"wizzard*\", \"witch*\",\n                                             \"monster\")))\n\n#Diktionär anwenden\nscifi_tvshows &lt;- dfm %&gt;% \n  dfm_weight(scheme = \"prop\") %&gt;% \n  dfm_lookup(dictionary = diktionär_scifi)\n\n# Ergebnis für die weitere Analyse in einen Data Frame umwandeln\nscifi_tvshows &lt;- convert(scifi_tvshows, \n                         to = \"data.frame\") %&gt;%\n  \n  # Umwandlung in tibble-Format\n  as_tibble %&gt;%\n  \n  # Wir ergänzen zunächst wieder die Serientitel\n  mutate(Title = data$Title,\n         Number.of.Votes = data$Number.of.Votes) %&gt;%\n  \n  # Wir erstellen eine Variable, die Texte als\n  # \"scifi\" oder \"non-scifi\" identifiziert\n  mutate(scifi_binary = \"scifi\",\n         scifi_binary = replace(scifi_binary,\n                         scifi == 0,\n                         \"non-scifi\")) %&gt;%\n\n# Sortierung der Variablen\nselect(Title, Number.of.Votes, scifi, scifi_binary)\n\n# Wie viel Prozent sind Sci-Fi Serien?\nscifi_tvshows %&gt;%\n  \n  # absolute Anzahl jeder Sentiment-Art (n)\n  count(scifi_binary) %&gt;%\n  \n  # Ausgabe in Prozent (perc)\n  mutate(perc = prop.table(n)*100,\n         perc = round(perc, 2))\n\n# A tibble: 2 × 3\n  scifi_binary     n  perc\n  &lt;chr&gt;        &lt;int&gt; &lt;dbl&gt;\n1 non-scifi      855    95\n2 scifi           45     5"
   },
   {
     "objectID": "tutorial/03-diktionäre.html#aufgabe-1.2-fortgeschritten",
     "href": "tutorial/03-diktionäre.html#aufgabe-1.2-fortgeschritten",
     "title": "Sitzung 3: Diktionäre",
     "section": "Aufgabe 1.2 (Fortgeschritten)",
-    "text": "Aufgabe 1.2 (Fortgeschritten)\nKönnt ihr analysieren, welche fünf Science-Fiction Serien die (nach Publikums-Votum laut Number.of.Votes) beliebtesten Serien sind?"
+    "text": "Aufgabe 1.2 (Fortgeschritten)\nKönnt ihr analysieren, welche fünf Science-Fiction Serien die (nach Publikums-Votum laut Number.of.Votes) beliebtesten Serien sind?\n\n# Diktionär erstellen\nscifi_tvshows %&gt;%\n  \n  # Auswahl der Sci-Fi-Serien\n  filter(scifi_binary == \"scifi\") %&gt;%\n  \n  # Umwandlung der Number.of.Votes Variable\n  mutate(Number.of.Votes = gsub(\"K\", \"000000\", Number.of.Votes),\n         Number.of.Votes = gsub(\"M\", \"000000000\", Number.of.Votes),\n         Number.of.Votes = as.numeric(Number.of.Votes)) %&gt;%\n  \n  # Sortierung nach Rating\n  arrange(desc(Number.of.Votes)) %&gt;%\n  \n  # Ausgabe der ersten fünf Serien\n  head(5)\n\n# A tibble: 5 × 4\n  Title               Number.of.Votes  scifi scifi_binary\n  &lt;chr&gt;                         &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;       \n1 18. The Mandalorian       590000000 0.0455 scifi       \n2 21. The Witcher           572000000 0.0435 scifi       \n3 70. Firefly               282000000 0.0526 scifi       \n4 74. The 100               277000000 0.0385 scifi       \n5 90. Doctor Who            248000000 0.0476 scifi"
   },
   {
     "objectID": "tutorial/03-diktionäre.html#aufgabe-1.3-fortgeschritten",

@@ -360,7 +360,7 @@ Bitte arbeitet für die Übung mit dem Horoskop-Datensatz (Download der CSV-Date
 
 ## Aufgabe 1.1 (Basis)
 Lest den Datensatz ein und verschafft euch einen Überblick über die Daten. Welche Variablen sind dort vorhanden?
-```{r echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+```{r echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 #Daten einlesen
 url <- getURL("https://raw.githubusercontent.com/valeriehase/textasdata-ms/main/data/data_horoscope.csv")
 horoscope_df <- read.csv2(text = url) 
@@ -371,7 +371,7 @@ horoscope_df <- read.csv2(text = url)
 
 ## Aufgabe 1.2 (Basis)
 Bereitet den Datensatz durch Preprocessing und das Umwandeln in eine DFM für die Analyse vor. Hinterfragt kritisch, welche Bereinigung- und Normalisierungsschritte ihr tatsächlich braucht.
-```{r echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+```{r echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 
 # Normalisierung
 horoscope_tokens <- horoscope_df$Horoscope %>% 
@@ -396,7 +396,7 @@ horoscope_dfm <- horoscope_tokens %>%
 ```
 ## Aufgabe 1.3 (Fortgeschritten)
 Schaut euch als erste Analyse an, welcher Ausdrück häufiger vorkommt: "**secret fear**" oder "**in love**"?
-```{r echo = FALSE, eval = FALSE, message = FALSE, warning = FALSE, error = FALSE}
+```{r echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 # Lösung mit regulären Ausdrücken
  horoscope_df %>%
   
@@ -407,7 +407,7 @@ Schaut euch als erste Analyse an, welcher Ausdrück häufiger vorkommt: "**secre
 ## Aufgabe 1.4 (Fortgeschritten)
 Jetzt wollen wir wissen, bei welchem Sternzeichen es am mysteriösesten wird: Bei welchem Sternzeichen fällt am häufigsten das Stichwort "**secret**"?
 
-```{r echo = FALSE, eval = FALSE, message = FALSE, warning = FALSE, error = FALSE}
+```{r echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 #Version 1: Mit regulären Ausdrücken
 horoscope_df %>%
   
@@ -421,7 +421,7 @@ horoscope_df %>%
   arrange(desc(Geheimnis))
 ```
 
-```{r echo = FALSE, eval = FALSE, message = FALSE, warning = FALSE, error = FALSE}
+```{r echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 #Version 2: Mit Quanteda
 
 #Wir analysieren die Häufigkeit des Features gruppiert nach Sternzeichen
@@ -438,7 +438,7 @@ textstat_frequency(horoscope_dfm, groups = horoscope_df$Signs) %>%
 Visualisiert auf Basis eines semantischen Netzwerk, mit welchen Adjektiven die Sternzeichen "**Aquarius**" (Wassermann) vs. "**Gemini**" (Zwilling) häufig in den Horoskopen assoziiert werden.
 
 Das Netzwerk könnte etwa so aussehen:
-```{r echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, error = FALSE}
+```{r echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 horoscope_df_filtered <- horoscope_df %>%
   
   #Reduktion des Datensatzes auf ausgewählte Sternzeichen
