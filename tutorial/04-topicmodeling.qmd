@@ -385,7 +385,7 @@ run_stminsights()
 
 Könnt ihr testen, wie sich das Modell verändert, wenn wir mit K = 10 Serien arbeiten? Wird es besser oder schlechter interpretierbar?
 
-```{r echo = FALSE, eval = FALSE, message = FALSE, warning = FALSE, error = FALSE}
+```{r echo = TRUE, eval = FALSE, message = FALSE, warning = FALSE, error = FALSE}
 # dfm_stm$documents: Welche Dokumente nutzen wir?
 # dfm_stm$vocab: Welche Features nutzen wir?
 stat_fit <- searchK(dfm_stm$documents, dfm_stm$vocab, 
@@ -425,7 +425,7 @@ topics_10
 
 Könnt ihr mittels des Datensatzes zu Horoskopen testen, ob Zwillinge und Wassermänner andere Themen in ihren Horoskopen vorhergesagt kriegen?
 
-```{r echo = FALSE, eval = FALSE, message = FALSE, warning = FALSE, error = FALSE}
+```{r echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, error = FALSE}
 # Daten laden
 url <-  getURL("https://raw.githubusercontent.com/valeriehase/textasdata-ms/main/data/data_horoscope.csv")
 data <- read.csv2(text = url)
